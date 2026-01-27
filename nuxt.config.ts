@@ -13,11 +13,20 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vueuse/nuxt",
     "@nuxt/fonts",
+    "@nuxt/image",
+    "@nuxthub/core",
   ],
+  hub: {
+    db: "postgresql",
+    kv: true,
+    blob: true,
+  },
+  nitro: {
+    experimental: {
+      tasks: true,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
-  },
-  colorMode: {
-    preference: "light",
   },
 });

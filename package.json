@@ -10,24 +10,36 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/eslint": "^1.11.0",
-    "@nuxt/fonts": "^0.12.1",
-    "@nuxt/ui": "^4.2.1",
+    "@electric-sql/pglite": "^0.3.15",
+    "@neondatabase/serverless": "^1.0.2",
+    "@nuxt/eslint": "^1.13.0",
+    "@nuxt/fonts": "^0.13.0",
+    "@nuxt/image": "2.0.0",
+    "@nuxt/ui": "^4.4.0",
+    "@nuxthub/core": "0.10.5",
     "@pinia/nuxt": "^0.11.3",
-    "@tailwindcss/vite": "^4.1.17",
+    "@tailwindcss/vite": "^4.1.18",
     "@vueuse/core": "^14.1.0",
+    "@vueuse/motion": "^3.0.3",
     "@vueuse/nuxt": "^14.1.0",
-    "nuxt": "^4.2.1",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.1",
+    "gsap": "^3.14.2",
+    "jsonwebtoken": "^9.0.3",
+    "nuxt": "^4.3.0",
     "pinia": "^3.0.4",
-    "tailwindcss": "^4.1.17",
+    "postgres": "^3.4.8",
+    "tailwindcss": "^4.1.18",
     "v-calendar": "^2.4.2",
     "vue": "latest",
     "vue-router": "latest",
-    "zod": "^4.1.13"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.76",
-    "prettier": "^3.7.1"
+    "@iconify-json/lucide": "^1.2.87",
+    "@types/jsonwebtoken": "^9.0.10",
+    "drizzle-kit": "^0.31.8",
+    "prettier": "^3.8.1"
   },
   "overrides": {
     "vue": "latest"
