@@ -41,7 +41,7 @@ const navigations = computed<NavigationMenuItem[]>(() => [
         <UButton
           color="neutral"
           variant="ghost"
-          to="#"
+          to="https://github.com/SethyRung/movies"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"
