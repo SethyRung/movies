@@ -22,9 +22,13 @@ export type MovieGenre = typeof movieGenres.$inferSelect;
 export type SeriesGenre = typeof seriesGenres.$inferSelect;
 export type MovieView = typeof movieViews.$inferSelect;
 
-export interface ApiResponse<T> {
-  status: "success" | "error";
-  message: string;
+export interface Response<T> {
+  status: {
+    code: string;
+    message: string;
+    requestId: string;
+    requestTime: number;
+  };
   data: T;
   meta?: {
     total: number;
