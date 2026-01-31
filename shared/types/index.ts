@@ -22,9 +22,20 @@ export type MovieGenre = typeof movieGenres.$inferSelect;
 export type SeriesGenre = typeof seriesGenres.$inferSelect;
 export type MovieView = typeof movieViews.$inferSelect;
 
+export enum ResponseCode {
+  Success = "SUCCESS",
+  Error = "ERROR",
+  NotFound = "NOT_FOUND",
+  ValidationError = "VALIDATION_ERROR",
+  Unauthorized = "UNAUTHORIZED",
+  Forbidden = "FORBIDDEN",
+  InvalidRequest = "INVALID_REQUEST",
+  InternalError = "INTERNAL_ERROR",
+}
+
 export interface Response<T> {
   status: {
-    code: string;
+    code: ResponseCode;
     message: string;
     requestId: string;
     requestTime: number;
