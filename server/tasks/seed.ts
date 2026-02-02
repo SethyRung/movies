@@ -289,8 +289,7 @@ const SERIES = [
     title: "The Office",
     description:
       "A mockumentary on a group of typical office workers, where the workday consists of ego clashes, inappropriate behavior, and tedium.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/kCMFurqQzJsrLNBsDyTFbVaJhg.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/kCMFurqQzJsrLNBsDyTFbVaJhg.jpg",
     poster: "https://image.tmdb.org/t/p/w500/kCMFurqQzJsrLNBsDyTFbVaJhg.jpg",
     firstAiredYear: 2005,
     lastAiredYear: 2013,
@@ -357,7 +356,8 @@ const SERIES = [
       {
         seasonNumber: 1,
         title: "Season 1",
-        description: "The Mandalorian travels to the outer reaches of the galaxy.",
+        description:
+          "The Mandalorian travels to the outer reaches of the galaxy.",
         thumbnail:
           "https://image.tmdb.org/t/p/w500/9ijMGlJKqcslswWUzTEwScm82Gs.jpg",
         releaseYear: 2019,
