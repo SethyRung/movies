@@ -51,3 +51,35 @@ export interface UpdateSeriesBody {
   featured?: boolean;
   status?: string;
 }
+
+export interface CreateSeasonBody {
+  seriesId: string;
+  seasonNumber: number;
+  title?: string;
+  description?: string;
+  thumbnail?: string;
+  releaseYear?: number;
+}
+
+export interface UpdateSeasonBody {
+  seasonNumber?: number;
+  title?: string;
+  description?: string;
+  thumbnail?: string;
+  releaseYear?: number;
+}
+
+export interface CreateEpisodeBody {
+  seasonId: string;
+  episodeNumber: number;
+  duration?: number;
+  embedUrl: string;
+  embedType: string;
+}
+
+export interface UpdateEpisodeBody {
+  episodeNumber?: number;
+  duration?: number;
+  embedUrl?: string;
+  embedType?: string;
+}
