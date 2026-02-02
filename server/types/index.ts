@@ -83,3 +83,37 @@ export interface UpdateEpisodeBody {
   embedUrl?: string;
   embedType?: string;
 }
+
+export interface CreateGenreBody {
+  name: string;
+  slug: string;
+}
+
+export interface UpdateGenreBody {
+  name?: string;
+  slug?: string;
+}
+
+export interface CreateMovieViewBody {
+  movieId: string;
+  progressSeconds?: number;
+  completed?: boolean;
+}
+
+export interface UpdateMovieViewBody {
+  progressSeconds?: number;
+  completed?: boolean;
+}
+
+export interface CreateEpisodeViewBody {
+  episodeId: string;
+  sessionId?: string;
+  progressSeconds?: number;
+  completed?: boolean;
+}
+
+export interface UpdateEpisodeViewBody {
+  sessionId?: string;
+  progressSeconds?: number;
+  completed?: boolean;
+}
