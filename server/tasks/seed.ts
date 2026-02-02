@@ -285,6 +285,102 @@ const SERIES = [
     genres: ["fantasy", "action", "drama"],
     seasons: [],
   },
+  {
+    title: "The Office",
+    description:
+      "A mockumentary on a group of typical office workers, where the workday consists of ego clashes, inappropriate behavior, and tedium.",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/kCMFurqQzJsrLNBsDyTFbVaJhg.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/kCMFurqQzJsrLNBsDyTFbVaJhg.jpg",
+    firstAiredYear: 2005,
+    lastAiredYear: 2013,
+    rating: "8.9",
+    featured: false,
+    status: "completed" as const,
+    genres: ["comedy"],
+    seasons: [
+      {
+        seasonNumber: 1,
+        title: "Season 1",
+        description: "The first season of the mockumentary sitcom.",
+        thumbnail:
+          "https://image.tmdb.org/t/p/w500/pxr3cIEHQjNz2zLxEq7eH8Tm17Q.jpg",
+        releaseYear: 2005,
+        episodes: [
+          {
+            episodeNumber: 1,
+            duration: 23,
+            embedUrl: "https://www.youtube.com/embed/WJmgcFiAjvE",
+          },
+          {
+            episodeNumber: 2,
+            duration: 23,
+            embedUrl: "https://www.youtube.com/embed/J2nLrMsPwBM",
+          },
+          {
+            episodeNumber: 3,
+            duration: 23,
+            embedUrl: "https://www.youtube.com/embed/UH_E6lJYPGk",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "The Crown",
+    description:
+      "Follows the political rivalries and romance of Queen Elizabeth II's reign and the events that shaped the second half of the 20th century.",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg",
+    firstAiredYear: 2016,
+    lastAiredYear: 2023,
+    rating: "8.1",
+    featured: false,
+    status: "completed" as const,
+    genres: ["drama"],
+    seasons: [],
+  },
+  {
+    title: "The Mandalorian",
+    description:
+      "After the fall of the Empire, a lone gunfighter makes his way through the outer reaches of the lawless galaxy.",
+    thumbnail:
+      "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
+    firstAiredYear: 2019,
+    rating: "8.5",
+    featured: true,
+    status: "ongoing" as const,
+    genres: ["sci-fi", "action", "fantasy"],
+    seasons: [
+      {
+        seasonNumber: 1,
+        title: "Season 1",
+        description: "The Mandalorian travels to the outer reaches of the galaxy.",
+        thumbnail:
+          "https://image.tmdb.org/t/p/w500/9ijMGlJKqcslswWUzTEwScm82Gs.jpg",
+        releaseYear: 2019,
+        episodes: [
+          {
+            episodeNumber: 1,
+            duration: 40,
+            embedUrl: "https://www.youtube.com/embed/aOC8E8k_rJE",
+          },
+          {
+            episodeNumber: 2,
+            duration: 35,
+            embedUrl: "https://www.youtube.com/embed/0j8fC1e8sVU",
+          },
+          {
+            episodeNumber: 3,
+            duration: 38,
+            embedUrl: "https://www.youtube.com/embed/KR8kMQF-5nk",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default defineTask({
