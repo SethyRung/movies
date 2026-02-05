@@ -1,8 +1,4 @@
-<!--
-  Default Layout - Main layout wrapper for public pages
--->
 <script setup lang="ts">
-// Set default head
 useHead({
   htmlAttrs: {
     lang: "en",
