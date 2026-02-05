@@ -2,6 +2,7 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
 
 const route = useRoute();
+const searchQuery = ref("");
 
 const navigations = computed<NavigationMenuItem[]>(() => [
   {
@@ -13,7 +14,7 @@ const navigations = computed<NavigationMenuItem[]>(() => [
     to: "/movies",
   },
   {
-    label: "TV Series",
+    label: "TV Shows",
     to: "/tv-series",
   },
 ]);
@@ -24,29 +25,25 @@ const navigations = computed<NavigationMenuItem[]>(() => [
     <template #title>
       <div class="flex items-center gap-2 group">
         <div
-          class="w-8 h-8 rounded bg-linear-to-br from-primary to-red-600 flex items-center justify-center"
+          class="w-8 h-8 rounded bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center"
         >
-          <span class="text-white font-bold text-lg">M</span>
+          <span class="text-white font-bold text-lg">C</span>
         </div>
-        <span class="text-xl font-bold"> MovieStream </span>
+        <span class="text-xl font-bold text-primary-500">CINE MAX</span>
       </div>
     </template>
 
     <UNavigationMenu :items="navigations" />
 
     <template #right>
-      <UColorModeButton />
+      <UButton
+        icon="i-heroicons-magnifying-glass"
+        color="neutral"
+        variant="ghost"
+        aria-label="Search"
+      />
 
-      <UTooltip text="Open on GitHub" :kbds="['meta', 'G']">
-        <UButton
-          color="neutral"
-          variant="ghost"
-          to="https://github.com/SethyRung/movies"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-        />
-      </UTooltip>
+      <UColorModeButton />
     </template>
 
     <template #body>

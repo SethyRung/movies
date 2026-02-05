@@ -16,13 +16,13 @@ const items: NavigationMenuItem[] = [
       <div class="md:col-span-2">
         <div class="flex items-center gap-2 mb-4">
           <div
-            class="w-8 h-8 rounded bg-linear-to-br from-primary to-red-600 flex items-center justify-center"
+            class="w-8 h-8 rounded bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center"
           >
-            <span class="text-white font-bold text-lg">M</span>
+            <span class="text-white font-bold text-lg">C</span>
           </div>
-          <span class="text-xl font-bold">MovieStream</span>
+          <span class="text-xl font-bold text-primary-500">CINE MAX</span>
         </div>
-        <p class="text-muted text-sm max-w-80">
+        <p class="text-muted-foreground text-sm max-w-80">
           Your ultimate destination for movies and TV series. Stream your
           favorite content anytime, anywhere.
         </p>
