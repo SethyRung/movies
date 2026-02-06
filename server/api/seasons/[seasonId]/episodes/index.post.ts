@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { ResponseCode } from "#shared/types";
 import type { CreateEpisodeBody } from "#server/types";
 

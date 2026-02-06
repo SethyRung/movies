@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { eq, desc, sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { ResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
