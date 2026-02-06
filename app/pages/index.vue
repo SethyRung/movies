@@ -4,8 +4,7 @@ useHead({
   meta: [
     {
       name: "description",
-      content:
-        "Stream your favorite movies and TV series online. Watch anytime, anywhere.",
+      content: "Stream your favorite movies and TV series online. Watch anytime, anywhere.",
     },
   ],
 });

@@ -23,8 +23,8 @@ const items: NavigationMenuItem[] = [
           <span class="text-xl font-bold text-primary-500">CINE MAX</span>
         </div>
         <p class="text-muted-foreground text-sm max-w-80">
-          Your ultimate destination for movies and TV series. Stream your
-          favorite content anytime, anywhere.
+          Your ultimate destination for movies and TV series. Stream your favorite content anytime,
+          anywhere.
         </p>
       </div>
     </template>

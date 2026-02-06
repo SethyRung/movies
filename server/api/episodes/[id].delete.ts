@@ -23,10 +23,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Episode not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Episode not found" }, null);
     }
 
     const seasonId = existing[0]!.seasonId;

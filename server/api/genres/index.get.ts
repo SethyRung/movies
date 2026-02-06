@@ -25,8 +25,7 @@ export default defineEventHandler(async (event) => {
           ? schema.genres.slug
           : schema.genres.createdAt;
 
-    const orderByClause =
-      sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
+    const orderByClause = sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
 
     const countResult = await db
       .select({ count: sql<number>`count(*)::int` })

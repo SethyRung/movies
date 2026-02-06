@@ -45,10 +45,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!season || season.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Season not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     // Check if episode with same number already exists in this season
@@ -58,9 +55,7 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.episodes.seasonId, seasonId))
       .orderBy(schema.episodes.episodeNumber);
 
-    const episodeExists = existingEpisodes.some(
-      (e) => e.episodeNumber === body.episodeNumber,
-    );
+    const episodeExists = existingEpisodes.some((e) => e.episodeNumber === body.episodeNumber);
 
     if (episodeExists) {
       return createResponse(

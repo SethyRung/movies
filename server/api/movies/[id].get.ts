@@ -13,17 +13,10 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const movie = await db
-      .select()
-      .from(schema.movies)
-      .where(eq(schema.movies.id, id))
-      .limit(1);
+    const movie = await db.select().from(schema.movies).where(eq(schema.movies.id, id)).limit(1);
 
     if (!movie || movie.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Movie not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Movie not found" }, null);
     }
 
     return createResponse({ code: ResponseCode.Success }, movie[0]);

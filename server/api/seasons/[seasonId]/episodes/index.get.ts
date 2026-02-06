@@ -21,10 +21,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!season || season.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Season not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     const episodes = await db

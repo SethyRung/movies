@@ -29,8 +29,7 @@ const MOVIES = [
     title: "Interstellar",
     description:
       "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
     poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
     duration: 169,
     embedUrl: "https://www.youtube.com/embed/zSWdZVtXT7E",
@@ -44,8 +43,7 @@ const MOVIES = [
     title: "The Dark Knight",
     description:
       "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
     poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
     duration: 152,
     embedUrl: "https://www.youtube.com/embed/EXeTwQWrcwY",
@@ -59,8 +57,7 @@ const MOVIES = [
     title: "Inception",
     description:
       "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
     poster: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
     duration: 148,
     embedUrl: "https://www.youtube.com/embed/YoHD9XEInc0",
@@ -74,8 +71,7 @@ const MOVIES = [
     title: "Pulp Fiction",
     description:
       "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
     poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
     duration: 154,
     embedUrl: "https://www.youtube.com/embed/s7EdQ4FqbhY",
@@ -88,8 +84,7 @@ const MOVIES = [
     title: "The Matrix",
     description:
       "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
     poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
     duration: 136,
     embedUrl: "https://www.youtube.com/embed/vKQi3bBA1y8",
@@ -102,8 +97,7 @@ const MOVIES = [
     title: "Parasite",
     description:
       "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
     poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
     duration: 132,
     embedUrl: "https://www.youtube.com/embed/5xH0HfJHsaY",
@@ -116,8 +110,7 @@ const MOVIES = [
     title: "Spirited Away",
     description:
       "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
     poster: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
     duration: 125,
     embedUrl: "https://www.youtube.com/embed/ByXuk9QqQkk",
@@ -130,8 +123,7 @@ const MOVIES = [
     title: "The Shawshank Redemption",
     description:
       "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
     poster: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
     duration: 142,
     embedUrl: "https://www.youtube.com/embed/6hB3S9bIaco",
@@ -161,8 +153,7 @@ const SERIES = [
         title: "Season 1",
         description:
           "Walter White, a chemistry teacher, discovers that he has cancer and decides to enter the drug trade to provide for his family.",
-        thumbnail:
-          "https://image.tmdb.org/t/p/w500/gFZjCcQ6eIvHdJLYCdyA83mFLQc.jpg",
+        thumbnail: "https://image.tmdb.org/t/p/w500/gFZjCcQ6eIvHdJLYCdyA83mFLQc.jpg",
         releaseYear: 2008,
         episodes: [
           {
@@ -207,8 +198,7 @@ const SERIES = [
         title: "Season 2",
         description:
           "Walter and Jesse continue their drug operation while facing personal and professional complications.",
-        thumbnail:
-          "https://image.tmdb.org/t/p/w500/2BHmx5AZvHanS2qwoq9Nu4VkaH5.jpg",
+        thumbnail: "https://image.tmdb.org/t/p/w500/2BHmx5AZvHanS2qwoq9Nu4VkaH5.jpg",
         releaseYear: 2009,
         episodes: [
           {
@@ -233,8 +223,7 @@ const SERIES = [
         title: "Season 3",
         description:
           "The third season follows Walter and Jesse as they expand their operation and face new enemies.",
-        thumbnail:
-          "https://image.tmdb.org/t/p/w500/saeEzXRKFvERKF1wG4qjJJ3fGZL.jpg",
+        thumbnail: "https://image.tmdb.org/t/p/w500/saeEzXRKFvERKF1wG4qjJJ3fGZL.jpg",
         releaseYear: 2010,
         episodes: [
           {
@@ -260,8 +249,7 @@ const SERIES = [
     title: "Stranger Things",
     description:
       "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
     poster: "https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
     firstAiredYear: 2016,
     rating: "8.7",
@@ -274,8 +262,7 @@ const SERIES = [
     title: "Game of Thrones",
     description:
       "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
     poster: "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
     firstAiredYear: 2011,
     lastAiredYear: 2019,
@@ -302,8 +289,7 @@ const SERIES = [
         seasonNumber: 1,
         title: "Season 1",
         description: "The first season of the mockumentary sitcom.",
-        thumbnail:
-          "https://image.tmdb.org/t/p/w500/pxr3cIEHQjNz2zLxEq7eH8Tm17Q.jpg",
+        thumbnail: "https://image.tmdb.org/t/p/w500/pxr3cIEHQjNz2zLxEq7eH8Tm17Q.jpg",
         releaseYear: 2005,
         episodes: [
           {
@@ -329,8 +315,7 @@ const SERIES = [
     title: "The Crown",
     description:
       "Follows the political rivalries and romance of Queen Elizabeth II's reign and the events that shaped the second half of the 20th century.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg",
     poster: "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg",
     firstAiredYear: 2016,
     lastAiredYear: 2023,
@@ -344,8 +329,7 @@ const SERIES = [
     title: "The Mandalorian",
     description:
       "After the fall of the Empire, a lone gunfighter makes his way through the outer reaches of the lawless galaxy.",
-    thumbnail:
-      "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
+    thumbnail: "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
     poster: "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
     firstAiredYear: 2019,
     rating: "8.5",
@@ -356,10 +340,8 @@ const SERIES = [
       {
         seasonNumber: 1,
         title: "Season 1",
-        description:
-          "The Mandalorian travels to the outer reaches of the galaxy.",
-        thumbnail:
-          "https://image.tmdb.org/t/p/w500/9ijMGlJKqcslswWUzTEwScm82Gs.jpg",
+        description: "The Mandalorian travels to the outer reaches of the galaxy.",
+        thumbnail: "https://image.tmdb.org/t/p/w500/9ijMGlJKqcslswWUzTEwScm82Gs.jpg",
         releaseYear: 2019,
         episodes: [
           {
@@ -556,10 +538,7 @@ async function seedSeries(userId: string, genreIds: Record<string, string>) {
   );
 }
 
-async function seedSeasonsAndEpisodes(
-  seriesId: string,
-  seasons: (typeof SERIES)[0]["seasons"],
-) {
+async function seedSeasonsAndEpisodes(seriesId: string, seasons: (typeof SERIES)[0]["seasons"]) {
   for (const seasonData of seasons) {
     const [season] = await db
       .insert(schema.seasons)
@@ -588,7 +567,5 @@ async function seedSeasonsAndEpisodes(
   }
 
   const totalEpisodes = seasons.reduce((sum, s) => sum + s.episodes.length, 0);
-  console.info(
-    `Created ${seasons.length} seasons with ${totalEpisodes} episodes`,
-  );
+  console.info(`Created ${seasons.length} seasons with ${totalEpisodes} episodes`);
 }
