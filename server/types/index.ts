@@ -1,3 +1,14 @@
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface JWTPayload {
+  userId: string;
+  email: string;
+  name: string;
+}
+
 export interface CreateMovieBody {
   title: string;
   description?: string;
@@ -116,4 +127,9 @@ export interface UpdateEpisodeViewBody {
   sessionId?: string;
   progressSeconds?: number;
   completed?: boolean;
+}
+
+export interface LoginBody {
+  email: string;
+  password: string;
 }

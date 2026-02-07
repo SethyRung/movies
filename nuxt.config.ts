@@ -7,6 +7,14 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-27",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
+  runtimeConfig: {
+    jwt: {
+      access: {
+        secret: "",
+        expiresIn: "",
+      },
+    },
+  },
   modules: [
     "@nuxt/ui",
     "@pinia/nuxt",
