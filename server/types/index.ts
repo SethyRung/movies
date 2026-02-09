@@ -1,3 +1,8 @@
+export interface PublicRoute {
+  path: string;
+  methods: string[];
+}
+
 export interface LoginRequest {
   email: string;
   password: string;
