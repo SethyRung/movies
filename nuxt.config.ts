@@ -13,6 +13,10 @@ export default defineNuxtConfig({
         secret: "",
         expiresIn: "",
       },
+      refresh: {
+        secret: "",
+        expiresIn: "",
+      },
     },
   },
   modules: [

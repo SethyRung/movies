@@ -1,7 +1,12 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { ResponseCode } from "#shared/types";
-import { verifyPassword, generateToken } from "#server/utils/auth";
+import {
+  verifyPassword,
+  generateToken,
+  generateRefreshToken,
+  calculateRefreshTokenExpiry,
+} from "#server/utils/auth";
 import { LoginRequest } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -46,6 +51,14 @@ export default defineEventHandler(async (event) => {
 
     const config = useRuntimeConfig();
     const accessToken = generateToken(user, config.jwt.access);
+    const refreshToken = generateRefreshToken(user.id, config.jwt.refresh);
+    const refreshTokenExpiry = calculateRefreshTokenExpiry(config.jwt.refresh.expiresIn);
+
+    await db.insert(schema.refreshTokens).values({
+      token: refreshToken,
+      userId: user.id,
+      expiresAt: refreshTokenExpiry,
+    });
 
     return createResponse(
       {
@@ -54,6 +67,7 @@ export default defineEventHandler(async (event) => {
       },
       {
         accessToken,
+        refreshToken,
       },
     );
   } catch {

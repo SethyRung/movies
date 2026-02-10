@@ -14,6 +14,11 @@ export interface JWTPayload {
   name: string;
 }
 
+export interface RefreshTokenPayload {
+  userId: string;
+  type: "refresh";
+}
+
 export interface CreateMovieBody {
   title: string;
   description?: string;

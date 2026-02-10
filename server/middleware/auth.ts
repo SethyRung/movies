@@ -11,6 +11,8 @@ import { verifyToken } from "#server/utils/auth";
 
 const PUBLIC_ROUTES: PublicRoute[] = [
   { path: "/api/auth/login", methods: ["POST"] },
+  { path: "/api/auth/refresh", methods: ["POST"] },
+  { path: "/api/auth/logout", methods: ["POST"] },
 
   { path: "^/api/movies$", methods: ["GET"] },
   { path: "^/api/movies/[a-f0-9-]+$", methods: ["GET"] },
