@@ -23,10 +23,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!movieView || movieView.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Movie view not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Movie view not found" }, null);
     }
 
     return createResponse({ code: ResponseCode.Success }, movieView[0]);

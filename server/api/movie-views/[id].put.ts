@@ -26,16 +26,12 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Movie view not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Movie view not found" }, null);
     }
 
     const updateData: any = {};
 
-    if (body.progressSeconds !== undefined)
-      updateData.progressSeconds = body.progressSeconds;
+    if (body.progressSeconds !== undefined) updateData.progressSeconds = body.progressSeconds;
     if (body.completed !== undefined) updateData.completed = body.completed;
 
     if (Object.keys(updateData).length === 0) {

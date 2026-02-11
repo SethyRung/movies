@@ -16,17 +16,10 @@ export default defineEventHandler(async (event) => {
 
     const body = await readBody<UpdateMovieBody>(event);
 
-    const existing = await db
-      .select()
-      .from(schema.movies)
-      .where(eq(schema.movies.id, id))
-      .limit(1);
+    const existing = await db.select().from(schema.movies).where(eq(schema.movies.id, id)).limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Movie not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Movie not found" }, null);
     }
 
     if (body.embedType) {
@@ -57,15 +50,13 @@ export default defineEventHandler(async (event) => {
     };
 
     if (body.title !== undefined) updateData.title = body.title;
-    if (body.description !== undefined)
-      updateData.description = body.description;
+    if (body.description !== undefined) updateData.description = body.description;
     if (body.thumbnail !== undefined) updateData.thumbnail = body.thumbnail;
     if (body.poster !== undefined) updateData.poster = body.poster;
     if (body.duration !== undefined) updateData.duration = body.duration;
     if (body.embedUrl !== undefined) updateData.embedUrl = body.embedUrl;
     if (body.embedType !== undefined) updateData.embedType = body.embedType;
-    if (body.releaseYear !== undefined)
-      updateData.releaseYear = body.releaseYear;
+    if (body.releaseYear !== undefined) updateData.releaseYear = body.releaseYear;
     if (body.rating !== undefined) updateData.rating = String(body.rating);
     if (body.featured !== undefined) updateData.featured = body.featured;
     if (body.status !== undefined) updateData.status = body.status;

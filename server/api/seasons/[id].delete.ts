@@ -20,10 +20,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Season not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     await db.delete(schema.seasons).where(eq(schema.seasons.id, id));

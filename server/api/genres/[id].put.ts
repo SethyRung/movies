@@ -16,17 +16,10 @@ export default defineEventHandler(async (event) => {
 
     const body = await readBody<UpdateGenreBody>(event);
 
-    const existing = await db
-      .select()
-      .from(schema.genres)
-      .where(eq(schema.genres.id, id))
-      .limit(1);
+    const existing = await db.select().from(schema.genres).where(eq(schema.genres.id, id)).limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Genre not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Genre not found" }, null);
     }
 
     const updateData: any = {};
@@ -38,8 +31,7 @@ export default defineEventHandler(async (event) => {
         return createResponse(
           {
             code: ResponseCode.ValidationError,
-            message:
-              "slug must contain only lowercase letters, numbers, and hyphens",
+            message: "slug must contain only lowercase letters, numbers, and hyphens",
           },
           null,
         );

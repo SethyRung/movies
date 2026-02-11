@@ -22,8 +22,7 @@ export default defineEventHandler(async (event) => {
       return createResponse(
         {
           code: ResponseCode.ValidationError,
-          message:
-            "slug must contain only lowercase letters, numbers, and hyphens",
+          message: "slug must contain only lowercase letters, numbers, and hyphens",
         },
         null,
       );

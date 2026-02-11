@@ -26,10 +26,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Episode not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Episode not found" }, null);
     }
 
     if (body.embedType) {
@@ -49,8 +46,7 @@ export default defineEventHandler(async (event) => {
       updatedAt: new Date(),
     };
 
-    if (body.episodeNumber !== undefined)
-      updateData.episodeNumber = body.episodeNumber;
+    if (body.episodeNumber !== undefined) updateData.episodeNumber = body.episodeNumber;
     if (body.duration !== undefined) updateData.duration = body.duration;
     if (body.embedUrl !== undefined) updateData.embedUrl = body.embedUrl;
     if (body.embedType !== undefined) updateData.embedType = body.embedType;

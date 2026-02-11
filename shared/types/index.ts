@@ -6,6 +6,7 @@ import type {
   movieGenres,
   movies,
   movieViews,
+  refreshTokens,
   seasons,
   seriesGenres,
   tvSeries,
@@ -21,6 +22,7 @@ export type EpisodeView = typeof episodeViews.$inferSelect;
 export type MovieGenre = typeof movieGenres.$inferSelect;
 export type SeriesGenre = typeof seriesGenres.$inferSelect;
 export type MovieView = typeof movieViews.$inferSelect;
+export type RefreshToken = typeof refreshTokens.$inferSelect;
 
 export enum ResponseCode {
   Success = "SUCCESS",

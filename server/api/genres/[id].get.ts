@@ -13,17 +13,10 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const genre = await db
-      .select()
-      .from(schema.genres)
-      .where(eq(schema.genres.id, id))
-      .limit(1);
+    const genre = await db.select().from(schema.genres).where(eq(schema.genres.id, id)).limit(1);
 
     if (!genre || genre.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Genre not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Genre not found" }, null);
     }
 
     return createResponse({ code: ResponseCode.Success }, genre[0]);

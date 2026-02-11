@@ -35,8 +35,7 @@ export default defineEventHandler(async (event) => {
     const updateData: any = {};
 
     if (body.sessionId !== undefined) updateData.sessionId = body.sessionId;
-    if (body.progressSeconds !== undefined)
-      updateData.progressSeconds = body.progressSeconds;
+    if (body.progressSeconds !== undefined) updateData.progressSeconds = body.progressSeconds;
     if (body.completed !== undefined) updateData.completed = body.completed;
 
     if (Object.keys(updateData).length === 0) {

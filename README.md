@@ -181,7 +181,3 @@ nuxt-movie/
 ## 🛡️ License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## 👨‍💻 Author
-
-Made with ❤️ by [Sethy](https://github.com/SethyRung)

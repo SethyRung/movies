@@ -149,3 +149,23 @@ export const episodeViews = pgTable("episode_views", {
   progressSeconds: integer("progress_seconds"),
   completed: boolean("completed").default(false),
 });
+
+export const refreshTokens = pgTable(
+  "refresh_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    token: varchar("token", { length: 500 }).notNull().unique(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+    revokedAt: timestamp("revoked_at"),
+  },
+  (table) => [
+    index("idx_refresh_tokens_user").on(table.userId),
+    index("idx_refresh_tokens_token").on(table.token),
+    index("idx_refresh_tokens_expires").on(table.expiresAt),
+    index("idx_refresh_tokens_revoked").on(table.revokedAt),
+  ],
+);

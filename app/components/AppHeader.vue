@@ -47,11 +47,7 @@ const navigations = computed<NavigationMenuItem[]>(() => [
     </template>
 
     <template #body>
-      <UNavigationMenu
-        :items="navigations"
-        orientation="vertical"
-        class="-mx-2.5"
-      />
+      <UNavigationMenu :items="navigations" orientation="vertical" class="-mx-2.5" />
     </template>
   </UHeader>
 </template>
