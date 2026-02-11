@@ -11,11 +11,7 @@ export default defineEventHandler(async (event) => {
 
     const movieId = query.movieId as string | undefined;
     const completed =
-      query.completed === "true"
-        ? true
-        : query.completed === "false"
-          ? false
-          : undefined;
+      query.completed === "true" ? true : query.completed === "false" ? false : undefined;
     const sortBy = (query.sortBy as string) || "viewedAt";
     const sortOrder = (query.sortOrder as string) || "desc";
 
@@ -43,8 +39,7 @@ export default defineEventHandler(async (event) => {
           ? schema.movieViews.progressSeconds
           : schema.movieViews.viewedAt;
 
-    const orderByClause =
-      sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
+    const orderByClause = sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
 
     const countResult = await db
       .select({ count: sql<number>`count(*)::int` })

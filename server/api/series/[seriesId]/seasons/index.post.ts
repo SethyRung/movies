@@ -34,10 +34,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!series || series.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Series not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Series not found" }, null);
     }
 
     // Check if season with same number already exists
@@ -47,9 +44,7 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.seasons.seriesId, seriesId))
       .orderBy(schema.seasons.seasonNumber);
 
-    const seasonExists = existingSeason.some(
-      (s) => s.seasonNumber === body.seasonNumber,
-    );
+    const seasonExists = existingSeason.some((s) => s.seasonNumber === body.seasonNumber);
 
     if (seasonExists) {
       return createResponse(

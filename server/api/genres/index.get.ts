@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { eq, desc, sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { ResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
@@ -25,8 +25,7 @@ export default defineEventHandler(async (event) => {
           ? schema.genres.slug
           : schema.genres.createdAt;
 
-    const orderByClause =
-      sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
+    const orderByClause = sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
 
     const countResult = await db
       .select({ count: sql<number>`count(*)::int` })

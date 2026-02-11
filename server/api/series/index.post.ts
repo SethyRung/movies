@@ -16,10 +16,7 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    if (
-      body.status &&
-      !["ongoing", "completed", "draft", "archived"].includes(body.status)
-    ) {
+    if (body.status && !["ongoing", "completed", "draft", "archived"].includes(body.status)) {
       return createResponse(
         {
           code: ResponseCode.ValidationError,

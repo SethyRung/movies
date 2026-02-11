@@ -13,17 +13,10 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const season = await db
-      .select()
-      .from(schema.seasons)
-      .where(eq(schema.seasons.id, id))
-      .limit(1);
+    const season = await db.select().from(schema.seasons).where(eq(schema.seasons.id, id)).limit(1);
 
     if (!season || season.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Season not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     return createResponse({ code: ResponseCode.Success }, season[0]);

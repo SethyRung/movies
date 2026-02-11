@@ -11,11 +11,7 @@ export default defineEventHandler(async (event) => {
 
     const status = (query.status as string) || "ongoing";
     const featured =
-      query.featured === "true"
-        ? true
-        : query.featured === "false"
-          ? false
-          : undefined;
+      query.featured === "true" ? true : query.featured === "false" ? false : undefined;
     const search = (query.search as string) || "";
     const sortBy = (query.sortBy as string) || "createdAt";
     const sortOrder = (query.sortOrder as string) || "desc";
@@ -32,8 +28,7 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const whereClause =
-      conditions.length > 1 ? and(...conditions) : conditions[0];
+    const whereClause = conditions.length > 1 ? and(...conditions) : conditions[0];
 
     const orderByColumn =
       sortBy === "title"
@@ -44,8 +39,7 @@ export default defineEventHandler(async (event) => {
             ? schema.tvSeries.firstAiredYear
             : schema.tvSeries.createdAt;
 
-    const orderByClause =
-      sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
+    const orderByClause = sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
 
     const countResult = await db
       .select({ count: sql<number>`count(*)::int` })

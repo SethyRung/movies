@@ -13,17 +13,10 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const existing = await db
-      .select()
-      .from(schema.movies)
-      .where(eq(schema.movies.id, id))
-      .limit(1);
+    const existing = await db.select().from(schema.movies).where(eq(schema.movies.id, id)).limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Movie not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Movie not found" }, null);
     }
 
     await db.delete(schema.movies).where(eq(schema.movies.id, id));

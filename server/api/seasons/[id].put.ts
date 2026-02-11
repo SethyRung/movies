@@ -23,24 +23,18 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Season not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     const updateData: any = {
       updatedAt: new Date(),
     };
 
-    if (body.seasonNumber !== undefined)
-      updateData.seasonNumber = body.seasonNumber;
+    if (body.seasonNumber !== undefined) updateData.seasonNumber = body.seasonNumber;
     if (body.title !== undefined) updateData.title = body.title;
-    if (body.description !== undefined)
-      updateData.description = body.description;
+    if (body.description !== undefined) updateData.description = body.description;
     if (body.thumbnail !== undefined) updateData.thumbnail = body.thumbnail;
-    if (body.releaseYear !== undefined)
-      updateData.releaseYear = body.releaseYear;
+    if (body.releaseYear !== undefined) updateData.releaseYear = body.releaseYear;
 
     const updated = await db
       .update(schema.seasons)

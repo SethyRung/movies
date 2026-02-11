@@ -23,16 +23,10 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse(
-        { code: ResponseCode.NotFound, message: "Series not found" },
-        null,
-      );
+      return createResponse({ code: ResponseCode.NotFound, message: "Series not found" }, null);
     }
 
-    if (
-      body.status &&
-      !["ongoing", "completed", "draft", "archived"].includes(body.status)
-    ) {
+    if (body.status && !["ongoing", "completed", "draft", "archived"].includes(body.status)) {
       return createResponse(
         {
           code: ResponseCode.ValidationError,
@@ -47,14 +41,11 @@ export default defineEventHandler(async (event) => {
     };
 
     if (body.title !== undefined) updateData.title = body.title;
-    if (body.description !== undefined)
-      updateData.description = body.description;
+    if (body.description !== undefined) updateData.description = body.description;
     if (body.thumbnail !== undefined) updateData.thumbnail = body.thumbnail;
     if (body.poster !== undefined) updateData.poster = body.poster;
-    if (body.firstAiredYear !== undefined)
-      updateData.firstAiredYear = body.firstAiredYear;
-    if (body.lastAiredYear !== undefined)
-      updateData.lastAiredYear = body.lastAiredYear;
+    if (body.firstAiredYear !== undefined) updateData.firstAiredYear = body.firstAiredYear;
+    if (body.lastAiredYear !== undefined) updateData.lastAiredYear = body.lastAiredYear;
     if (body.rating !== undefined) updateData.rating = String(body.rating);
     if (body.featured !== undefined) updateData.featured = body.featured;
     if (body.status !== undefined) updateData.status = body.status;
