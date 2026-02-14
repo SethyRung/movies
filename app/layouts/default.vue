@@ -13,13 +13,11 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div class="min-h-screen bg-neutral-950">
     <AppHeader />
 
-    <UMain>
-      <UContainer>
-        <slot />
-      </UContainer>
+    <UMain class="w-full">
+      <slot />
     </UMain>
 
     <AppFooter />
