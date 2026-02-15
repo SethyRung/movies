@@ -1,14 +1,4 @@
 <script setup lang="ts">
-/**
- * AppFooter Component
- *
- * Streaming platform footer with:
- * - Site navigation links
- * - Social media links
- * - Language selector
- * - Copyright info
- */
-
 const currentYear = computed(() => new Date().getFullYear());
 
 const linkSections = [
@@ -60,9 +50,7 @@ const socialLinks = [
 
 <template>
   <footer class="bg-neutral-900 text-white mt-8 sm:mt-12">
-    <!-- Main Footer Content -->
     <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-8 sm:py-10 md:py-12">
-      <!-- Social Links -->
       <div class="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
         <UButton
           v-for="social in socialLinks"
@@ -78,7 +66,6 @@ const socialLinks = [
         />
       </div>
 
-      <!-- Navigation Links Grid -->
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
         <div v-for="section in linkSections" :key="section.title">
           <h3 class="text-xs sm:text-sm font-semibold text-white mb-3 sm:mb-4">
@@ -99,7 +86,6 @@ const socialLinks = [
         </div>
       </div>
 
-      <!-- Service Code -->
       <div class="mb-4 sm:mb-6">
         <UButton
           color="neutral"
@@ -110,7 +96,6 @@ const socialLinks = [
         </UButton>
       </div>
 
-      <!-- Copyright Text -->
       <div class="text-xs sm:text-sm text-neutral-500 space-y-1.5 sm:space-y-2">
         <p>© {{ currentYear }} Cine Max, Inc.</p>
         <p class="text-[10px] sm:text-xs">
@@ -120,13 +105,11 @@ const socialLinks = [
       </div>
     </div>
 
-    <!-- Bottom Bar -->
     <div class="border-t border-neutral-800">
       <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4">
         <div
           class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
         >
-          <!-- Location Selector -->
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-globe" class="w-4 h-4 text-neutral-500 flex-shrink-0" />
             <select
@@ -141,7 +124,6 @@ const socialLinks = [
             </select>
           </div>
 
-          <!-- Bottom Links - stacked on mobile, horizontal on desktop -->
           <div
             class="flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-1 text-xs sm:text-sm text-neutral-500"
           >
@@ -162,7 +144,6 @@ const socialLinks = [
 </template>
 
 <style scoped>
-/* Remove default select styling */
 select {
   -webkit-appearance: none;
   -moz-appearance: none;

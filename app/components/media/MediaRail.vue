@@ -1,17 +1,4 @@
 <script setup lang="ts">
-/**
- * MediaRail Component - Premium Edition
- *
- * Enterprise-grade horizontal scrolling rail with:
- * - Smooth momentum-based drag scrolling
- * - 3D perspective hover effects on cards
- * - Skeleton loading states for initial render
- * - Smooth fade-in animations on scroll
- * - Enhanced navigation arrows with hover glow
- * - Better touch handling for mobile
- * - Animated section headers with icon
- */
-
 import type { StreamingContent } from "~/data/mockDataEnhanced";
 
 type CardSize = "portrait" | "landscape" | "wide";

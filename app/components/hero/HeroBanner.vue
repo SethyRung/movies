@@ -1,19 +1,4 @@
 <script setup lang="ts">
-/**
- * HeroBanner Component - Premium Edition
- *
- * Enterprise-grade immersive hero banner with:
- * - Parallax mouse movement effects
- * - Staggered text entrance animations with GSAP
- * - Smooth carousel transitions with fade/slide effects
- * - Video background support option
- * - Subtle floating particle effects
- * - Progressive gradient overlays
- * - Premium typography with animated underlines
- * - Enhanced button hover states with scale and glow effects
- * - Animated progress bar
- */
-
 import type { StreamingContent, StreamingMovie, StreamingSeries } from "~/data/mockDataEnhanced";
 
 interface Props {
@@ -38,7 +23,6 @@ const emit = defineEmits<{
 
 const { $gsap: gsap } = useNuxtApp();
 
-// State
 const currentIndex = ref(0);
 const isAnimating = ref(false);
 const isPaused = ref(false);
@@ -49,7 +33,6 @@ const particles = ref<
   Array<{ id: number; x: number; y: number; size: number; duration: number; delay: number }>
 >([]);
 
-// GSAP context
 const heroRef = ref<HTMLElement>();
 const containerRef = ref<HTMLElement>();
 const titleRef = ref<HTMLElement>();
@@ -63,16 +46,13 @@ const progressBarRef = ref<HTMLElement>();
 const particlesContainerRef = ref<HTMLElement>();
 const gsapCtx = ref<ReturnType<typeof gsap.context> | null>(null);
 
-// Computed
 const currentItem = computed(() => props.content[currentIndex.value] ?? null);
 const totalItems = computed(() => props.content.length);
 
-// Helper to check if movie
 const isMovie = (item: StreamingContent): item is StreamingMovie => {
   return item.type === "movie";
 };
 
-// Helper to get duration text
 const getDurationText = (item: StreamingContent): string => {
   if (isMovie(item)) {
     const hours = Math.floor(item.duration / 60);
@@ -83,12 +63,10 @@ const getDurationText = (item: StreamingContent): string => {
   }
 };
 
-// Helper to get quality badge
 const getQualityBadge = (item: StreamingContent): string => {
   return item.videoMetadata.quality;
 };
 
-// Generate particles
 const generateParticles = () => {
   if (!props.enableParticles) return;
   particles.value = Array.from({ length: 20 }, (_, i) => ({
@@ -101,7 +79,6 @@ const generateParticles = () => {
   }));
 };
 
-// Animate particles
 const animateParticles = () => {
   if (!gsap || !props.enableParticles) return;
 
@@ -120,7 +97,6 @@ const animateParticles = () => {
   });
 };
 
-// Parallax effect on mouse move
 const handleMouseMove = (e: MouseEvent) => {
   if (!props.enableParallax || !bgImageRef.value) return;
 
@@ -140,7 +116,6 @@ const handleMouseMove = (e: MouseEvent) => {
   });
 };
 
-// Reset parallax on mouse leave
 const handleMouseLeave = () => {
   if (!gsap || !bgImageRef.value) return;
 
@@ -172,13 +147,11 @@ const animateProgress = () => {
   );
 };
 
-// Animation timeline - premium entrance
 const animateIn = () => {
   if (!gsap || !currentItem.value) return;
 
   isAnimating.value = true;
 
-  // Kill any existing animations on all tracked elements
   const trackedElements = [
     titleRef.value,
     titleUnderlineRef.value,
@@ -191,10 +164,8 @@ const animateIn = () => {
 
   trackedElements.forEach((el) => gsap.killTweensOf(el));
 
-  // Reset progress
   progressValue.value = 0;
 
-  // Background dramatic zoom effect - enhanced brightness for vivid appearance
   if (bgImageRef.value) {
     gsap.fromTo(
       bgImageRef.value,
@@ -203,7 +174,6 @@ const animateIn = () => {
     );
   }
 
-  // Create timeline for content animations
   const tl = gsap.timeline({
     onComplete: () => {
       isAnimating.value = false;
@@ -213,7 +183,6 @@ const animateIn = () => {
     },
   });
 
-  // Title animation - slide up with reveal
   if (titleRef.value) {
     gsap.set(titleRef.value, { y: 60, opacity: 0, rotationX: 15 });
     tl.to(
@@ -228,7 +197,6 @@ const animateIn = () => {
       0.3,
     );
 
-    // Animated underline
     if (titleUnderlineRef.value) {
       gsap.set(titleUnderlineRef.value, { scaleX: 0 });
       tl.to(
@@ -243,7 +211,6 @@ const animateIn = () => {
     }
   }
 
-  // Meta badges animation - stagger from left
   if (metaRef.value) {
     const badges = metaRef.value.querySelectorAll(".meta-badge");
     if (badges.length > 0) {

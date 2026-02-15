@@ -1,25 +1,11 @@
 <script setup lang="ts">
-/**
- * AppHeader Component
- *
- * Netflix-style navigation header with:
- * - Transparent to solid background on scroll
- * - Logo with animation
- * - Navigation links
- * - Search overlay
- * - Profile dropdown
- * - Mobile menu
- */
-
 const route = useRoute();
 
-// State
 const isScrolled = ref(false);
 const isSearchOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const searchQuery = ref("");
 
-// Navigation items
 const navItems = [
   { label: "Home", to: "/" },
   { label: "Movies", to: "/movies" },
@@ -28,12 +14,10 @@ const navItems = [
   { label: "My List", to: "/my-list" },
 ];
 
-// Handle scroll
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50;
 };
 
-// Toggle search
 const toggleSearch = () => {
   isSearchOpen.value = !isSearchOpen.value;
   if (isSearchOpen.value) {
@@ -44,31 +28,25 @@ const toggleSearch = () => {
   }
 };
 
-// Close search
 const closeSearch = () => {
   isSearchOpen.value = false;
   searchQuery.value = "";
 };
 
-// Toggle mobile menu
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
 };
 
-// Keyboard shortcuts
 const handleKeydown = (e: KeyboardEvent) => {
-  // Cmd/Ctrl + K to open search
   if ((e.metaKey || e.ctrlKey) && e.key === "k") {
     e.preventDefault();
     toggleSearch();
   }
-  // Escape to close search
   if (e.key === "Escape" && isSearchOpen.value) {
     closeSearch();
   }
 };
 
-// Lifecycle
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   window.addEventListener("keydown", handleKeydown);
@@ -82,7 +60,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- Main Navigation -->
   <header
     :class="[
       'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
@@ -93,9 +70,7 @@ onUnmounted(() => {
   >
     <div class="container mx-auto px-4 md:px-8 lg:px-16">
       <div class="flex items-center justify-between h-16 md:h-20">
-        <!-- Logo & Navigation -->
         <div class="flex items-center gap-6 md:gap-8">
-          <!-- Logo -->
           <NuxtLink to="/" class="flex items-center gap-2 group" aria-label="Cine Max Home">
             <div
               class="w-8 h-8 md:w-10 md:h-10 rounded bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center transition-transform group-hover:scale-110"
@@ -107,7 +82,6 @@ onUnmounted(() => {
             </span>
           </NuxtLink>
 
-          <!-- Desktop Navigation -->
           <nav class="hidden lg:flex items-center gap-6">
             <NuxtLink
               v-for="item in navItems"
@@ -125,9 +99,7 @@ onUnmounted(() => {
           </nav>
         </div>
 
-        <!-- Right Side -->
         <div class="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
-          <!-- Search Button -->
           <UButton
             icon="i-lucide-search"
             color="neutral"
@@ -137,7 +109,6 @@ onUnmounted(() => {
             @click="toggleSearch"
           />
 
-          <!-- Notifications -->
           <UButton
             icon="i-lucide-bell"
             color="neutral"
@@ -146,7 +117,6 @@ onUnmounted(() => {
             aria-label="Notifications"
           />
 
-          <!-- Profile Dropdown -->
           <UDropdown
             :items="[
               [{ label: 'Profile', icon: 'i-lucide-user', click: () => navigateTo('/profile') }],
@@ -182,7 +152,6 @@ onUnmounted(() => {
             </UButton>
           </UDropdown>
 
-          <!-- Mobile Menu Button -->
           <UButton
             icon="i-lucide-menu"
             color="neutral"
@@ -195,7 +164,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Search Overlay -->
     <Transition
       enter-active-class="transition-all duration-200 ease-out"
       enter-from-class="opacity-0 -translate-y-2"
@@ -233,7 +201,6 @@ onUnmounted(() => {
             />
           </div>
 
-          <!-- Search Results Placeholder -->
           <div v-if="searchQuery" class="mt-3 sm:mt-4 max-w-2xl mx-auto">
             <div
               class="flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg hover:bg-neutral-800/50 cursor-pointer"
@@ -257,7 +224,6 @@ onUnmounted(() => {
     </Transition>
   </header>
 
-  <!-- Mobile Menu Overlay -->
   <Transition
     enter-active-class="transition-opacity duration-200"
     enter-from-class="opacity-0"
@@ -285,7 +251,6 @@ onUnmounted(() => {
       v-if="isMobileMenuOpen"
       class="fixed top-0 left-0 bottom-0 w-[280px] sm:w-80 max-w-full z-50 bg-neutral-900 lg:hidden"
     >
-      <!-- Mobile Menu Header -->
       <div class="flex items-center justify-between h-14 sm:h-16 px-4 border-b border-neutral-800">
         <span class="text-lg sm:text-xl font-bold text-white">Menu</span>
         <UButton
@@ -298,7 +263,6 @@ onUnmounted(() => {
         />
       </div>
 
-      <!-- Mobile Menu Links -->
       <nav class="p-4 space-y-1 sm:space-y-2 overflow-y-auto max-h-[calc(100vh-8rem)]">
         <NuxtLink
           v-for="item in navItems"
@@ -312,7 +276,6 @@ onUnmounted(() => {
         </NuxtLink>
       </nav>
 
-      <!-- Mobile Menu Footer -->
       <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-neutral-800 bg-neutral-900">
         <div class="flex items-center gap-3 px-2 sm:px-4 py-3">
           <div
@@ -329,7 +292,6 @@ onUnmounted(() => {
     </div>
   </Transition>
 
-  <!-- Keyboard Shortcut Hint -->
   <div
     v-if="!isSearchOpen && !isScrolled"
     class="fixed top-20 right-4 hidden lg:flex items-center gap-2 px-3 py-1.5 rounded bg-neutral-900/80 backdrop-blur-sm text-xs text-neutral-400 opacity-0 hover:opacity-100 transition-opacity"
@@ -340,12 +302,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Smooth transitions */
 a {
   position: relative;
 }
 
-/* Remove outline for mouse, keep for keyboard */
 *:focus-visible {
   outline: 2px solid rgb(99 102 241);
   outline-offset: 2px;

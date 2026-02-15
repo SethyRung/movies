@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Movie, TVSeries } from "#shared/types";
 
-// Get GSAP from Nuxt app
 const { $gsap: gsap } = useNuxtApp();
 
 interface FeaturedItem {
@@ -28,11 +27,9 @@ const isAnimating = ref(false);
 const autoRotateInterval = ref<ReturnType<typeof setInterval> | null>(null);
 const isPaused = ref(false);
 
-// GSAP context for proper cleanup
 let gsapCtx: ReturnType<typeof gsap.context> | null = null;
 let animationTimeline: ReturnType<typeof gsap.timeline> | null = null;
 
-// Combine and shuffle featured content
 const featuredItems = computed<FeaturedItem[]>(() => {
   const movies = (props.featuredMovies || []).map(
     (item): FeaturedItem => ({
@@ -82,7 +79,6 @@ const featuredItems = computed<FeaturedItem[]>(() => {
 const currentItem = computed(() => featuredItems.value[currentIndex.value] ?? null);
 const totalItems = computed(() => featuredItems.value.length);
 
-// GSAP animation references
 const heroRef = ref<HTMLElement | null>(null);
 const titleRef = ref<HTMLElement | null>(null);
 const metaRef = ref<HTMLElement | null>(null);
@@ -90,10 +86,8 @@ const descRef = ref<HTMLElement | null>(null);
 const buttonsRef = ref<HTMLElement | null>(null);
 const bgImageRef = ref<HTMLElement | null>(null);
 
-// Sanitize URL to prevent injection
 const sanitizeUrl = (url: string | null): string => {
   if (!url) return "";
-  // Only allow http/https URLs from trusted domains
   try {
     const parsed = new URL(url);
     if (parsed.protocol === "http:" || parsed.protocol === "https:") {
@@ -116,7 +110,6 @@ const animateIn = () => {
 
   isAnimating.value = true;
 
-  // Kill existing timeline
   if (animationTimeline) {
     animationTimeline.kill();
     animationTimeline = null;
@@ -128,7 +121,6 @@ const animateIn = () => {
     },
   });
 
-  // Background image scale animation
   if (bgImageRef.value) {
     gsap.set(bgImageRef.value, { scale: 1.1 });
     animationTimeline.to(
@@ -142,7 +134,6 @@ const animateIn = () => {
     );
   }
 
-  // Staggered content animations
   if (titleRef.value) {
     gsap.set(titleRef.value, { y: 30, opacity: 0 });
     animationTimeline.to(
@@ -221,7 +212,6 @@ const prevSlide = () => {
   goToSlide(prevIndex);
 };
 
-// Keyboard navigation
 const handleKeydown = (event: KeyboardEvent) => {
   if (totalItems.value <= 1) return;
 
@@ -245,7 +235,6 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
-// Auto-rotation
 const startAutoRotate = () => {
   stopAutoRotate();
   if (!isPaused.value && totalItems.value > 1) {
@@ -272,9 +261,7 @@ const resumeRotation = () => {
   startAutoRotate();
 };
 
-// Lifecycle hooks
 onMounted(() => {
-  // Create GSAP context for this component
   gsapCtx = gsap.context(() => {}, heroRef.value ?? undefined);
 
   nextTick(() => {
@@ -282,12 +269,10 @@ onMounted(() => {
     startAutoRotate();
   });
 
-  // Add keyboard listener
   window.addEventListener("keydown", handleKeydown);
 });
 
 onUnmounted(() => {
-  // Clean up GSAP context and all animations
   if (gsapCtx) {
     gsapCtx.revert();
     gsapCtx = null;
@@ -302,7 +287,6 @@ onUnmounted(() => {
   window.removeEventListener("keydown", handleKeydown);
 });
 
-// Watch for data changes - use shallow watch
 watch(
   () => [props.featuredMovies?.length, props.featuredSeries?.length],
   () => {
@@ -313,7 +297,6 @@ watch(
   },
 );
 
-// Generate display year
 const displayYear = computed(() => {
   if (!currentItem.value) return "";
   if (currentItem.value.type === "movie") {
@@ -323,7 +306,6 @@ const displayYear = computed(() => {
   }
 });
 
-// Format rating
 const displayRating = computed(() => {
   if (!currentItem.value?.rating) return null;
   const rating = currentItem.value.rating;
@@ -341,7 +323,6 @@ const displayRating = computed(() => {
     aria-label="Featured content carousel"
     :aria-roledescription="`Slide ${currentIndex + 1} of ${totalItems}`"
   >
-    <!-- Background Image -->
     <div class="absolute inset-0 bg-neutral-950">
       <div
         v-if="currentItem && backgroundImageUrl"
@@ -349,7 +330,6 @@ const displayRating = computed(() => {
         class="absolute inset-0 bg-cover bg-center transition-transform duration-[1500ms]"
         :style="{ backgroundImage: backgroundImageUrl }"
       />
-      <!-- Gradient Overlays -->
       <div
         class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"
       />
@@ -359,7 +339,6 @@ const displayRating = computed(() => {
       <div class="absolute inset-0 bg-black/20" />
     </div>
 
-    <!-- Loading Skeleton -->
     <div
       v-if="!currentItem"
       class="absolute inset-0 flex items-center justify-center bg-neutral-900"
@@ -372,11 +351,9 @@ const displayRating = computed(() => {
       </div>
     </div>
 
-    <!-- Content Container -->
     <div v-if="currentItem" class="relative h-full flex items-center">
       <div class="container mx-auto px-4 md:px-8 lg:px-12">
         <div class="max-w-2xl md:max-w-3xl">
-          <!-- Type Badge -->
           <div class="inline-flex items-center gap-2 mb-4">
             <UBadge
               variant="subtle"
@@ -397,7 +374,6 @@ const displayRating = computed(() => {
             </UBadge>
           </div>
 
-          <!-- Title -->
           <h1
             ref="titleRef"
             class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 leading-tight drop-shadow-2xl"
@@ -405,7 +381,6 @@ const displayRating = computed(() => {
             {{ currentItem.title }}
           </h1>
 
-          <!-- Meta Info -->
           <div ref="metaRef" class="flex items-center gap-4 mb-4 text-neutral-300">
             <span
               v-if="currentItem.type === 'movie' && currentItem.duration"
@@ -423,7 +398,6 @@ const displayRating = computed(() => {
             </span>
           </div>
 
-          <!-- Description -->
           <p
             ref="descRef"
             class="text-base md:text-lg text-neutral-200 mb-8 line-clamp-3 md:line-clamp-4 max-w-xl drop-shadow-lg"
@@ -431,7 +405,6 @@ const displayRating = computed(() => {
             {{ currentItem.description || "No description available." }}
           </p>
 
-          <!-- Buttons -->
           <div ref="buttonsRef" class="flex flex-wrap items-center gap-4">
             <UButton
               size="lg"
@@ -470,14 +443,12 @@ const displayRating = computed(() => {
       </div>
     </div>
 
-    <!-- Navigation Dots -->
     <div
       v-if="totalItems > 1"
       class="absolute bottom-8 right-4 md:right-8 flex items-center gap-2"
       role="tablist"
       aria-label="Carousel navigation"
     >
-      <!-- Prev Button -->
       <UButton
         icon="i-heroicons-chevron-left"
         color="neutral"
@@ -488,7 +459,6 @@ const displayRating = computed(() => {
         aria-label="Previous slide"
         @click="prevSlide"
       />
-      <!-- Dots -->
       <div class="flex items-center gap-2 px-2">
         <button
           v-for="(_, index) in totalItems"
@@ -506,7 +476,6 @@ const displayRating = computed(() => {
           @click="goToSlide(index)"
         />
       </div>
-      <!-- Next Button -->
       <UButton
         icon="i-heroicons-chevron-right"
         color="neutral"

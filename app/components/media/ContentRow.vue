@@ -4,13 +4,11 @@
     class="content-row relative py-6 md:py-8"
     :class="{ 'opacity-0': !hasAnimatedIn }"
   >
-    <!-- Header -->
     <div class="mb-4 flex items-end justify-between px-4 md:px-8 lg:px-12">
       <h2 class="text-xl font-bold md:text-2xl lg:text-3xl" :class="titleGradientClass">
         {{ title }}
       </h2>
 
-      <!-- See All Link -->
       <NuxtLink
         v-if="seeAllLink && !isLoading && data.length > 0"
         :to="seeAllLink"
@@ -24,14 +22,12 @@
       </NuxtLink>
     </div>
 
-    <!-- Scroll Container -->
     <div
       ref="containerRef"
       class="group/row relative"
       @mouseenter="showArrows = true"
       @mouseleave="showArrows = false"
     >
-      <!-- Left Navigation Arrow -->
       <Transition name="fade-slide">
         <button
           v-show="showLeftArrow && showArrows && !isLoading && data.length > 0"
@@ -44,7 +40,6 @@
         </button>
       </Transition>
 
-      <!-- Right Navigation Arrow -->
       <Transition name="fade-slide">
         <button
           v-show="showRightArrow && showArrows && !isLoading && data.length > 0"
@@ -57,7 +52,6 @@
         </button>
       </Transition>
 
-      <!-- Content Track -->
       <div
         ref="trackRef"
         class="no-scrollbar flex gap-3 overflow-x-auto px-4 pb-4 transition-all duration-300 ease-out md:gap-4 md:px-8 md:pb-6 lg:px-12"
@@ -73,7 +67,6 @@
         @touchend="handleTouchEnd"
         @mouseleave="handleDragEnd"
       >
-        <!-- Loading State - Skeletons -->
         <template v-if="isLoading">
           <MediaCardSkeleton
             v-for="i in skeletonCount"
@@ -82,7 +75,6 @@
           />
         </template>
 
-        <!-- Error State -->
         <div v-else-if="error" class="flex w-full items-center justify-center py-8 text-gray-500">
           <div class="text-center">
             <Icon name="i-lucide-alert-circle" class="mx-auto mb-2 h-8 w-8" />
@@ -93,7 +85,6 @@
           </div>
         </div>
 
-        <!-- Empty State -->
         <div
           v-else-if="data.length === 0"
           class="flex w-full items-center justify-center py-8 text-gray-500"
@@ -101,7 +92,6 @@
           <p>No content available</p>
         </div>
 
-        <!-- Media Cards -->
         <template v-else>
           <div
             v-for="(item, index) in displayData"
@@ -114,7 +104,6 @@
           </div>
         </template>
 
-        <!-- Optional: Infinite scroll indicator -->
         <div
           v-if="hasMore && !isLoading && data.length > 0 && infiniteScroll"
           class="flex flex-shrink-0 items-center justify-center px-4"
@@ -179,17 +168,14 @@ const props = withDefaults(defineProps<Props>(), {
   enableDragScroll: true,
 });
 
-// Get GSAP from Nuxt app
 const { $gsap: gsap } = useNuxtApp();
 
-// Refs
 const sectionRef = ref<HTMLElement>();
 const containerRef = ref<HTMLElement>();
 const trackRef = ref<HTMLElement>();
 const cardRefs = ref<Map<number, HTMLElement>>(new Map());
 const ctx = ref<ReturnType<typeof gsap.context> | null>(null);
 
-// State
 const showArrows = ref(false);
 const showLeftArrow = ref(false);
 const showRightArrow = ref(true);
@@ -201,11 +187,9 @@ const scrollStartPos = ref(0);
 const hasAnimatedIn = ref(false);
 const isLoadingMore = ref(false);
 
-// Media query for drag functionality
 const { canHover } = useMediaQuery();
 const canDrag = computed(() => props.enableDragScroll && canHover.value);
 
-// Map card size to MediaCard size prop
 const mediaCardSize = computed<MediaCardSize>(() => {
   const sizeMap: Record<CardSize, MediaCardSize> = {
     small: "sm",
@@ -215,27 +199,23 @@ const mediaCardSize = computed<MediaCardSize>(() => {
   return sizeMap[props.cardSize];
 });
 
-// For skeleton component
 const skeletonCardSize = computed<CardSize>(() => props.cardSize);
 
-// Card width based on size
 const cardWidthStyle = computed(() => {
   const widths = {
     small: { mobile: "160px", tablet: "200px", desktop: "240px" },
     medium: { mobile: "200px", tablet: "260px", desktop: "300px" },
     large: { mobile: "280px", tablet: "340px", desktop: "400px" },
   };
-  return {}; // Using flex-shrink-0 and aspect ratio instead
+  return {};
 });
 
-// Helper to set card refs
 const setCardRef = (el: any, index: number) => {
   if (el) {
     cardRefs.value.set(index, el as HTMLElement);
   }
 };
 
-// API Data - use direct data if provided, otherwise fetch from endpoint
 const shouldFetch = computed(() => !props.data && props.endpoint);
 
 const apiData = useApiData<Movie | TVSeries>({
@@ -244,7 +224,6 @@ const apiData = useApiData<Movie | TVSeries>({
   immediate: shouldFetch.value,
 });
 
-// Internal data ref for mutable API data (for infinite scroll)
 const internalData = ref<(Movie | TVSeries)[]>([]);
 const internalMeta = ref<{ total: number; limit: number; offset: number } | null>(null);
 const internalError = ref<string | null>(null);
@@ -264,19 +243,16 @@ watch(
   { immediate: true },
 );
 
-// Use direct data or fetched data - ref for mutability
 const data = computed(() => props.data || internalData.value);
 const isLoading = computed(() => (props.data ? false : internalIsLoading.value));
 const error = computed(() => (props.data ? null : internalError.value));
 const meta = computed(() => (props.data ? null : internalMeta.value));
 
-// Refresh function (not computed)
 const refresh = () => {
   if (props.data) return;
   apiData.refresh();
 };
 
-// Computed
 const displayData = computed(() => data.value);
 const hasMore = computed(() => {
   if (props.data) return false;
@@ -284,7 +260,6 @@ const hasMore = computed(() => {
   return internalMeta.value.offset + internalMeta.value.limit < internalMeta.value.total;
 });
 
-// Classes
 const titleGradientClass = computed(() => {
   const gradients: Record<MediaType, string> = {
     movie:
@@ -311,7 +286,6 @@ const arrowClasses = (direction: "left" | "right") => {
   return [...base, position];
 };
 
-// Methods
 const handleScroll = () => {
   if (!trackRef.value) return;
 
@@ -341,7 +315,6 @@ const scrollRight = () => {
   });
 };
 
-// Drag to scroll (mouse)
 const handleDragStart = (e: MouseEvent) => {
   if (!trackRef.value || !canDrag.value) return;
 
@@ -355,7 +328,7 @@ const handleDragMove = (e: MouseEvent) => {
 
   e.preventDefault();
   const x = e.pageX - trackRef.value.offsetLeft;
-  const walk = (x - startPos.value.x) * 1.5; // Scroll speed multiplier
+  const walk = (x - startPos.value.x) * 1.5;
   trackRef.value.scrollLeft = scrollStartPos.value - walk;
 };
 
@@ -363,7 +336,6 @@ const handleDragEnd = () => {
   isDragging.value = false;
 };
 
-// Touch scroll (enhanced with vertical scroll detection)
 const touchStartY = ref(0);
 const isHorizontalScroll = ref(false);
 
@@ -395,7 +367,6 @@ const handleTouchMove = (e: TouchEvent) => {
 };
 
 const handleTouchEnd = () => {
-  // Touch end handling
 };
 
 const loadMore = async () => {
@@ -414,7 +385,6 @@ const loadMore = async () => {
     });
 
     if (response.status?.code === "SUCCESS" && Array.isArray(response.data)) {
-      // Use internalData ref for mutation
       internalData.value.push(...response.data);
       internalMeta.value = response.meta;
     }
@@ -423,11 +393,9 @@ const loadMore = async () => {
   }
 };
 
-// GSAP Animations
 const animateSection = () => {
   if (!sectionRef.value) return;
 
-  // Animate section in
   gsap.fromTo(
     sectionRef.value,
     { opacity: 0, y: 30 },
@@ -449,10 +417,8 @@ const animateCards = () => {
   const cardsArray = Array.from(cardRefs.value.values()).filter(Boolean);
   if (cardsArray.length === 0) return;
 
-  // Reset for animation
   gsap.set(cardsArray, { opacity: 0, y: 20 });
 
-  // Stagger animation
   gsap.to(cardsArray, {
     opacity: 1,
     y: 0,
@@ -463,7 +429,6 @@ const animateCards = () => {
   });
 };
 
-// Watch for data changes to animate cards
 watch(
   () => [isLoading.value, displayData.value.length],
   ([loading]) => {
@@ -476,14 +441,11 @@ watch(
   { immediate: true },
 );
 
-// Lifecycle
 onMounted(() => {
-  // Initialize GSAP context for proper cleanup
   if (gsap && sectionRef.value) {
     ctx.value = gsap.context(() => {}, sectionRef.value);
   }
 
-  // Initialize scroll state
   nextTick(() => {
     handleScroll();
     animateSection();
@@ -491,14 +453,12 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // Clean up GSAP context
   if (ctx.value) {
     ctx.value.revert();
     ctx.value = null;
   }
 });
 
-// Expose methods
 defineExpose({
   scrollLeft,
   scrollRight,
@@ -508,7 +468,6 @@ defineExpose({
 
 <style scoped>
 .content-row {
-  /* Base styles */
 }
 
 .fade-slide-enter-active,
@@ -528,7 +487,6 @@ defineExpose({
   transform: translateY(0);
 }
 
-/* Card width based on size */
 .card-item {
   width: 160px;
 }
@@ -545,7 +503,6 @@ defineExpose({
   }
 }
 
-/* Larger cards */
 .card-item:has(.media-card:has([data-size="large"])) {
   width: 220px;
 }
@@ -562,7 +519,6 @@ defineExpose({
   }
 }
 
-/* Small cards */
 .card-item:has(.media-card:has([data-size="small"])) {
   width: 140px;
 }
@@ -579,21 +535,18 @@ defineExpose({
   }
 }
 
-/* Smooth touch scrolling */
 @supports (-webkit-touch-callout: none) {
   .no-scrollbar {
     -webkit-overflow-scrolling: touch;
   }
 }
 
-/* Shimmer animation for skeleton */
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
   }
 }
 
-/* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .card-item {
     transition: none !important;

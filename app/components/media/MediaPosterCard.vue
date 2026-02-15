@@ -1,17 +1,4 @@
 <script setup lang="ts">
-/**
- * MediaPosterCard Component - Premium Edition
- *
- * Enterprise-grade poster card with:
- * - 3D perspective hover effects with tilt
- * - Smooth scale and lift animations
- * - Metadata reveal on hover with backdrop blur
- * - Progress bar support with gradient
- * - Premium loading skeleton states
- * - Enhanced accessibility features
- * - Multiple size variants
- */
-
 import type { StreamingContent, StreamingMovie, StreamingSeries } from "~/data/mockDataEnhanced";
 
 type CardSize = "portrait" | "landscape" | "wide";

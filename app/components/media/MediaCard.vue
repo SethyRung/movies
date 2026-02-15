@@ -1,42 +1,17 @@
 <script setup lang="ts">
 import type { Movie, TVSeries } from "#imports";
 
-/**
- * MediaCard Component
- *
- * A versatile card component for displaying movies and TV series with:
- * - Multiple size variants (sm, md, lg)
- * - GSAP-powered hover animations
- * - Skeleton loading state
- * - Progress bar for continue watching
- * - Responsive design with dark theme
- */
-
-// ============================================================================
-// TYPES
-// ============================================================================
-
 type MediaType = "movie" | "series";
 type CardSize = "sm" | "md" | "lg";
 
 interface MediaCardProps {
-  /** The media object (movie or series) */
   media: Movie | TVSeries | null;
-  /** Type of media - 'movie' or 'series' */
   type: MediaType;
-  /** Size variant - 'sm' (compact), 'md' (standard), 'lg' (large with overlay) */
   size?: CardSize;
-  /** Optional: Progress percentage for continue watching (0-100) */
   progressPercent?: number;
-  /** Optional: Click handler callback */
   onClick?: (media: Movie | TVSeries) => void;
-  /** Optional: Loading state */
   loading?: boolean;
 }
-
-// ============================================================================
-// PROPS & EMITS
-// ============================================================================
 
 const props = withDefaults(defineProps<MediaCardProps>(), {
   size: "md",
@@ -49,29 +24,14 @@ const emit = defineEmits<{
   click: [media: Movie | TVSeries];
 }>();
 
-// ============================================================================
-// COMPOSABLES
-// ============================================================================
-
 const { prefersReducedMotion } = useMediaQuery();
-// Get GSAP from Nuxt app
 const { $gsap: gsap } = useNuxtApp();
 
-// ============================================================================
-// COMPUTED
-// ============================================================================
-
-/**
- * Get the image source - prefers thumbnail, falls back to poster
- */
 const imageSrc = computed(() => {
   if (!props.media) return "";
   return props.media.thumbnail || props.media.poster || "";
 });
 
-/**
- * Get the release year based on media type
- */
 const releaseYear = computed(() => {
   if (!props.media) return undefined;
   if (props.type === "movie") {
@@ -80,17 +40,11 @@ const releaseYear = computed(() => {
   return (props.media as TVSeries).firstAiredYear;
 });
 
-/**
- * Get the rating as a number
- */
 const rating = computed(() => {
   if (!props.media?.rating) return undefined;
   return Number(props.media.rating);
 });
 
-/**
- * Generate CSS classes based on size variant
- */
 const cardClasses = computed(() => {
   const base =
     "media-card group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300";
@@ -104,9 +58,6 @@ const cardClasses = computed(() => {
   return `${base} ${sizeClasses[props.size]}`;
 });
 
-/**
- * Container classes for the image wrapper
- */
 const imageWrapperClasses = computed(() => {
   const base = "relative overflow-hidden bg-gray-800";
 
@@ -119,9 +70,6 @@ const imageWrapperClasses = computed(() => {
   return `${base} ${sizeClasses[props.size]}`;
 });
 
-/**
- * Content layout classes
- */
 const contentClasses = computed(() => {
   const sizeClasses = {
     sm: "flex-1 p-3 flex flex-col justify-center",
@@ -132,9 +80,6 @@ const contentClasses = computed(() => {
   return sizeClasses[props.size];
 });
 
-/**
- * Title text classes
- */
 const titleClasses = computed(() => {
   const sizeClasses = {
     sm: "text-sm font-semibold line-clamp-1",
@@ -145,9 +90,6 @@ const titleClasses = computed(() => {
   return `${sizeClasses[props.size]} text-white`;
 });
 
-/**
- * Description snippet (only for lg size on hover)
- */
 const descriptionSnippet = computed(() => {
   if (!props.media?.description) return "";
   const maxLength = props.size === "lg" ? 120 : 80;
@@ -157,22 +99,15 @@ const descriptionSnippet = computed(() => {
   return props.media.description.slice(0, maxLength) + "...";
 });
 
-// ============================================================================
-// GSAP ANIMATIONS
-// ============================================================================
-
 const cardRef = ref<HTMLElement>();
 const imageRef = ref<HTMLElement>();
 const overlayRef = ref<HTMLElement>();
 
-// GSAP context for proper cleanup
 let gsapCtx: ReturnType<typeof gsap.context> | null = null;
-// Store animation references for cleanup
 let cardAnimation: ReturnType<typeof gsap.to> | null = null;
 let imageAnimation: ReturnType<typeof gsap.to> | null = null;
 let overlayAnimation: ReturnType<typeof gsap.to> | null = null;
 
-// Event handler references for cleanup
 const handleMouseEnter = () => {
   if (props.size === "lg" && overlayAnimation) {
     overlayAnimation.play();
@@ -192,14 +127,11 @@ const handleMouseLeave = () => {
 onMounted(() => {
   if (!cardRef.value || prefersReducedMotion.value) return;
 
-  // Create GSAP context for this component
   gsapCtx = gsap.context(() => {
-    // Initial state
     if (overlayRef.value) {
       gsap.set(overlayRef.value, { y: 20, opacity: 0 });
     }
 
-    // Hover animation for the card
     cardAnimation = gsap.to(cardRef.value, {
       scale: 1.03,
       y: -4,
@@ -209,7 +141,6 @@ onMounted(() => {
       paused: true,
     });
 
-    // Image zoom effect
     if (imageRef.value) {
       imageAnimation = gsap.to(imageRef.value, {
         scale: 1.1,
@@ -219,7 +150,6 @@ onMounted(() => {
       });
     }
 
-    // Overlay content fade in
     if (overlayRef.value) {
       overlayAnimation = gsap.to(overlayRef.value, {
         y: 0,
@@ -231,7 +161,6 @@ onMounted(() => {
     }
   }, cardRef.value);
 
-  // Set up hover event listeners with proper cleanup
   if (cardRef.value) {
     cardRef.value.addEventListener("mouseenter", handleMouseEnter);
     cardRef.value.addEventListener("mouseleave", handleMouseLeave);
@@ -239,7 +168,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // Kill all animations
   cardAnimation?.kill();
   imageAnimation?.kill();
   overlayAnimation?.kill();
@@ -247,22 +175,16 @@ onUnmounted(() => {
   imageAnimation = null;
   overlayAnimation = null;
 
-  // Revert GSAP context
   if (gsapCtx) {
     gsapCtx.revert();
     gsapCtx = null;
   }
 
-  // Remove event listeners
   if (cardRef.value) {
     cardRef.value.removeEventListener("mouseenter", handleMouseEnter);
     cardRef.value.removeEventListener("mouseleave", handleMouseLeave);
   }
 });
-
-// ============================================================================
-// EVENT HANDLERS
-// ============================================================================
 
 function handleClick() {
   if (props.media) {
@@ -275,16 +197,6 @@ function handleClick() {
 </script>
 
 <template>
-  <!--
-    MEDIA CARD COMPONENT
-
-    Size Variants:
-    - sm: Compact horizontal card (thumbnail + side content)
-    - md: Standard vertical card (thumbnail + content below)
-    - lg: Large card with overlay content on hover
-  -->
-
-  <!-- Loading State (Skeleton) -->
   <div v-if="loading" :class="cardClasses">
     <div :class="imageWrapperClasses">
       <div class="skeleton-pulse w-full h-full bg-gray-800" />
@@ -295,7 +207,6 @@ function handleClick() {
     </div>
   </div>
 
-  <!-- Actual Card -->
   <div
     v-else-if="media"
     ref="cardRef"
@@ -306,9 +217,7 @@ function handleClick() {
     @click="handleClick"
     @keydown.enter="handleClick"
   >
-    <!-- Image Container -->
     <div :class="imageWrapperClasses">
-      <!-- Media Image -->
       <NuxtImg
         v-if="imageSrc"
         ref="imageRef"
@@ -331,14 +240,11 @@ function handleClick() {
         <Icon name="i-lucide-film" class="w-12 h-12 text-gray-600" />
       </div>
 
-      <!-- Subtle Gradient Overlay for Dark Thumbnails -->
       <div
         class="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-gray-900/20 pointer-events-none"
       />
 
-      <!-- Badges Overlay (Top Right) -->
       <div class="absolute top-2 right-2 flex gap-2 z-10">
-        <!-- Rating Badge -->
         <div
           v-if="rating"
           class="flex items-center gap-1 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm"
@@ -348,25 +254,21 @@ function handleClick() {
         </div>
       </div>
 
-      <!-- Year Badge (Top Left) -->
       <div v-if="releaseYear" class="absolute top-2 left-2 z-10">
         <div class="px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm">
           <span class="text-xs font-medium text-white">{{ releaseYear }}</span>
         </div>
       </div>
 
-      <!-- Large size overlay content (appears on hover) -->
       <div
         v-if="size === 'lg'"
         ref="overlayRef"
         class="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent"
       >
-        <!-- Description snippet -->
         <p v-if="descriptionSnippet" class="text-sm text-gray-300 line-clamp-3 mb-3">
           {{ descriptionSnippet }}
         </p>
 
-        <!-- Action buttons -->
         <div class="flex gap-2">
           <UButton icon="i-lucide-play" size="sm" color="primary" variant="solid" class="flex-1">
             {{ type === "movie" ? "Watch" : "Play" }}
@@ -375,7 +277,6 @@ function handleClick() {
         </div>
       </div>
 
-      <!-- Progress Bar (Continue Watching) -->
       <div
         v-if="progressPercent !== undefined && progressPercent > 0 && progressPercent < 100"
         class="absolute bottom-0 left-0 right-0 h-1 bg-black/50"
@@ -387,27 +288,21 @@ function handleClick() {
       </div>
     </div>
 
-    <!-- Content Section (not for lg - it uses overlay) -->
     <div v-if="size !== 'lg'" :class="contentClasses">
-      <!-- Title -->
       <h3 :class="titleClasses">
         {{ media.title }}
       </h3>
 
-      <!-- Small size: Additional info below title -->
       <template v-if="size === 'sm'">
         <div class="flex items-center gap-2 mt-1">
-          <!-- Rating (inline for sm) -->
           <span v-if="rating" class="flex items-center gap-1 text-xs text-gray-400">
             <Icon name="i-lucide-star" class="w-3 h-3 text-yellow-400 fill-yellow-400" />
             {{ rating }}
           </span>
-          <!-- Year (inline for sm) -->
           <span v-if="releaseYear" class="text-xs text-gray-400">
             {{ releaseYear }}
           </span>
         </div>
-        <!-- Progress bar for sm size (below content) -->
         <div
           v-if="progressPercent !== undefined && progressPercent > 0 && progressPercent < 100"
           class="mt-2 h-0.5 bg-gray-700 rounded-full overflow-hidden"
@@ -419,13 +314,11 @@ function handleClick() {
         </div>
       </template>
 
-      <!-- Medium size: Description snippet and badges below -->
       <template v-if="size === 'md'">
         <p v-if="descriptionSnippet" class="text-xs text-gray-400 line-clamp-2 mt-1">
           {{ descriptionSnippet }}
         </p>
 
-        <!-- Rating and Year inline for md -->
         <div class="flex items-center gap-3 mt-2">
           <span v-if="rating" class="flex items-center gap-1 text-xs text-gray-400">
             <Icon name="i-lucide-star" class="w-3 h-3 text-yellow-400 fill-yellow-400" />
@@ -439,7 +332,6 @@ function handleClick() {
           </span>
         </div>
 
-        <!-- Progress bar for md size -->
         <div
           v-if="progressPercent !== undefined && progressPercent > 0 && progressPercent < 100"
           class="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden"
@@ -453,7 +345,6 @@ function handleClick() {
     </div>
   </div>
 
-  <!-- Empty State -->
   <div v-else :class="cardClasses" class="opacity-50 pointer-events-none">
     <div :class="imageWrapperClasses">
       <div class="w-full h-full bg-gray-800 flex items-center justify-center">
@@ -467,7 +358,6 @@ function handleClick() {
 </template>
 
 <style scoped>
-/* Skeleton loading animation */
 @keyframes skeleton-pulse {
   0%,
   100% {
@@ -482,7 +372,6 @@ function handleClick() {
   animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Line clamping utilities */
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -504,7 +393,6 @@ function handleClick() {
   overflow: hidden;
 }
 
-/* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .media-card {
     transition: none !important;
@@ -515,20 +403,17 @@ function handleClick() {
   }
 }
 
-/* Glow effect on hover for large cards */
 @media (hover: hover) {
   .media-card.group:hover .media-card-glow {
     opacity: 1;
   }
 }
 
-/* Focus styles for accessibility */
 .media-card:focus-visible {
   outline: 2px solid rgb(99 102 241);
   outline-offset: 2px;
 }
 
-/* Smooth image transition */
 .media-card img {
   transition: transform 0.3s ease-out;
 }
