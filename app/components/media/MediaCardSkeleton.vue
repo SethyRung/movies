@@ -9,25 +9,20 @@
           : 'w-[140px] md:w-[180px] aspect-video',
     ]"
   >
-    <!-- Poster skeleton -->
     <div class="relative h-full w-full overflow-hidden">
       <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-gray-800 to-gray-900">
-        <!-- Shimmer effect -->
         <div
           class="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent"
         />
       </div>
 
-      <!-- Rating badge skeleton -->
       <div
         v-if="showRating"
         class="absolute top-2 right-2 flex h-8 w-12 items-center justify-center rounded-lg bg-gray-800/80"
       />
 
-      <!-- Quality badge skeleton -->
       <div v-if="showQuality" class="absolute top-2 left-2 h-5 w-8 rounded bg-gray-800/80" />
 
-      <!-- Title skeleton (for sm/md sizes) -->
       <div v-if="size !== 'large'" class="absolute bottom-0 left-0 right-0 p-3 bg-gray-900/80">
         <div class="h-4 w-3/4 rounded bg-gray-700" />
         <div class="mt-2 h-3 w-1/2 rounded bg-gray-700" />

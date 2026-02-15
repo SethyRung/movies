@@ -1,15 +1,4 @@
-/**
- * Mock Data for Homepage Development
- *
- * This file contains sample data for development and testing before API integration.
- * Replace with actual API calls when backend is ready.
- */
-
 import type { Movie, TVSeries, Genre } from "#shared/types";
-
-// ============================================================================
-// MOVIES DATA
-// ============================================================================
 
 export const mockMovies: Movie[] = [
   {
@@ -150,10 +139,6 @@ export const mockMovies: Movie[] = [
   },
 ];
 
-// ============================================================================
-// TV SERIES DATA
-// ============================================================================
-
 export const mockSeries: TVSeries[] = [
   {
     id: "series-1",
@@ -293,10 +278,6 @@ export const mockSeries: TVSeries[] = [
   },
 ];
 
-// ============================================================================
-// GENRES DATA
-// ============================================================================
-
 export const mockGenres: Genre[] = [
   {
     id: "genre-1",
@@ -370,45 +351,26 @@ export const mockGenres: Genre[] = [
   },
 ];
 
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
-
-/**
- * Get featured movies
- */
 export const getFeaturedMovies = (): Movie[] => {
   return mockMovies.filter((movie) => movie.featured);
 };
 
-/**
- * Get featured series
- */
 export const getFeaturedSeries = (): TVSeries[] => {
   return mockSeries.filter((series) => series.featured);
 };
 
-/**
- * Get trending movies (top rated)
- */
 export const getTrendingMovies = (limit = 10): Movie[] => {
   return [...mockMovies]
     .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
     .slice(0, limit);
 };
 
-/**
- * Get trending series (top rated)
- */
 export const getTrendingSeries = (limit = 10): TVSeries[] => {
   return [...mockSeries]
     .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
     .slice(0, limit);
 };
 
-/**
- * Get new releases
- */
 export const getNewReleases = (limit = 10): (Movie | TVSeries)[] => {
   const movies = mockMovies
     .filter((m) => m.releaseYear && m.releaseYear >= 2023)
@@ -426,11 +388,7 @@ export const getNewReleases = (limit = 10): (Movie | TVSeries)[] => {
     .slice(0, limit) as (Movie | TVSeries)[];
 };
 
-/**
- * Get continue watching items (mock)
- */
 export const getContinueWatching = (limit = 6): (Movie | TVSeries)[] => {
-  // Return some items with progress for continue watching
   const items: (Movie | TVSeries)[] = [
     mockSeries[1], // The Last of Us
     mockMovies[2], // The Batman

@@ -30,7 +30,6 @@ export function useApiData<T = unknown>(options: ApiDataOptions<T>): ApiDataStat
     error.value = null;
 
     try {
-      // Build query string
       const queryString = Object.entries(query)
         .filter(([_, value]) => value !== undefined && value !== null)
         .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
@@ -59,7 +58,6 @@ export function useApiData<T = unknown>(options: ApiDataOptions<T>): ApiDataStat
     }
   };
 
-  // Fetch immediately if enabled
   if (immediate) {
     fetchData();
   }

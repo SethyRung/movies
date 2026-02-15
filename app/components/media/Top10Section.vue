@@ -1,16 +1,4 @@
 <script setup lang="ts">
-/**
- * Top10Section Component - Premium Edition
- *
- * Netflix-style Top 10 ranking section with:
- * - Large numbered cards (1-10) with premium styling
- * - Staggered scale effect
- * - Enhanced hover animations with 3D effects
- * - Horizontal scroll with momentum
- * - Animated section header
- * - Golden gradient for top 3
- */
-
 import type { StreamingContent } from "~/data/mockDataEnhanced";
 
 interface Props {

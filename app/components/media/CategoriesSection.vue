@@ -1,13 +1,6 @@
 <script setup lang="ts">
-/**
- * CategoriesSection Component
- *
- * Displays genre cards for quick browsing with hover animations and visual effects.
- */
-
 const { $gsap: gsap } = useNuxtApp();
 
-// Track hover animations for cleanup
 const hoverAnimations = ref<Map<HTMLElement, GSAPTween>>(new Map());
 
 interface GenreWithColor {
@@ -102,12 +95,10 @@ const genres = ref<GenreWithColor[]>([
   },
 ]);
 
-// GSAP animation refs
 const sectionRef = ref<HTMLElement>();
 const cardRefs = ref<HTMLElement[]>([]);
 const gsapCtx = ref<ReturnType<typeof gsap.context> | null>(null);
 
-// Set card refs safely - clear old refs first
 const setCardRef = (el: unknown) => {
   const element = el as HTMLElement;
   if (element && !cardRefs.value.includes(element)) {
@@ -115,17 +106,14 @@ const setCardRef = (el: unknown) => {
   }
 };
 
-// Hover animation for individual cards with proper cleanup
 const animateCardHover = (element: HTMLElement | null, entering: boolean) => {
   if (!element || !gsap) return;
 
-  // Kill any existing animation for this element
   const existing = hoverAnimations.value.get(element);
   if (existing) {
     existing.kill();
   }
 
-  // Create new animation and store reference
   const tween = gsap.to(element, {
     scale: entering ? 1.05 : 1,
     y: entering ? -5 : 0,
@@ -142,11 +130,9 @@ onMounted(() => {
     return;
   }
 
-  // Create GSAP context for proper cleanup
   gsapCtx.value = gsap.context();
 
   nextTick(() => {
-    // Animate section title
     if (sectionRef.value) {
       const title = sectionRef.value.querySelector(".section-title");
       if (title) {
@@ -158,7 +144,6 @@ onMounted(() => {
       }
     }
 
-    // Stagger animate cards
     if (cardRefs.value.length > 0) {
       gsap.fromTo(
         cardRefs.value,
@@ -176,26 +161,21 @@ onMounted(() => {
   });
 });
 
-// Clean up on unmount
 onUnmounted(() => {
-  // Kill all hover animations
   hoverAnimations.value.forEach((tween) => tween.kill());
   hoverAnimations.value.clear();
 
-  // Revert GSAP context
   if (gsapCtx.value) {
     gsapCtx.value.revert();
     gsapCtx.value = null;
   }
 
-  // Clear refs
   cardRefs.value = [];
 });
 </script>
 
 <template>
   <section ref="sectionRef" class="relative py-12 md:py-16 overflow-hidden">
-    <!-- Background decoration -->
     <div
       class="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background"
     />
@@ -203,9 +183,7 @@ onUnmounted(() => {
       class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.1),transparent_50%)]"
     />
 
-    <!-- Content -->
     <div class="relative container mx-auto px-4 md:px-8 lg:px-12">
-      <!-- Header -->
       <div class="section-title mb-8 md:mb-12">
         <div class="flex items-center gap-2 mb-2">
           <UIcon name="i-lucide-compass" class="w-5 h-5 text-primary-500" />
@@ -223,7 +201,6 @@ onUnmounted(() => {
         </p>
       </div>
 
-      <!-- Genre Grid -->
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
         <NuxtLink
           v-for="genre in genres"
@@ -235,7 +212,6 @@ onUnmounted(() => {
           @mouseenter="animateCardHover($event.currentTarget as HTMLElement, true)"
           @mouseleave="animateCardHover($event.currentTarget as HTMLElement, false)"
         >
-          <!-- Overlay pattern -->
           <div class="absolute inset-0 opacity-20">
             <div
               class="absolute inset-0"
@@ -246,12 +222,9 @@ onUnmounted(() => {
             />
           </div>
 
-          <!-- Gradient overlay for depth -->
           <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-          <!-- Content -->
           <div class="relative z-10">
-            <!-- Icon -->
             <div class="mb-3 flex items-center justify-between">
               <div
                 class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center"
@@ -265,32 +238,27 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <!-- Genre name -->
             <h3
               class="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-white transition-colors"
             >
               {{ genre.name }}
             </h3>
 
-            <!-- Description -->
             <p class="text-xs md:text-sm text-white/80 line-clamp-2">
               {{ genre.description }}
             </p>
           </div>
 
-          <!-- Hover effect overlay -->
           <div
             class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           />
 
-          <!-- Shine effect on hover -->
           <div
             class="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/20 to-transparent"
           />
         </NuxtLink>
       </div>
 
-      <!-- See All Genres Link -->
       <div class="mt-8 text-center">
         <UButton to="/genres" size="lg" color="neutral" variant="ghost" class="gap-2">
           <template #leading>
@@ -307,7 +275,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -315,7 +282,6 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .group-hover\:translate-x-\[100\%] {
     transition: none;

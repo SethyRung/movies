@@ -1,15 +1,4 @@
 <script setup lang="ts">
-/**
- * BillboardsSection Component - Premium Edition
- *
- * Promotional billboard banners with:
- * - Countdown timers with animated digits
- * - Featured content highlights
- * - Enhanced hover effects with scale and glow
- * - Scroll-triggered entrance animations
- * - Premium gradient backgrounds
- */
-
 import type { StreamingContent } from "~/data/mockDataEnhanced";
 
 interface Billboard {
