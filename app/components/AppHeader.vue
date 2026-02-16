@@ -11,7 +11,6 @@ const navItems = [
   { label: "Movies", to: "/movies" },
   { label: "TV Series", to: "/tv-series" },
   { label: "New & Popular", to: "/new" },
-  { label: "My List", to: "/my-list" },
 ];
 
 const handleScroll = () => {
@@ -108,49 +107,6 @@ onUnmounted(() => {
             aria-label="Search"
             @click="toggleSearch"
           />
-
-          <UButton
-            icon="i-lucide-bell"
-            color="neutral"
-            variant="ghost"
-            class="hidden sm:flex items-center justify-center text-white hover:bg-white/10 w-10 h-10 sm:w-11 sm:h-11"
-            aria-label="Notifications"
-          />
-
-          <UDropdown
-            :items="[
-              [{ label: 'Profile', icon: 'i-lucide-user', click: () => navigateTo('/profile') }],
-              [
-                {
-                  label: 'My List',
-                  icon: 'i-lucide-bookmark',
-                  click: () => navigateTo('/my-list'),
-                },
-              ],
-              [
-                {
-                  label: 'Settings',
-                  icon: 'i-lucide-settings',
-                  click: () => navigateTo('/settings'),
-                },
-              ],
-              [{ type: 'divider' }],
-              [{ label: 'Sign Out', icon: 'i-lucide-log-out', click: () => navigateTo('/logout') }],
-            ]"
-          >
-            <UButton
-              color="neutral"
-              variant="ghost"
-              class="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full p-0"
-              aria-label="Profile menu"
-            >
-              <div
-                class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center"
-              >
-                <span class="text-white text-xs sm:text-sm font-semibold">U</span>
-              </div>
-            </UButton>
-          </UDropdown>
 
           <UButton
             icon="i-lucide-menu"
@@ -276,19 +232,6 @@ onUnmounted(() => {
         </NuxtLink>
       </nav>
 
-      <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-neutral-800 bg-neutral-900">
-        <div class="flex items-center gap-3 px-2 sm:px-4 py-3">
-          <div
-            class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center flex-shrink-0"
-          >
-            <span class="text-white font-semibold text-sm">U</span>
-          </div>
-          <div class="min-w-0 flex-1">
-            <p class="text-white font-medium text-sm truncate">User</p>
-            <p class="text-xs sm:text-sm text-neutral-500 truncate">user@example.com</p>
-          </div>
-        </div>
-      </div>
     </div>
   </Transition>
 
