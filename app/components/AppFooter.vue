@@ -14,7 +14,6 @@ const linkSections = [
   {
     title: "Help",
     links: [
-      { label: "Account", to: "/account" },
       { label: "Support", to: "/support" },
       { label: "Devices", to: "/devices" },
       { label: "Contact Us", to: "/contact" },

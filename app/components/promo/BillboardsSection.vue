@@ -217,25 +217,6 @@ onUnmounted(() => {
             {{ billboard.description }}
           </p>
 
-          <!-- CTA Button with Enhanced Effects -->
-          <UButton
-            :to="billboard.ctaLink"
-            size="lg"
-            color="white"
-            variant="solid"
-            class="billboard-button group/btn relative overflow-hidden gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white text-black hover:bg-neutral-100 text-sm sm:text-base font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-          >
-            <template #leading>
-              <UIcon
-                name="i-lucide-play"
-                class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:scale-110 transition-transform"
-              />
-            </template>
-            {{ billboard.ctaText }}
-            <span
-              class="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-200/50 to-transparent -translate-x-full group-hover/btn:animate-shimmer"
-            />
-          </UButton>
         </div>
 
         <!-- Countdown (if applicable) -->
