@@ -16,10 +16,12 @@ useHead({
   <div class="min-h-screen bg-neutral-950">
     <AppHeader />
 
-    <UMain class="w-full">
-      <slot />
-    </UMain>
+    <ScrollSmootherWrapper>
+      <UMain class="w-full">
+        <slot />
+      </UMain>
 
-    <AppFooter />
+      <AppFooter />
+    </ScrollSmootherWrapper>
   </div>
 </template>
