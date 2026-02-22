@@ -353,46 +353,46 @@ onUnmounted(() => {
             />
           </div>
         </div>
-
-        <UContainer
-          class="flex items-center justify-center sm:justify-end absolute left-0 bottom-8"
-        >
-          <div class="flex items-center gap-2">
-            <UButton
-              icon="i-lucide-chevron-left"
-              color="neutral"
-              variant="ghost"
-              :disabled="isAnimating"
-              class="bg-neutral-900/90 hover:bg-neutral-800 backdrop-blur-md border border-neutral-600/50 rounded-full shadow-xl transition-all duration-300 hover:scale-110"
-              @click="prev()"
-            />
-
-            <div>
-              <div
-                class="flex items-center bg-neutral-900/60 backdrop-blur-md rounded-full px-3 py-2 border border-neutral-700/50"
-              >
-                <button
-                  v-for="(_, index) in totalItems"
-                  :key="index"
-                  :data-active="index === activeIndex || undefined"
-                  class="w-8 h-2 rounded-full transition-transform duration-500 bg-accented hover:bg-default/50 data-active:bg-linear-to-r data-active:from-primary-500 data-active:to-primary-400 data-active:shadow-lg data-active:shadow-primary-500/50 scale-x-25 data-active:scale-x-100"
-                  @click="scrollTo(index)"
-                />
-              </div>
-            </div>
-
-            <UButton
-              icon="i-lucide-chevron-right"
-              color="neutral"
-              variant="ghost"
-              :disabled="isAnimating"
-              class="bg-neutral-900/90 hover:bg-neutral-800 backdrop-blur-md border border-neutral-600/50 rounded-full shadow-xl transition-all duration-300 hover:scale-110"
-              @click="next()"
-            />
-          </div>
-        </UContainer>
       </UContainer>
     </div>
+
+    <UContainer
+      class="flex items-center justify-center sm:justify-end absolute left-0 right-0 bottom-8 z-10"
+    >
+      <div class="flex items-center gap-2">
+        <UButton
+          icon="i-lucide-chevron-left"
+          color="neutral"
+          variant="ghost"
+          :disabled="isAnimating"
+          class="bg-neutral-900/90 hover:bg-neutral-800 backdrop-blur-md border border-neutral-600/50 rounded-full shadow-xl transition-all duration-300 hover:scale-110"
+          @click="prev()"
+        />
+
+        <div>
+          <div
+            class="flex items-center bg-neutral-900/60 backdrop-blur-md rounded-full px-3 py-2 border border-neutral-700/50"
+          >
+            <button
+              v-for="(_, index) in totalItems"
+              :key="index"
+              :data-active="index === activeIndex || undefined"
+              class="w-8 h-2 rounded-full transition-transform duration-500 bg-accented hover:bg-default/50 data-active:bg-linear-to-r data-active:from-primary-500 data-active:to-primary-400 data-active:shadow-lg data-active:shadow-primary-500/50 scale-x-25 data-active:scale-x-100"
+              @click="scrollTo(index)"
+            />
+          </div>
+        </div>
+
+        <UButton
+          icon="i-lucide-chevron-right"
+          color="neutral"
+          variant="ghost"
+          :disabled="isAnimating"
+          class="bg-neutral-900/90 hover:bg-neutral-800 backdrop-blur-md border border-neutral-600/50 rounded-full shadow-xl transition-all duration-300 hover:scale-110"
+          @click="next()"
+        />
+      </div>
+    </UContainer>
 
     <UProgress
       v-model="progressValue"
