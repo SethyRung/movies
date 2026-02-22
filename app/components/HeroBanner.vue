@@ -1,3 +1,8 @@
+<script lang="ts">
+const AUTOPLAY_INTERVAL = 6000; // 6000ms
+const PROGRESS_UPDATE_INTERVAL = 50; // 50ms
+</script>
+
 <script setup lang="ts">
 import { titleCase } from "scule";
 import gsap from "gsap";
@@ -13,6 +18,7 @@ const sectionRef = useTemplateRef("sectionRef");
 const slideRefs = useTemplateRef("slideRefs");
 const activeIndex = ref(0);
 const isAnimating = ref(false);
+const progressValue = ref(0);
 
 const totalItems = computed(() => props.content.length);
 
@@ -25,7 +31,7 @@ function getDurationText(item: StreamingContent): string {
   return `${item.seasons} Season${item.seasons > 1 ? "s" : ""}`;
 }
 
-const { x: mouseX, y: mouseY } = useMouseInElement(sectionRef);
+const { x: mouseX, y: mouseY, isOutside } = useMouseInElement(sectionRef);
 
 let xTo: ReturnType<typeof gsap.quickTo> | null = null;
 let yTo: ReturnType<typeof gsap.quickTo> | null = null;
@@ -171,6 +177,8 @@ function animateOut(slideEl: HTMLElement | undefined, callback: () => void): voi
 async function goToSlide(index: number): Promise<void> {
   if (isAnimating.value || index === activeIndex.value) return;
 
+  startAutoplay();
+
   isAnimating.value = true;
   const slides = slideRefs.value;
   const currentSlide = slides?.[activeIndex.value];
@@ -206,6 +214,34 @@ defineShortcuts({
   arrowright: () => next(),
 });
 
+let autoplayTimer: ReturnType<typeof setInterval> | null = null;
+let elapsedTime = 0;
+
+function startAutoplay(): void {
+  stopAutoplay();
+
+  elapsedTime = 0;
+  progressValue.value = 0;
+
+  autoplayTimer = setInterval(() => {
+    if (isAnimating.value) return;
+
+    elapsedTime += PROGRESS_UPDATE_INTERVAL;
+    progressValue.value = (elapsedTime / AUTOPLAY_INTERVAL) * 100;
+
+    if (elapsedTime >= AUTOPLAY_INTERVAL) {
+      next();
+    }
+  }, PROGRESS_UPDATE_INTERVAL);
+}
+
+function stopAutoplay(): void {
+  if (autoplayTimer) {
+    clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+}
+
 onMounted(() => {
   const slides = slideRefs.value;
   if (!slides) return;
@@ -216,9 +252,11 @@ onMounted(() => {
   yTo = gsap.quickTo(".animate-bg", "y", { duration: 1, ease: "power2.out" });
 
   animateIn(slides[0]);
+  startAutoplay();
 });
 
 onUnmounted(() => {
+  stopAutoplay();
   gsap.killTweensOf(slideRefs.value);
 });
 </script>
@@ -329,16 +367,18 @@ onUnmounted(() => {
               @click="prev()"
             />
 
-            <div
-              class="flex items-center bg-neutral-900/60 backdrop-blur-md rounded-full px-3 py-2 border border-neutral-700/50"
-            >
-              <button
-                v-for="(_, index) in totalItems"
-                :key="index"
-                :data-active="index === activeIndex || undefined"
-                class="w-8 h-2 rounded-full transition-transform duration-500 bg-accented hover:bg-default/50 data-active:bg-linear-to-r data-active:from-primary-500 data-active:to-primary-400 data-active:shadow-lg data-active:shadow-primary-500/50 scale-x-25 data-active:scale-x-100"
-                @click="scrollTo(index)"
-              />
+            <div>
+              <div
+                class="flex items-center bg-neutral-900/60 backdrop-blur-md rounded-full px-3 py-2 border border-neutral-700/50"
+              >
+                <button
+                  v-for="(_, index) in totalItems"
+                  :key="index"
+                  :data-active="index === activeIndex || undefined"
+                  class="w-8 h-2 rounded-full transition-transform duration-500 bg-accented hover:bg-default/50 data-active:bg-linear-to-r data-active:from-primary-500 data-active:to-primary-400 data-active:shadow-lg data-active:shadow-primary-500/50 scale-x-25 data-active:scale-x-100"
+                  @click="scrollTo(index)"
+                />
+              </div>
             </div>
 
             <UButton
@@ -353,5 +393,14 @@ onUnmounted(() => {
         </UContainer>
       </UContainer>
     </div>
+
+    <UProgress
+      v-model="progressValue"
+      size="sm"
+      :ui="{
+        root: 'absolute bottom-0',
+        base: 'rounded-none',
+      }"
+    />
   </section>
 </template>
