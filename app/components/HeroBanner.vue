@@ -27,24 +27,19 @@ function getDurationText(item: StreamingContent): string {
 
 const { x: mouseX, y: mouseY } = useMouseInElement(sectionRef);
 
-function animateBG() {
-  if (!sectionRef.value) return;
+let xTo: ReturnType<typeof gsap.quickTo> | null = null;
+let yTo: ReturnType<typeof gsap.quickTo> | null = null;
+
+watch([mouseX, mouseY], () => {
+  if (!sectionRef.value || !xTo || !yTo) return;
 
   const centerX = sectionRef.value.clientWidth;
   const centerY = sectionRef.value.clientHeight;
   const deltaX = (mouseX.value - centerX) / centerX;
   const deltaY = (mouseY.value - centerY) / centerY;
 
-  gsap.to(".animate-bg", {
-    x: deltaX * 15,
-    y: deltaY * 15,
-    ease: "power2.out",
-    duration: 1,
-  });
-}
-
-watch([mouseX, mouseY], () => {
-  animateBG();
+  xTo(deltaX * 15);
+  yTo(deltaY * 15);
 });
 
 function animateIn(slideEl: HTMLElement | undefined): void {
@@ -216,6 +211,9 @@ onMounted(() => {
   if (!slides) return;
 
   gsap.set(slides, { opacity: 0 });
+
+  xTo = gsap.quickTo(".animate-bg", "x", { duration: 1, ease: "power2.out" });
+  yTo = gsap.quickTo(".animate-bg", "y", { duration: 1, ease: "power2.out" });
 
   animateIn(slides[0]);
 });
