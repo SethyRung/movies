@@ -1,27 +1,17 @@
-<script setup lang="ts">
-useHead({
-  htmlAttrs: {
-    lang: "en",
-  },
-  meta: [
-    { charset: "utf-8" },
-    { name: "viewport", content: "width=device-width, initial-scale=1" },
-    { name: "format-detection", content: "telephone=no" },
-  ],
-  link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
-});
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="min-h-screen bg-neutral-950">
+  <div class="relative">
     <AppHeader />
 
     <ScrollSmootherWrapper>
-      <UMain class="w-full">
-        <slot />
-      </UMain>
+      <div class="bg-neutral-950">
+        <UMain>
+          <slot />
+        </UMain>
 
-      <AppFooter />
+        <AppFooter />
+      </div>
     </ScrollSmootherWrapper>
   </div>
 </template>

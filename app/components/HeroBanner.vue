@@ -262,7 +262,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="relative w-full h-screen overflow-hidden bg-neutral-950">
+  <section ref="sectionRef" class="relative w-screen h-screen overflow-hidden">
     <div
       v-for="item in content"
       :key="item.id"
