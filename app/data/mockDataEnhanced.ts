@@ -87,11 +87,38 @@ export interface StreamingSeries {
 export type StreamingContent = StreamingMovie | StreamingSeries;
 
 // ============================================================================
+// FIXED UUIDS (Must match server/tasks/db/seed.ts)
+// ============================================================================
+
+export const MOCK_UUIDS = {
+  // Movies
+  "movie-1": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "movie-2": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
+  "movie-3": "a1b2c3d4-e5f6-7890-abcd-ef1234567892",
+  "movie-4": "a1b2c3d4-e5f6-7890-abcd-ef1234567893",
+  "movie-5": "a1b2c3d4-e5f6-7890-abcd-ef1234567894",
+  "movie-6": "a1b2c3d4-e5f6-7890-abcd-ef1234567895",
+  "movie-7": "a1b2c3d4-e5f6-7890-abcd-ef1234567896",
+  "movie-8": "a1b2c3d4-e5f6-7890-abcd-ef1234567897",
+  "movie-9": "a1b2c3d4-e5f6-7890-abcd-ef1234567898",
+  "movie-10": "a1b2c3d4-e5f6-7890-abcd-ef1234567899",
+  // TV Series
+  "series-1": "b1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "series-2": "b1b2c3d4-e5f6-7890-abcd-ef1234567891",
+  "series-3": "b1b2c3d4-e5f6-7890-abcd-ef1234567892",
+  "series-4": "b1b2c3d4-e5f6-7890-abcd-ef1234567893",
+  "series-5": "b1b2c3d4-e5f6-7890-abcd-ef1234567894",
+  "series-6": "b1b2c3d4-e5f6-7890-abcd-ef1234567895",
+  "series-7": "b1b2c3d4-e5f6-7890-abcd-ef1234567896",
+  "series-8": "b1b2c3d4-e5f6-7890-abcd-ef1234567897",
+} as const;
+
+// ============================================================================
 // CAST DATA
 // ============================================================================
 
 const castDatabase: Record<string, CastMember[]> = {
-  "movie-1": [
+  [MOCK_UUIDS["movie-1"]]: [
     {
       id: "c1",
       name: "Timothée Chalamet",
@@ -117,7 +144,7 @@ const castDatabase: Record<string, CastMember[]> = {
       image: "https://image.tmdb.org/t/p/w200/bf7iPSvxOY775wv0BKXpMLFzfTQ.jpg",
     },
   ],
-  "movie-2": [
+  [MOCK_UUIDS["movie-2"]]: [
     {
       id: "c5",
       name: "Cillian Murphy",
@@ -137,45 +164,45 @@ const castDatabase: Record<string, CastMember[]> = {
       image: "https://image.tmdb.org/t/p/w200/im9SAqJPZKEbVZGmjXuLI4O7RvM.jpg",
     },
   ],
-  "movie-3": [
+  [MOCK_UUIDS["movie-3"]]: [
     { id: "c8", name: "Christian Bale", character: "Bruce Wayne / Batman", image: null },
     { id: "c9", name: "Heath Ledger", character: "Joker", image: null },
     { id: "c10", name: "Aaron Eckhart", character: "Harvey Dent", image: null },
   ],
-  "movie-4": [
+  [MOCK_UUIDS["movie-4"]]: [
     { id: "c11", name: "Matthew McConaughey", character: "Cooper", image: null },
     { id: "c12", name: "Anne Hathaway", character: "Brand", image: null },
     { id: "c13", name: "Jessica Chastain", character: "Murph", image: null },
   ],
-  "movie-5": [
+  [MOCK_UUIDS["movie-5"]]: [
     { id: "c14", name: "Leonardo DiCaprio", character: "Cobb", image: null },
     { id: "c15", name: "Joseph Gordon-Levitt", character: "Arthur", image: null },
     { id: "c16", name: "Ellen Page", character: "Ariadne", image: null },
   ],
-  "movie-6": [
+  [MOCK_UUIDS["movie-6"]]: [
     { id: "c17", name: "Christian Bale", character: "Bruce Wayne / Batman", image: null },
     { id: "c18", name: "Heath Ledger", character: "The Joker", image: null },
     { id: "c19", name: "Aaron Eckhart", character: "Harvey Dent", image: null },
   ],
-  "series-1": [
+  [MOCK_UUIDS["series-1"]]: [
     { id: "c20", name: "Matt Smith", character: "Daemon Targaryen", image: null },
     { id: "c21", name: "Emma D'Arcy", character: "Rhaenyra Targaryen", image: null },
     { id: "c22", name: "Olivia Cooke", character: "Alicent Hightower", image: null },
   ],
-  "series-2": [
+  [MOCK_UUIDS["series-2"]]: [
     { id: "c23", name: "Pedro Pascal", character: "Joel", image: null },
     { id: "c24", name: "Bella Ramsey", character: "Ellie", image: null },
     { id: "c25", name: "Nick Offerman", character: "Bill", image: null },
   ],
-  "series-3": [
+  [MOCK_UUIDS["series-3"]]: [
     { id: "c26", name: "Bryan Cranston", character: "Walter White", image: null },
     { id: "c27", name: "Aaron Paul", character: "Jesse Pinkman", image: null },
   ],
-  "series-4": [
+  [MOCK_UUIDS["series-4"]]: [
     { id: "c28", name: "Emilia Clarke", character: "Daenerys Targaryen", image: null },
     { id: "c29", name: "Kit Harington", character: "Jon Snow", image: null },
   ],
-  "series-5": [
+  [MOCK_UUIDS["series-5"]]: [
     { id: "c30", name: "Millie Bobby Brown", character: "Eleven", image: null },
     { id: "c31", name: "Finn Wolfhard", character: "Mike", image: null },
   ],
@@ -205,7 +232,7 @@ const videoMetadata1080p: VideoMetadata = {
 
 export const enhancedMovies: StreamingMovie[] = [
   {
-    id: "movie-1",
+    id: MOCK_UUIDS["movie-1"],
     title: "Dune: Part Two",
     type: "movie",
     description:
@@ -223,7 +250,7 @@ export const enhancedMovies: StreamingMovie[] = [
     duration: 166,
     maturityRating: "PG-13",
     genres: ["Sci-Fi", "Action", "Adventure", "Drama"],
-    cast: castDatabase["movie-1"] || [],
+    cast: castDatabase[MOCK_UUIDS["movie-1"]] || [],
     director: "Denis Villeneuve",
     featured: true,
     trending: true,
@@ -235,7 +262,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2024-03-01T00:00:00.000Z",
   },
   {
-    id: "movie-2",
+    id: MOCK_UUIDS["movie-2"],
     title: "Oppenheimer",
     type: "movie",
     description:
@@ -253,7 +280,7 @@ export const enhancedMovies: StreamingMovie[] = [
     duration: 180,
     maturityRating: "R",
     genres: ["Drama", "Biography", "History"],
-    cast: castDatabase["movie-2"] || [],
+    cast: castDatabase[MOCK_UUIDS["movie-2"]] || [],
     director: "Christopher Nolan",
     featured: true,
     trending: true,
@@ -265,7 +292,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2023-11-21",
   },
   {
-    id: "movie-3",
+    id: MOCK_UUIDS["movie-3"],
     title: "The Batman",
     type: "movie",
     description:
@@ -283,7 +310,7 @@ export const enhancedMovies: StreamingMovie[] = [
     duration: 176,
     maturityRating: "PG-13",
     genres: ["Action", "Crime", "Drama"],
-    cast: castDatabase["movie-3"] || [],
+    cast: castDatabase[MOCK_UUIDS["movie-3"]] || [],
     director: "Matt Reeves",
     featured: true,
     trending: true,
@@ -295,7 +322,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2022-04-18",
   },
   {
-    id: "movie-4",
+    id: MOCK_UUIDS["movie-4"],
     title: "Interstellar",
     type: "movie",
     description:
@@ -312,7 +339,7 @@ export const enhancedMovies: StreamingMovie[] = [
     duration: 169,
     maturityRating: "PG-13",
     genres: ["Sci-Fi", "Drama", "Adventure"],
-    cast: castDatabase["movie-4"] || [],
+    cast: castDatabase[MOCK_UUIDS["movie-4"]] || [],
     director: "Christopher Nolan",
     featured: false,
     trending: true,
@@ -324,7 +351,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2020-01-01",
   },
   {
-    id: "movie-5",
+    id: MOCK_UUIDS["movie-5"],
     title: "Inception",
     type: "movie",
     description:
@@ -341,7 +368,7 @@ export const enhancedMovies: StreamingMovie[] = [
     duration: 148,
     maturityRating: "PG-13",
     genres: ["Sci-Fi", "Action", "Thriller"],
-    cast: castDatabase["movie-5"] || [],
+    cast: castDatabase[MOCK_UUIDS["movie-5"]] || [],
     director: "Christopher Nolan",
     featured: false,
     trending: true,
@@ -353,7 +380,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2020-01-01",
   },
   {
-    id: "movie-6",
+    id: MOCK_UUIDS["movie-6"],
     title: "The Dark Knight",
     type: "movie",
     description:
@@ -370,7 +397,7 @@ export const enhancedMovies: StreamingMovie[] = [
     duration: 152,
     maturityRating: "PG-13",
     genres: ["Action", "Crime", "Drama"],
-    cast: castDatabase["movie-6"] || [],
+    cast: castDatabase[MOCK_UUIDS["movie-6"]] || [],
     director: "Christopher Nolan",
     featured: false,
     trending: true,
@@ -382,7 +409,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2020-01-01",
   },
   {
-    id: "movie-7",
+    id: MOCK_UUIDS["movie-7"],
     title: "Avatar: The Way of Water",
     type: "movie",
     description:
@@ -411,7 +438,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2023-06-01",
   },
   {
-    id: "movie-8",
+    id: MOCK_UUIDS["movie-8"],
     title: "John Wick: Chapter 4",
     type: "movie",
     description:
@@ -440,7 +467,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2023-06-01",
   },
   {
-    id: "movie-9",
+    id: MOCK_UUIDS["movie-9"],
     title: "Spider-Man: No Way Home",
     type: "movie",
     description:
@@ -469,7 +496,7 @@ export const enhancedMovies: StreamingMovie[] = [
     updatedAt: "2022-03-01",
   },
   {
-    id: "movie-10",
+    id: MOCK_UUIDS["movie-10"],
     title: "Top Gun: Maverick",
     type: "movie",
     description:
@@ -505,7 +532,7 @@ export const enhancedMovies: StreamingMovie[] = [
 
 export const enhancedSeries: StreamingSeries[] = [
   {
-    id: "series-1",
+    id: MOCK_UUIDS["series-1"],
     title: "House of the Dragon",
     type: "series",
     description:
@@ -524,7 +551,7 @@ export const enhancedSeries: StreamingSeries[] = [
     episodes: 18,
     maturityRating: "TV-MA",
     genres: ["Drama", "Fantasy", "Action"],
-    cast: castDatabase["series-1"] || [],
+    cast: castDatabase[MOCK_UUIDS["series-1"]] || [],
     creators: ["Ryan J. Condal", "George R.R. Martin"],
     featured: true,
     trending: true,
@@ -537,7 +564,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2022-08-21",
   },
   {
-    id: "series-2",
+    id: MOCK_UUIDS["series-2"],
     title: "The Last of Us",
     type: "series",
     description:
@@ -556,7 +583,7 @@ export const enhancedSeries: StreamingSeries[] = [
     episodes: 18,
     maturityRating: "TV-MA",
     genres: ["Drama", "Action", "Adventure"],
-    cast: castDatabase["series-2"] || [],
+    cast: castDatabase[MOCK_UUIDS["series-2"]] || [],
     creators: ["Craig Mazin", "Neil Druckmann"],
     featured: true,
     trending: true,
@@ -569,7 +596,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2023-01-15",
   },
   {
-    id: "series-3",
+    id: MOCK_UUIDS["series-3"],
     title: "Breaking Bad",
     type: "series",
     description:
@@ -589,7 +616,7 @@ export const enhancedSeries: StreamingSeries[] = [
     episodes: 62,
     maturityRating: "TV-MA",
     genres: ["Drama", "Crime", "Thriller"],
-    cast: castDatabase["series-3"] || [],
+    cast: castDatabase[MOCK_UUIDS["series-3"]] || [],
     creators: ["Vince Gilligan"],
     featured: false,
     trending: true,
@@ -602,7 +629,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2020-01-01",
   },
   {
-    id: "series-4",
+    id: MOCK_UUIDS["series-4"],
     title: "Game of Thrones",
     type: "series",
     description:
@@ -621,7 +648,7 @@ export const enhancedSeries: StreamingSeries[] = [
     episodes: 73,
     maturityRating: "TV-MA",
     genres: ["Drama", "Fantasy", "Action"],
-    cast: castDatabase["series-4"] || [],
+    cast: castDatabase[MOCK_UUIDS["series-4"]] || [],
     creators: ["David Benioff", "D.B. Weiss"],
     featured: false,
     trending: true,
@@ -634,7 +661,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2020-01-01",
   },
   {
-    id: "series-5",
+    id: MOCK_UUIDS["series-5"],
     title: "Stranger Things",
     type: "series",
     description:
@@ -653,7 +680,7 @@ export const enhancedSeries: StreamingSeries[] = [
     episodes: 42,
     maturityRating: "TV-14",
     genres: ["Drama", "Fantasy", "Horror"],
-    cast: castDatabase["series-5"] || [],
+    cast: castDatabase[MOCK_UUIDS["series-5"]] || [],
     creators: ["The Duffer Brothers"],
     featured: false,
     trending: true,
@@ -666,7 +693,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2022-05-27",
   },
   {
-    id: "series-6",
+    id: MOCK_UUIDS["series-6"],
     title: "The Witcher",
     type: "series",
     description:
@@ -699,7 +726,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2020-01-01",
   },
   {
-    id: "series-7",
+    id: MOCK_UUIDS["series-7"],
     title: "Wednesday",
     type: "series",
     description:
@@ -732,7 +759,7 @@ export const enhancedSeries: StreamingSeries[] = [
     updatedAt: "2022-11-23",
   },
   {
-    id: "series-8",
+    id: MOCK_UUIDS["series-8"],
     title: "The Mandalorian",
     type: "series",
     description:

@@ -24,8 +24,14 @@ const emit = defineEmits<{
   click: [media: Movie | TVSeries];
 }>();
 
+const router = useRouter();
 const { prefersReducedMotion } = useMediaQuery();
 const { $gsap: gsap } = useNuxtApp();
+
+const detailLink = computed(() => {
+  if (!props.media) return "";
+  return props.type === "movie" ? `/movies/${props.media.id}` : `/tv-series/${props.media.id}`;
+});
 
 const imageSrc = computed(() => {
   if (!props.media) return "";
@@ -192,6 +198,7 @@ function handleClick() {
       props.onClick(props.media);
     }
     emit("click", props.media);
+    router.push(detailLink.value);
   }
 }
 </script>
@@ -270,10 +277,10 @@ function handleClick() {
         </p>
 
         <div class="flex gap-2">
-          <UButton icon="i-lucide-play" size="sm" color="primary" variant="solid" class="flex-1">
+          <UButton size="sm" color="primary" variant="solid" class="flex-1" trailing-icon="i-lucide-play">
             {{ type === "movie" ? "Watch" : "Play" }}
           </UButton>
-          <UButton icon="i-lucide-plus" size="sm" color="neutral" variant="soft" />
+          <UButton size="sm" color="neutral" variant="soft" trailing-icon="i-lucide-plus" aria-label="Add to list" />
         </div>
       </div>
 

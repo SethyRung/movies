@@ -12,6 +12,7 @@ const emit = defineEmits<{
   play: [content: StreamingContent];
 }>();
 
+const router = useRouter();
 const { $gsap: gsap } = useNuxtApp();
 
 // Refs
@@ -56,11 +57,15 @@ const handleMouseLeave = () => {
 
 const handleClick = (content: StreamingContent) => {
   emit("click", content);
+  const link = content.type === "movie" ? `/movies/${content.id}` : `/tv-series/${content.id}`;
+  router.push(link);
 };
 
 const handlePlay = (content: StreamingContent, e: Event) => {
   e.stopPropagation();
   emit("play", content);
+  const link = content.type === "movie" ? `/movies/${content.id}` : `/tv-series/${content.id}`;
+  router.push(link);
 };
 
 // Scroll handlers
@@ -208,7 +213,7 @@ onUnmounted(() => {
             <div
               class="relative w-10 h-10 rounded-full bg-neutral-800/90 hover:bg-neutral-700 flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-xl border border-neutral-600/50"
             >
-              <UIcon name="i-lucide-chevron-left" class="w-5 h-5 text-white" />
+              <UIcon name="i-lucide-chevron-left" class="w-5 h-5 text-white" aria-hidden="true" />
             </div>
           </div>
         </button>
@@ -323,11 +328,12 @@ onUnmounted(() => {
                     size="lg"
                     color="white"
                     variant="solid"
-                    icon="i-lucide-play"
                     class="w-14 h-14 sm:w-16 sm:h-16 bg-white text-black hover:bg-neutral-200 rounded-full shadow-2xl"
                     aria-label="Play"
                     @click="(e) => handlePlay(item, e)"
-                  />
+                  >
+                    <UIcon name="i-lucide-play" class="w-6 h-6" />
+                  </UButton>
                 </div>
               </div>
             </Transition>
@@ -374,7 +380,7 @@ onUnmounted(() => {
             <div
               class="relative w-10 h-10 rounded-full bg-neutral-800/90 hover:bg-neutral-700 flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-xl border border-neutral-600/50"
             >
-              <UIcon name="i-lucide-chevron-right" class="w-5 h-5 text-white" />
+              <UIcon name="i-lucide-chevron-right" class="w-5 h-5 text-white" aria-hidden="true" />
             </div>
           </div>
         </button>
