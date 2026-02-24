@@ -15,34 +15,35 @@ const PUBLIC_ROUTES: PublicRoute[] = [
   { path: "/api/auth/logout", methods: ["POST"] },
 
   { path: "^/api/movies$", methods: ["GET"] },
-  { path: "^/api/movies/[a-f0-9-]+$", methods: ["GET"] },
+  { path: "^/api/movies/[^/]+$", methods: ["GET"], caseInsensitive: true },
 
   { path: "^/api/series$", methods: ["GET"] },
-  { path: "^/api/series/[a-f0-9-]+$", methods: ["GET"] },
-  { path: "^/api/series/[a-f0-9-]+/seasons$", methods: ["GET"] },
+  { path: "^/api/series/[^/]+$", methods: ["GET"], caseInsensitive: true },
+  { path: "^/api/series/[^/]+/seasons$", methods: ["GET"], caseInsensitive: true },
 
-  { path: "^/api/seasons/[a-f0-9-]+$", methods: ["GET"] },
-  { path: "^/api/seasons/[a-f0-9-]+/episodes$", methods: ["GET"] },
+  { path: "^/api/seasons/[^/]+$", methods: ["GET"], caseInsensitive: true },
+  { path: "^/api/seasons/[^/]+/episodes$", methods: ["GET"], caseInsensitive: true },
 
-  { path: "^/api/episodes/[a-f0-9-]+$", methods: ["GET"] },
+  { path: "^/api/episodes/[^/]+$", methods: ["GET"], caseInsensitive: true },
 
   { path: "^/api/genres$", methods: ["GET"] },
-  { path: "^/api/genres/[a-f0-9-]+$", methods: ["GET"] },
+  { path: "^/api/genres/[^/]+$", methods: ["GET"], caseInsensitive: true },
 
   { path: "^/api/_nuxt_icon/.*", methods: ["GET"] },
 ];
 
-function matchesPublicRoute(path: string, routePath: string): boolean {
-  if (routePath.startsWith("^")) {
-    const regex = new RegExp(routePath.replace("^", ""));
+function matchesPublicRoute(path: string, route: PublicRoute): boolean {
+  if (route.path.startsWith("^")) {
+    const flags = route.caseInsensitive ? "i" : "";
+    const regex = new RegExp(route.path.replace("^", ""), flags);
     return regex.test(path);
   }
-  return path === routePath;
+  return path === route.path;
 }
 
 function findPublicRoute(path: string, method: string): PublicRoute | undefined {
   return PUBLIC_ROUTES.find(
-    (route) => matchesPublicRoute(path, route.path) && route.methods.includes(method),
+    (route) => matchesPublicRoute(path, route) && route.methods.includes(method),
   );
 }
 

@@ -54,8 +54,7 @@ const heroSectionRef = ref<HTMLElement>();
 const contentSectionsRef = ref<HTMLElement[]>([]);
 
 const handlePlay = (content: StreamingContent) => {
-  const path =
-    content.type === "movie" ? `/movies/${content.id}/watch` : `/tv-series/${content.id}/watch`;
+  const path = content.type === "movie" ? `/movies/${content.id}` : `/tv-series/${content.id}`;
   navigateTo(path);
 };
 

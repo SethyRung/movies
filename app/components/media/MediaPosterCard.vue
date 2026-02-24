@@ -27,6 +27,7 @@ const emit = defineEmits<{
   play: [content: StreamingContent];
 }>();
 
+const router = useRouter();
 const { $gsap: gsap } = useNuxtApp();
 
 // Refs
@@ -89,6 +90,13 @@ const ratingColorClass = computed(() => {
   if (rating >= 0.8) return "from-green-500 to-green-600";
   if (rating >= 0.6) return "from-yellow-500 to-yellow-600";
   return "from-red-500 to-red-600";
+});
+
+// Detail page link
+const detailLink = computed(() => {
+  return props.content.type === "movie"
+    ? `/movies/${props.content.id}`
+    : `/tv-series/${props.content.id}`;
 });
 
 // 3D Tilt effect on mouse move
@@ -215,11 +223,13 @@ const handleImageError = () => {
 // Click handler
 const handleClick = () => {
   emit("click", props.content);
+  router.push(detailLink.value);
 };
 
 const handlePlay = (e: Event) => {
   e.stopPropagation();
   emit("play", props.content);
+  router.push(detailLink.value);
 };
 
 // Check if user has visited before for animation
@@ -441,27 +451,34 @@ onUnmounted(() => {
                 size="sm"
                 color="white"
                 variant="solid"
-                icon="i-lucide-play"
+                leading
                 class="flex-1 h-9 min-h-[36px] bg-white text-black hover:bg-neutral-100 text-xs font-semibold shadow-lg"
                 aria-label="Play"
                 @click="handlePlay"
-              />
+              >
+                <template #leading>
+                  <UIcon name="i-lucide-play" class="w-4 h-4" />
+                </template>
+                Play
+              </UButton>
               <UButton
                 size="sm"
                 color="neutral"
                 variant="soft"
-                icon="i-lucide-plus"
                 class="w-9 h-9 min-w-[36px] bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border border-white/30"
                 aria-label="Add to list"
-              />
+              >
+                <UIcon name="i-lucide-plus" class="w-4 h-4" />
+              </UButton>
               <UButton
                 size="sm"
                 color="neutral"
                 variant="soft"
-                icon="i-lucide-chevron-down"
                 class="w-9 h-9 min-w-[36px] bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border border-white/30"
                 aria-label="More options"
-              />
+              >
+                <UIcon name="i-lucide-chevron-down" class="w-4 h-4" />
+              </UButton>
             </div>
           </div>
         </div>
