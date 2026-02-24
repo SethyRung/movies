@@ -7,7 +7,6 @@ const navItems = [
   { label: "Home", to: "/" },
   { label: "Movies", to: "/movies" },
   { label: "TV Series", to: "/tv-series" },
-  { label: "My List", to: "/my-list", icon: "i-lucide-bookmark" },
 ];
 
 const { y: scrollY } = useWindowScroll();
@@ -42,7 +41,7 @@ onBeforeUnmount(() => {
     mode="slideover"
     :ui="{
       root: [
-        'w-full fixed border-b-0',
+        'w-full fixed border-b-0 z-50',
         scrollY > 50
           ? 'bg-neutral-950 shadow-lg'
           : 'bg-gradient-to-b from-neutral-950/80 via-neutral-950/40 to-transparent backdrop-blur-none',
@@ -50,6 +49,9 @@ onBeforeUnmount(() => {
       container: 'gap-6 md:gap-8',
       left: 'lg:flex-none',
       content: 'bg-neutral-950',
+      overlay: 'fixed inset-0 z-[51] bg-elevated/75',
+      header: 'px-4 sm:px-6 h-(--ui-header-height) shrink-0 flex items-center justify-between gap-3 relative z-[52]',
+      body: 'p-4 sm:p-6 overflow-y-auto relative z-[52]',
     }"
     @update:open="animateMobileMenu"
   >

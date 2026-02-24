@@ -4,6 +4,7 @@ import type { Response, TVSeries, Season, Episode } from "#shared/types";
 const route = useRoute();
 const router = useRouter();
 const { $gsap: gsap } = useNuxtApp();
+const { isInList, toggleListItem } = useMyList();
 
 const seriesId = computed(() => route.params.id as string);
 
@@ -170,10 +171,14 @@ const scrollToPlayer = () => {
   }
 };
 
-const isInWatchlist = ref(false);
+const isInWatchlist = computed(() => {
+  if (!series.value) return false;
+  return isInList(series.value.id);
+});
 
-const toggleWatchlist = () => {
-  isInWatchlist.value = !isInWatchlist.value;
+const handleToggleWatchlist = () => {
+  if (!series.value) return;
+  toggleListItem(series.value);
 };
 
 const formatDuration = (seconds: number) => {
@@ -549,7 +554,7 @@ useHead(() => ({
                         :variant="isInWatchlist ? 'soft' : 'outline'"
                         :icon="isInWatchlist ? 'i-lucide-check' : 'i-lucide-plus'"
                         aria-label="Add this series to your watchlist"
-                        @click="toggleWatchlist"
+                        @click="handleToggleWatchlist"
                       >
                         {{ isInWatchlist ? 'In My List' : 'My List' }}
                       </UButton>

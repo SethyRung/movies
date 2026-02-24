@@ -80,8 +80,8 @@ useHead({
 <template>
   <div class="min-h-screen bg-background">
     <!-- Search Header -->
-    <div class="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-white/10">
-      <div class="px-4 sm:px-6 md:px-8 lg:px-12 py-4">
+    <div class="sticky top-[var(--ui-header-height)] z-30 bg-background/95 backdrop-blur-sm border-b border-white/10">
+      <div class="px-4 sm:px-6 md:px-8 lg:px-12 py-4 pt-6">
         <div class="max-w-4xl mx-auto">
           <!-- Search Input -->
           <div class="relative">
@@ -106,9 +106,9 @@ useHead({
           </div>
 
           <!-- Filters -->
-          <div class="flex items-center gap-3 mt-4">
-            <span class="text-sm text-white/60">Filter:</span>
-            <div class="flex gap-2">
+          <div class="flex items-center gap-3 mt-4 flex-wrap">
+            <span class="text-sm text-white/60 shrink-0">Filter:</span>
+            <div class="flex gap-2 flex-wrap">
               <button
                 :class="[
                   'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',

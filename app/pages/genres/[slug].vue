@@ -90,9 +90,9 @@ useHead({
       </div>
 
       <!-- Filters -->
-      <div class="flex items-center gap-3 mt-6">
-        <span class="text-sm text-white/60">Filter:</span>
-        <div class="flex gap-2">
+      <div class="flex items-center gap-3 mt-6 flex-wrap">
+        <span class="text-sm text-white/60 shrink-0">Filter:</span>
+        <div class="flex gap-2 flex-wrap">
           <button
             :class="[
               'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
