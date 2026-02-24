@@ -41,7 +41,7 @@ useHead({
 </script>
 
 <template>
-  <div class="min-h-screen bg-background">
+  <div class="min-h-screen bg-background pt-[var(--ui-header-height)]">
     <!-- Header -->
     <div class="px-4 sm:px-6 md:px-8 lg:px-12 pt-8 pb-6">
       <div class="flex items-center gap-4">

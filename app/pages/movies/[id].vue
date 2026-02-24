@@ -4,6 +4,7 @@ import type { Response, Movie } from "#shared/types";
 const route = useRoute();
 const router = useRouter();
 const { $gsap: gsap } = useNuxtApp();
+const { isInList, toggleListItem } = useMyList();
 
 const movieId = computed(() => route.params.id as string);
 
@@ -77,10 +78,14 @@ const scrollToPlayer = () => {
   player?.scrollIntoView({ behavior: prefersReducedMotion.value ? "auto" : "smooth" });
 };
 
-const isInWatchlist = ref(false);
+const isInWatchlist = computed(() => {
+  if (!movie.value) return false;
+  return isInList(movie.value.id);
+});
 
-const toggleWatchlist = () => {
-  isInWatchlist.value = !isInWatchlist.value;
+const handleToggleWatchlist = () => {
+  if (!movie.value) return;
+  toggleListItem(movie.value);
 };
 
 const initAnimations = () => {
@@ -405,7 +410,7 @@ useHead(() => ({
                         :variant="isInWatchlist ? 'soft' : 'outline'"
                         :icon="isInWatchlist ? 'i-lucide-check' : 'i-lucide-plus'"
                         aria-label="Add this movie to your watchlist"
-                        @click="toggleWatchlist"
+                        @click="handleToggleWatchlist"
                       >
                         {{ isInWatchlist ? 'In My List' : 'My List' }}
                       </UButton>

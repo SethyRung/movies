@@ -27,6 +27,7 @@ const emit = defineEmits<{
 const router = useRouter();
 const { prefersReducedMotion } = useMediaQuery();
 const { $gsap: gsap } = useNuxtApp();
+const { isInList, toggleListItem } = useMyList();
 
 const detailLink = computed(() => {
   if (!props.media) return "";
@@ -201,6 +202,19 @@ function handleClick() {
     router.push(detailLink.value);
   }
 }
+
+const isInWatchlist = computed(() => {
+  if (!props.media) return false;
+  return isInList(props.media.id);
+});
+
+function handleToggleWatchlist(event: Event) {
+  event.stopPropagation();
+  event.preventDefault();
+  if (props.media) {
+    toggleListItem(props.media);
+  }
+}
 </script>
 
 <template>
@@ -288,10 +302,11 @@ function handleClick() {
           </UButton>
           <UButton
             size="sm"
-            color="neutral"
-            variant="soft"
-            trailing-icon="i-lucide-plus"
-            aria-label="Add to list"
+            :color="isInWatchlist ? 'primary' : 'neutral'"
+            :variant="isInWatchlist ? 'solid' : 'soft'"
+            :icon="isInWatchlist ? 'i-lucide-check' : 'i-lucide-plus'"
+            :aria-label="isInWatchlist ? 'Remove from list' : 'Add to list'"
+            @click="handleToggleWatchlist"
           />
         </div>
       </div>
