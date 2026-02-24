@@ -139,7 +139,7 @@ onMounted(() => {
         gsap.fromTo(
           title,
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
         );
       }
     }
@@ -155,7 +155,7 @@ onMounted(() => {
           duration: 0.5,
           stagger: 0.05,
           ease: "power2.out",
-        }
+        },
       );
     }
   });
@@ -244,7 +244,7 @@ onUnmounted(() => {
               {{ genre.name }}
             </h3>
 
-            <p class="text-xs md:text-sm text-white/80 line-clamp-2">
+            <p class="text-xs md:text-sm text-white/80 line-clamp-2 motion-reduce:transition-none">
               {{ genre.description }}
             </p>
           </div>
@@ -273,18 +273,3 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
-
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .group-hover\:translate-x-\[100\%] {
-    transition: none;
-  }
-}
-</style>

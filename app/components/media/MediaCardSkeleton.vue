@@ -12,7 +12,7 @@
     <div class="relative h-full w-full overflow-hidden">
       <div class="absolute inset-0 animate-pulse bg-gradient-to-br from-gray-800 to-gray-900">
         <div
-          class="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent"
+          class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/5 to-transparent"
         />
       </div>
 
@@ -44,11 +44,3 @@ withDefaults(defineProps<Props>(), {
   showQuality: true,
 });
 </script>
-
-<style scoped>
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-</style>

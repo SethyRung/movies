@@ -28,7 +28,14 @@
       @mouseenter="showArrows = true"
       @mouseleave="showArrows = false"
     >
-      <Transition name="fade-slide">
+      <Transition
+        enter-active-class="transition-all duration-200 ease-out"
+        enter-from-class="opacity-0 -translate-y-1/2"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 -translate-y-1/2"
+      >
         <button
           v-show="showLeftArrow && showArrows && !isLoading && data.length > 0"
           :class="arrowClasses('left')"
@@ -40,7 +47,14 @@
         </button>
       </Transition>
 
-      <Transition name="fade-slide">
+      <Transition
+        enter-active-class="transition-all duration-200 ease-out"
+        enter-from-class="opacity-0 -translate-y-1/2"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 -translate-y-1/2"
+      >
         <button
           v-show="showRightArrow && showArrows && !isLoading && data.length > 0"
           :class="arrowClasses('right')"
@@ -97,8 +111,7 @@
             v-for="(item, index) in displayData"
             :key="item.id"
             :ref="(el) => setCardRef(el, index)"
-            class="card-item flex-shrink-0 opacity-0"
-            :style="cardWidthStyle"
+            class="flex-shrink-0 opacity-0 w-40 sm:w-50 md:w-60"
           >
             <MediaCard :media="item" :type="type" :size="mediaCardSize" />
           </div>
@@ -366,8 +379,7 @@ const handleTouchMove = (e: TouchEvent) => {
   }
 };
 
-const handleTouchEnd = () => {
-};
+const handleTouchEnd = () => {};
 
 const loadMore = async () => {
   if (isLoadingMore.value || !internalMeta.value || props.data) return;
@@ -465,96 +477,3 @@ defineExpose({
   refresh,
 });
 </script>
-
-<style scoped>
-.content-row {
-}
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.2s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-50%);
-}
-
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.card-item {
-  width: 160px;
-}
-
-@media (min-width: 640px) {
-  .card-item {
-    width: 200px;
-  }
-}
-
-@media (min-width: 768px) {
-  .card-item {
-    width: 240px;
-  }
-}
-
-.card-item:has(.media-card:has([data-size="large"])) {
-  width: 220px;
-}
-
-@media (min-width: 640px) {
-  .card-item:has(.media-card:has([data-size="large"])) {
-    width: 280px;
-  }
-}
-
-@media (min-width: 768px) {
-  .card-item:has(.media-card:has([data-size="large"])) {
-    width: 320px;
-  }
-}
-
-.card-item:has(.media-card:has([data-size="small"])) {
-  width: 140px;
-}
-
-@media (min-width: 640px) {
-  .card-item:has(.media-card:has([data-size="small"])) {
-    width: 180px;
-  }
-}
-
-@media (min-width: 768px) {
-  .card-item:has(.media-card:has([data-size="small"])) {
-    width: 200px;
-  }
-}
-
-@supports (-webkit-touch-callout: none) {
-  .no-scrollbar {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-item {
-    transition: none !important;
-  }
-
-  .fade-slide-enter-active,
-  .fade-slide-leave-active {
-    transition: none !important;
-  }
-}
-</style>

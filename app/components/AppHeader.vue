@@ -7,9 +7,11 @@ const navItems = [
   { label: "Home", to: "/" },
   { label: "Movies", to: "/movies" },
   { label: "TV Series", to: "/tv-series" },
+  { label: "My List", to: "/my-list", icon: "i-lucide-bookmark" },
 ];
 
 const { y: scrollY } = useWindowScroll();
+const { itemCount } = useMyList();
 
 function animateMobileMenu(value: boolean) {
   if (value) {
@@ -81,17 +83,49 @@ onBeforeUnmount(() => {
     </nav>
 
     <template #right>
-      <UButton icon="i-lucide:search" color="neutral" variant="ghost" />
+      <div class="flex items-center gap-2">
+        <UButton
+          to="/search"
+          icon="i-lucide-search"
+          color="neutral"
+          variant="ghost"
+          aria-label="Search"
+        />
+        <UButton
+          to="/my-list"
+          color="neutral"
+          variant="ghost"
+          aria-label="My List"
+          class="relative"
+        >
+          <UIcon name="i-lucide-bookmark" class="w-5 h-5" />
+          <span
+            v-if="itemCount > 0"
+            class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary-500 text-white text-xs flex items-center justify-center font-medium"
+          >
+            {{ itemCount > 9 ? "9+" : itemCount }}
+          </span>
+        </UButton>
+      </div>
     </template>
 
     <template #body>
       <NuxtLink
+        to="/search"
+        class="menu-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
+        active-class="bg-neutral-800"
+      >
+        <UIcon name="i-lucide-search" class="w-5 h-5" />
+        Search
+      </NuxtLink>
+      <NuxtLink
         v-for="item in navItems"
         :key="item.to"
         :to="item.to"
-        class="menu-item flex items-center px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
+        class="menu-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
         active-class="bg-neutral-800"
       >
+        <UIcon v-if="item.icon" :name="item.icon" class="w-5 h-5" />
         {{ item.label }}
       </NuxtLink>
     </template>

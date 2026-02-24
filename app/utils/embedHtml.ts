@@ -12,17 +12,19 @@ export interface EmbedConfig {
   embedType: EmbedType;
 }
 
-// Trusted domains for embeds
-const TRUSTED_YOUTUBE_DOMAINS = ["youtube.com", "youtu.be", "www.youtube.com"];
-const TRUSTED_VIMEO_DOMAINS = ["vimeo.com", "player.vimeo.com", "www.vimeo.com"];
+// Trusted domains for embeds (reserved for future validation)
+const _TRUSTED_YOUTUBE_DOMAINS = ["youtube.com", "youtu.be", "www.youtube.com"];
+const _TRUSTED_VIMEO_DOMAINS = ["vimeo.com", "player.vimeo.com", "www.vimeo.com"];
 
 /**
  * Validates if a URL is from a trusted source
  */
-function isTrustedUrl(url: string, trustedDomains: string[]): boolean {
+function _isTrustedUrl(url: string, trustedDomains: string[]): boolean {
   try {
     const urlObj = new URL(url);
-    return trustedDomains.some((domain) => urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`));
+    return trustedDomains.some(
+      (domain) => urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`),
+    );
   } catch {
     return false;
   }

@@ -197,14 +197,13 @@ onMounted(() => {
       <div class="flex flex-col items-center gap-6">
         <div class="relative">
           <div
-            class="w-20 h-20 border-4 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"
+            class="w-20 h-20 border-4 border-primary-500/30 border-t-primary-500 rounded-full animate-spin motion-reduce:animate-none"
           />
           <div
-            class="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-primary-400/50 rounded-full animate-spin"
-            style="animation-duration: 1.5s; animation-direction: reverse"
+            class="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-primary-400/50 rounded-full animate-[spin_1.5s_linear_reverse] motion-reduce:animate-none"
           />
         </div>
-        <p class="text-neutral-400 text-lg tracking-wide animate-pulse">
+        <p class="text-neutral-400 text-lg tracking-wide animate-pulse motion-reduce:animate-none">
           Loading your experience...
         </p>
       </div>
@@ -313,80 +312,3 @@ onMounted(() => {
     />
   </div>
 </template>
-
-<style scoped>
-:deep(html) {
-  scroll-behavior: smooth;
-}
-
-:deep(*)::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-:deep(*)::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-:deep(*)::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #404040, #303030);
-  border-radius: 5px;
-  border: 2px solid #0a0a0a;
-}
-
-:deep(*)::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #505050, #404040);
-}
-
-.media-rail-section {
-  transition: transform 0.3s ease;
-}
-
-.page-enter-active,
-.page-leave-active {
-  transition:
-    opacity 0.4s ease,
-    filter 0.4s ease;
-}
-
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-  filter: blur(10px);
-}
-
-#app {
-  transition: opacity 0.5s ease-in-out;
-}
-
-#app.fade-in {
-  opacity: 1 !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :deep(html) {
-    scroll-behavior: auto;
-  }
-
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
-@keyframes ambient-glow {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .media-card {
-    will-change: transform;
-  }
-}
-</style>

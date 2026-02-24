@@ -6,7 +6,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Also make it available globally for components that use it directly
   if (import.meta.client) {
-    (window as any).gsap = gsap;
+    (window as Window & { gsap: typeof gsap }).gsap = gsap;
   }
 });
 
@@ -18,5 +18,8 @@ declare module "#app" {
 }
 
 declare global {
+  interface Window {
+    gsap: typeof import("gsap");
+  }
   const gsap: typeof import("gsap");
 }
