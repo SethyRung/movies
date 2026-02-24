@@ -53,8 +53,7 @@ const GENRES = extractGenres();
 export default defineTask({
   meta: {
     name: "db:seed",
-    description:
-      "Seed database with mock data from shared/mockData.ts",
+    description: "Seed database with mock data from shared/mockData.ts",
   },
   async run() {
     try {
@@ -135,10 +134,7 @@ async function seedGenres(): Promise<Record<string, string>> {
   return genreIds;
 }
 
-async function seedMovies(
-  userId: string,
-  genreIds: Record<string, string>,
-): Promise<void> {
+async function seedMovies(userId: string, genreIds: Record<string, string>): Promise<void> {
   console.info("Seeding movies...");
 
   const movieGenresData: { movieId: string; genreId: string }[] = [];
@@ -185,10 +181,7 @@ async function seedMovies(
   );
 }
 
-async function seedSeries(
-  userId: string,
-  genreIds: Record<string, string>,
-): Promise<void> {
+async function seedSeries(userId: string, genreIds: Record<string, string>): Promise<void> {
   console.info("Seeding TV series...");
 
   const seriesGenresData: { seriesId: string; genreId: string }[] = [];
@@ -206,7 +199,12 @@ async function seedSeries(
         lastAiredYear: series.lastAiredYear,
         rating: series.rating.toString(),
         featured: series.featured,
-        status: series.status === "Running" ? "ongoing" : series.status === "Ended" ? "completed" : "ongoing",
+        status:
+          series.status === "Running"
+            ? "ongoing"
+            : series.status === "Ended"
+              ? "completed"
+              : "ongoing",
         createdBy: userId,
       })),
     )
@@ -245,7 +243,7 @@ async function seedMockSeasonsAndEpisodes(
   for (let seasonNum = 1; seasonNum <= seasonCount; seasonNum++) {
     const episodesInThisSeason =
       seasonNum === seasonCount
-        ? episodeCount - (episodesPerSeason * (seasonNum - 1))
+        ? episodeCount - episodesPerSeason * (seasonNum - 1)
         : episodesPerSeason;
 
     const [season] = await db

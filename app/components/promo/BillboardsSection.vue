@@ -153,7 +153,7 @@ onUnmounted(() => {
 
     <!-- Billboards Container -->
     <div
-      class="flex gap-4 sm:gap-6 overflow-x-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 scrollbar-hide"
+      class="flex gap-4 sm:gap-6 overflow-x-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 no-scrollbar"
     >
       <div
         v-for="(billboard, index) in props.billboards"
@@ -188,16 +188,23 @@ onUnmounted(() => {
           class="billboard-content relative z-10 h-full flex flex-col justify-center p-6 sm:p-8 md:p-10 lg:p-12"
         >
           <!-- Badge -->
-          <Transition name="badge-pop">
+          <Transition
+            enter-active-class="transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none"
+            enter-from-class="opacity-0 -translate-x-5 [transform:rotateY(-90deg)]"
+            enter-to-class="opacity-100 translate-x-0 [transform:rotateY(0)]"
+            leave-active-class="transition-all duration-200 ease-in motion-reduce:transition-none"
+            leave-from-class="opacity-100 scale-100"
+            leave-to-class="opacity-0 scale-80"
+          >
             <UBadge
               v-if="billboard.badge"
               variant="subtle"
               color="primary"
               size="md"
-              class="billboard-badge w-fit mb-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white border-0 text-xs sm:text-sm shadow-lg shadow-primary-500/30"
+              class="w-fit mb-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white border-0 text-xs sm:text-sm shadow-lg shadow-primary-500/30"
             >
               <span class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse motion-reduce:animate-none" />
                 {{ billboard.badge }}
               </span>
             </UBadge>
@@ -216,7 +223,6 @@ onUnmounted(() => {
           >
             {{ billboard.description }}
           </p>
-
         </div>
 
         <!-- Countdown (if applicable) -->
@@ -282,83 +288,9 @@ onUnmounted(() => {
 
         <!-- Shimmer Effect on Hover -->
         <div
-          class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer pointer-events-none"
+          class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500 ease-out pointer-events-none motion-reduce:transition-none"
         />
       </div>
     </div>
   </section>
 </template>
-
-<style scoped>
-/* Scrollbar hide */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Line clamp */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Shimmer animation */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-shimmer {
-  animation: shimmer 1.5s ease-out;
-}
-
-/* Badge pop animation */
-.badge-pop-enter-active {
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.badge-pop-leave-active {
-  transition: all 0.2s ease-in;
-}
-
-.badge-pop-enter-from {
-  opacity: 0;
-  transform: translateX(-20px) rotateY(-90deg);
-}
-
-.badge-pop-leave-to {
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .animate-shimmer {
-    animation: none;
-  }
-
-  .badge-pop-enter-active,
-  .badge-pop-leave-active {
-    transition: none;
-  }
-
-  .billboard-item {
-    transition: none !important;
-  }
-}
-
-/* Tabular nums for countdown */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-</style>

@@ -53,7 +53,7 @@ const rating = computed(() => {
 
 const cardClasses = computed(() => {
   const base =
-    "media-card group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300";
+    "group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2";
 
   const sizeClasses = {
     sm: "flex flex-row w-full max-w-md",
@@ -206,11 +206,11 @@ function handleClick() {
 <template>
   <div v-if="loading" :class="cardClasses">
     <div :class="imageWrapperClasses">
-      <div class="skeleton-pulse w-full h-full bg-gray-800" />
+      <div class="w-full h-full bg-gray-800 animate-pulse" />
     </div>
     <div v-if="size !== 'lg'" class="p-3 w-full">
-      <div class="skeleton-pulse h-4 w-3/4 bg-gray-800 rounded mb-2" />
-      <div class="skeleton-pulse h-3 w-1/2 bg-gray-800 rounded" />
+      <div class="h-4 w-3/4 bg-gray-800 rounded mb-2 animate-pulse" />
+      <div class="h-3 w-1/2 bg-gray-800 rounded animate-pulse" />
     </div>
   </div>
 
@@ -277,10 +277,22 @@ function handleClick() {
         </p>
 
         <div class="flex gap-2">
-          <UButton size="sm" color="primary" variant="solid" class="flex-1" trailing-icon="i-lucide-play">
+          <UButton
+            size="sm"
+            color="primary"
+            variant="solid"
+            class="flex-1"
+            trailing-icon="i-lucide-play"
+          >
             {{ type === "movie" ? "Watch" : "Play" }}
           </UButton>
-          <UButton size="sm" color="neutral" variant="soft" trailing-icon="i-lucide-plus" aria-label="Add to list" />
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="soft"
+            trailing-icon="i-lucide-plus"
+            aria-label="Add to list"
+          />
         </div>
       </div>
 
@@ -363,71 +375,3 @@ function handleClick() {
     </div>
   </div>
 </template>
-
-<style scoped>
-@keyframes skeleton-pulse {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.skeleton-pulse {
-  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .media-card {
-    transition: none !important;
-  }
-
-  .skeleton-pulse {
-    animation: none !important;
-  }
-}
-
-@media (hover: hover) {
-  .media-card.group:hover .media-card-glow {
-    opacity: 1;
-  }
-}
-
-.media-card:focus-visible {
-  outline: 2px solid rgb(99 102 241);
-  outline-offset: 2px;
-}
-
-.media-card img {
-  transition: transform 0.3s ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .media-card img {
-    transition: none;
-  }
-}
-</style>

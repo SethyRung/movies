@@ -223,7 +223,7 @@ onUnmounted(() => {
   <section
     v-if="hasContent || isLoading"
     ref="railRef"
-    class="media-rail relative py-4 sm:py-5 md:py-8 overflow-hidden"
+    class="media-rail relative py-4 sm:py-5 md:py-8 overflow-hidden perspective-1000"
     @mouseenter="isHovering = true"
     @mouseleave="isHovering = false"
   >
@@ -366,7 +366,7 @@ onUnmounted(() => {
               <!-- Skeleton Shimmer -->
               <div class="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-900">
                 <div
-                  class="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-700/30 to-transparent animate-skeleton-shimmer"
+                  class="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-700/30 to-transparent animate-shimmer"
                 />
               </div>
               <!-- Badge placeholders -->
@@ -398,98 +398,3 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
-
-<style scoped>
-/* Hide scrollbar but allow scroll */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Enhanced arrow transitions */
-.arrow-fade-enter-active,
-.arrow-fade-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.arrow-fade-enter-from,
-.arrow-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-50%) scale(0.9);
-}
-
-/* Skeleton shimmer animation */
-@keyframes skeleton-shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-skeleton-shimmer {
-  animation: skeleton-shimmer 2s infinite;
-}
-
-/* Smooth scroll behavior override during drag */
-.cursor-grabbing {
-  cursor: grabbing !important;
-}
-
-.cursor-grab {
-  cursor: grab;
-}
-
-/* Custom scrollbar fallback */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .scrollbar-hide {
-    scroll-behavior: auto;
-  }
-
-  .animate-skeleton-shimmer {
-    animation: none;
-  }
-
-  .arrow-fade-enter-active,
-  .arrow-fade-leave-active {
-    transition: opacity 0.2s ease;
-  }
-}
-
-/* Perspective for 3D effects */
-.media-rail {
-  perspective: 1000px;
-}
-
-/* Hover glow effect enhancement */
-@media (hover: hover) {
-  .group\/rail:hover .opacity-0 {
-    opacity: 1;
-  }
-}
-
-/* Custom focus styles for accessibility */
-button:focus-visible {
-  outline: 2px solid rgb(99 102 241);
-  outline-offset: 2px;
-}
-
-button:focus:not(:focus-visible) {
-  outline: none;
-}
-</style>

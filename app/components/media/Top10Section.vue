@@ -222,16 +222,14 @@ onUnmounted(() => {
       <!-- Track -->
       <div
         ref="trackRef"
-        class="flex gap-2 sm:gap-3 overflow-x-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 scrollbar-hide scroll-smooth"
-        style="perspective: 1000px"
+        class="flex gap-2 sm:gap-3 overflow-x-auto px-2 sm:px-4 md:px-6 lg:px-8 pb-4 scrollbar-hide scroll-smooth perspective-1000"
       >
         <div
           v-for="(item, index) in content.slice(0, 10)"
           :key="item.id"
           :ref="(el) => setCardRef(el, index)"
-          class="relative flex-shrink-0 cursor-pointer transition-all duration-500"
+          class="relative flex-shrink-0 cursor-pointer transition-all duration-500 preserve-3d will-change-transform"
           :class="[
-            'top10-card',
             index === 0
               ? 'w-[110px] xs:w-[120px] sm:w-[140px] md:w-[180px] lg:w-[200px] xl:w-[240px]'
               : '',
@@ -259,7 +257,7 @@ onUnmounted(() => {
         >
           <!-- Poster Container with 3D Effect -->
           <div
-            class="relative aspect-[2/3] rounded-xl overflow-hidden shadow-2xl transition-all duration-500"
+            class="relative aspect-[2/3] rounded-xl overflow-hidden shadow-2xl transition-all duration-500 preserve-3d"
             :class="[
               'will-change-transform',
               hoveredIndex === index
@@ -388,83 +386,3 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
-
-<style scoped>
-/* Custom breakpoint for extra small screens */
-@media (min-width: 375px) {
-  .xs\:block {
-    display: block;
-  }
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Enhanced arrow transitions */
-.arrow-fade-enter-active,
-.arrow-fade-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.arrow-fade-enter-from,
-.arrow-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-50%) scale(0.9);
-}
-
-/* Hover overlay transition */
-.hover-overlay-enter-active,
-.hover-overlay-leave-active {
-  transition: all 0.3s ease;
-}
-
-.hover-overlay-enter-from,
-.hover-overlay-leave-to {
-  opacity: 0;
-}
-
-.hover-overlay-enter-from div,
-.hover-overlay-leave-to div {
-  transform: scale(0.8);
-}
-
-/* 3D card hover effect */
-.top10-card {
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .top10-card {
-    transition: none !important;
-    transform: none !important;
-  }
-
-  .hover-overlay-enter-active,
-  .hover-overlay-leave-active {
-    transition: none;
-  }
-}
-
-/* Glow animations */
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-</style>
