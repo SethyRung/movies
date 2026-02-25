@@ -12,17 +12,22 @@ import type {
   tvSeries,
 } from "hub:db:schema";
 
-export type User = typeof users.$inferSelect;
-export type Genre = typeof genres.$inferSelect;
-export type Movie = typeof movies.$inferSelect;
-export type TVSeries = typeof tvSeries.$inferSelect;
-export type Season = typeof seasons.$inferSelect;
-export type Episode = typeof episodes.$inferSelect;
-export type EpisodeView = typeof episodeViews.$inferSelect;
+type DateFields<T, K extends keyof T> = Omit<T, K> & { [P in K]: string | null };
+
+export type User = DateFields<typeof users.$inferSelect, "createdAt" | "updatedAt">;
+export type Genre = DateFields<typeof genres.$inferSelect, "createdAt">;
+export type Movie = DateFields<typeof movies.$inferSelect, "createdAt" | "updatedAt">;
+export type TVSeries = DateFields<typeof tvSeries.$inferSelect, "createdAt" | "updatedAt">;
+export type Season = DateFields<typeof seasons.$inferSelect, "createdAt" | "updatedAt">;
+export type Episode = DateFields<typeof episodes.$inferSelect, "createdAt" | "updatedAt">;
+export type EpisodeView = DateFields<typeof episodeViews.$inferSelect, "viewedAt">;
 export type MovieGenre = typeof movieGenres.$inferSelect;
 export type SeriesGenre = typeof seriesGenres.$inferSelect;
-export type MovieView = typeof movieViews.$inferSelect;
-export type RefreshToken = typeof refreshTokens.$inferSelect;
+export type MovieView = DateFields<typeof movieViews.$inferSelect, "viewedAt">;
+export type RefreshToken = DateFields<
+  typeof refreshTokens.$inferSelect,
+  "createdAt" | "expiresAt" | "revokedAt"
+>;
 
 export enum ResponseCode {
   Success = "SUCCESS",
