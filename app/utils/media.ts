@@ -11,7 +11,7 @@ export function isMovie(media: Movie | TVSeries): media is Movie {
  * Media type discriminator for TVSeries
  */
 export function isTVSeries(media: Movie | TVSeries): media is TVSeries {
-  return "seasons" in media && "firstAiredYear" in media;
+  return "firstAiredYear" in media;
 }
 
 /**
@@ -108,19 +108,6 @@ export function formatRating(rating: string | null | undefined): string | null {
  */
 export function getMediaTypeLabel(media: Movie | TVSeries): string {
   return isMovie(media) ? "Movie" : "TV Series";
-}
-
-/**
- * Get duration or seasons text for media
- * @param media - Movie or TVSeries object
- * @returns Duration/seasons text
- */
-export function getMediaDurationText(media: Movie | TVSeries): string {
-  if (isMovie(media)) {
-    return formatDuration(media.duration);
-  }
-  const seasons = media.seasons || 0;
-  return `${seasons} Season${seasons !== 1 ? "s" : ""}`;
 }
 
 /**
