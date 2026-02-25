@@ -10,7 +10,6 @@ const navItems = [
 ];
 
 const { y: scrollY } = useWindowScroll();
-const { itemCount } = useMyList();
 
 function animateMobileMenu(value: boolean) {
   if (value) {
@@ -41,7 +40,7 @@ onBeforeUnmount(() => {
     mode="slideover"
     :ui="{
       root: [
-        'w-full fixed border-b-0 z-50',
+        'w-full fixed border-b-0',
         scrollY > 50
           ? 'bg-neutral-950 shadow-lg'
           : 'bg-gradient-to-b from-neutral-950/80 via-neutral-950/40 to-transparent backdrop-blur-none',
@@ -49,9 +48,6 @@ onBeforeUnmount(() => {
       container: 'gap-6 md:gap-8',
       left: 'lg:flex-none',
       content: 'bg-neutral-950',
-      overlay: 'fixed inset-0 z-[51] bg-elevated/75',
-      header: 'px-4 sm:px-6 h-(--ui-header-height) shrink-0 flex items-center justify-between gap-3 relative z-[52]',
-      body: 'p-4 sm:p-6 overflow-y-auto relative z-[52]',
     }"
     @update:open="animateMobileMenu"
   >
@@ -85,49 +81,17 @@ onBeforeUnmount(() => {
     </nav>
 
     <template #right>
-      <div class="flex items-center gap-2">
-        <UButton
-          to="/search"
-          icon="i-lucide-search"
-          color="neutral"
-          variant="ghost"
-          aria-label="Search"
-        />
-        <UButton
-          to="/my-list"
-          color="neutral"
-          variant="ghost"
-          aria-label="My List"
-          class="relative"
-        >
-          <UIcon name="i-lucide-bookmark" class="w-5 h-5" />
-          <span
-            v-if="itemCount > 0"
-            class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary-500 text-white text-xs flex items-center justify-center font-medium"
-          >
-            {{ itemCount > 9 ? "9+" : itemCount }}
-          </span>
-        </UButton>
-      </div>
+      <UButton icon="i-lucide:search" color="neutral" variant="ghost" />
     </template>
 
     <template #body>
       <NuxtLink
-        to="/search"
-        class="menu-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
-        active-class="bg-neutral-800"
-      >
-        <UIcon name="i-lucide-search" class="w-5 h-5" />
-        Search
-      </NuxtLink>
-      <NuxtLink
         v-for="item in navItems"
         :key="item.to"
         :to="item.to"
-        class="menu-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
+        class="menu-item flex items-center px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
         active-class="bg-neutral-800"
       >
-        <UIcon v-if="item.icon" :name="item.icon" class="w-5 h-5" />
         {{ item.label }}
       </NuxtLink>
     </template>
