@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
-import type { StreamingContent } from "~/data/mockDataEnhanced";
-
 const props = defineProps<{
-  content: StreamingContent;
+  content: Movie | TVSeries;
 }>();
 
 const year = computed(() =>
-  props.content.type === "movie" ? props.content.releaseYear : props.content.firstAiredYear,
+  isMovie(props.content) ? props.content.releaseYear : props.content.firstAiredYear,
 );
 
 const imageRef = useTemplateRef("imageRef");
@@ -87,7 +85,7 @@ onUnmounted(() => {
   >
     <div ref="imageRef" class="size-full">
       <NuxtImg
-        v-if="!imageError"
+        v-if="!imageError && content.poster"
         :src="content.poster"
         :alt="content.title"
         class="size-full object-cover"
@@ -115,7 +113,7 @@ onUnmounted(() => {
       class="absolute top-2 right-2 px-2 py-1 bg-black/70 rounded text-white text-sm font-medium opacity-0 -translate-y-2 flex items-center gap-1"
     >
       <UIcon name="i-mdi:star" class="size-4 text-yellow-400" />
-      {{ content.rating.toFixed(1) }}
+      {{ content.rating }}
     </div>
 
     <div
@@ -130,11 +128,7 @@ onUnmounted(() => {
           base: 'rounded-full p-3',
           leadingIcon: 'size-8',
         }"
-        :to="
-          props.content.type === 'movie'
-            ? `/movies/${props.content.id}`
-            : `/tv-series/${props.content.id}`
-        "
+        :to="getMediaDetailLink(props.content)"
       />
     </div>
   </div>

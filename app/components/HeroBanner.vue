@@ -8,10 +8,8 @@ import { titleCase } from "scule";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 
-import type { StreamingContent } from "~/data/mockDataEnhanced";
-
 const props = defineProps<{
-  content: StreamingContent[];
+  content: (Movie | TVSeries)[];
 }>();
 
 const sectionRef = useTemplateRef("sectionRef");
@@ -22,16 +20,15 @@ const progressValue = ref(0);
 
 const totalItems = computed(() => props.content.length);
 
-function getDurationText(item: StreamingContent): string {
-  if (item.type === "movie") {
-    const hours = Math.floor(item.duration / 60);
-    const mins = item.duration % 60;
-    return `${hours}h ${mins}m`;
+function getDurationText(item: Movie | TVSeries) {
+  if (isMovie(item)) {
+    return formatDuration(item.duration);
   }
-  return `${item.seasons} Season${item.seasons > 1 ? "s" : ""}`;
+
+  return null;
 }
 
-const { x: mouseX, y: mouseY, isOutside } = useMouseInElement(sectionRef);
+const { x: mouseX, y: mouseY } = useMouseInElement(sectionRef);
 
 let xTo: ReturnType<typeof gsap.quickTo> | null = null;
 let yTo: ReturnType<typeof gsap.quickTo> | null = null;
@@ -274,7 +271,7 @@ onUnmounted(() => {
           v-if="item"
           class="animate-bg absolute inset-0 bg-cover bg-center will-change-transform"
           :style="{
-            backgroundImage: `url('${item.backdrop}')`,
+            backgroundImage: `url('${item.thumbnail}')`,
           }"
         ></div>
 
@@ -315,17 +312,24 @@ onUnmounted(() => {
           <div
             class="animate-meta flex flex-wrap items-center gap-3 my-4 text-white text-sm font-medium"
           >
-            <UBadge class="meta-badge" :label="titleCase(item.type)" size="md" variant="subtle" />
+            <UBadge
+              class="meta-badge"
+              :label="titleCase(isMovie(item) ? 'movie' : 'series')"
+              size="md"
+              variant="subtle"
+            />
 
             <span class="meta-badge text-white/30">•</span>
 
             <span class="meta-badge">
-              {{ item.type === "movie" ? item.releaseYear : item.firstAiredYear }}
+              {{ getMediaYear(item) }}
             </span>
 
-            <span class="meta-badge text-white/30">•</span>
+            <template v-if="getDurationText(item)">
+              <span class="meta-badge text-white/30">•</span>
 
-            <span class="meta-badge">{{ getDurationText(item) }}</span>
+              <span class="meta-badge">{{ getDurationText(item) }}</span>
+            </template>
 
             <span class="meta-badge text-white/30">•</span>
 
@@ -341,7 +345,13 @@ onUnmounted(() => {
           </p>
 
           <div class="animate-buttons flex items-center gap-4">
-            <UButton icon="i-lucide-play" label="Play" size="xl" class="hover:scale-110" />
+            <UButton
+              icon="i-lucide-play"
+              label="Play"
+              size="xl"
+              class="hover:scale-110"
+              :to="getMediaDetailLink(item)"
+            />
 
             <UButton
               icon="i-lucide-info"
