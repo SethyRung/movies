@@ -3,9 +3,10 @@ import gsap from "gsap";
 import ScrollSmoother from "gsap/ScrollSmoother";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import SplitText from "gsap/SplitText";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 onMounted(() => {
-  gsap.registerPlugin(ScrollSmoother, ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollSmoother, ScrollTrigger, SplitText, ScrollToPlugin);
 });
 </script>
 

@@ -93,9 +93,9 @@ onUnmounted(() => {
         @error="() => (imageError = true)"
       />
 
-      <div v-else class="size-full bg-muted flex flex-col items-center justify-center gap-2">
+      <div v-else class="size-full p-4 bg-muted flex flex-col items-center justify-center gap-2">
         <UIcon name="i-mdi:movie-open" class="size-16 text-toned" />
-        <span class="font-semibold">{{ content.title }}</span>
+        <span class="font-semibold text-center">{{ content.title }}</span>
       </div>
     </div>
 
