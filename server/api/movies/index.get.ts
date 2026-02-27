@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, inArray } from "drizzle-orm";
 import { ResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
     const search = (query.search as string) || "";
     const sortBy = (query.sortBy as string) || "createdAt";
     const sortOrder = (query.sortOrder as string) || "desc";
+    const genreParam = query.genre as string | undefined;
 
     const conditions: any[] = [eq(schema.movies.status, status)];
 
@@ -40,6 +41,37 @@ export default defineEventHandler(async (event) => {
             : schema.movies.createdAt;
 
     const orderByClause = sortOrder === "asc" ? orderByColumn : desc(orderByColumn);
+
+    if (genreParam) {
+      const genreIds = genreParam.split(",").filter(Boolean);
+
+      const countResult = await db
+        .select({ count: sql<number>`count(distinct ${schema.movies.id})::int` })
+        .from(schema.movies)
+        .innerJoin(schema.movieGenres, eq(schema.movies.id, schema.movieGenres.movieId))
+        .where(and(whereClause, inArray(schema.movieGenres.genreId, genreIds)));
+
+      const total = countResult[0]?.count || 0;
+
+      const movies = await db
+        .selectDistinctOn([schema.movies.id], { movies: schema.movies })
+        .from(schema.movies)
+        .innerJoin(schema.movieGenres, eq(schema.movies.id, schema.movieGenres.movieId))
+        .where(and(whereClause, inArray(schema.movieGenres.genreId, genreIds)))
+        .orderBy(schema.movies.id, orderByClause)
+        .limit(limit)
+        .offset(offset);
+
+      return createResponse(
+        { code: ResponseCode.Success },
+        movies.map((m) => m.movies),
+        {
+          total,
+          limit,
+          offset,
+        },
+      );
+    }
 
     const countResult = await db
       .select({ count: sql<number>`count(*)::int` })
