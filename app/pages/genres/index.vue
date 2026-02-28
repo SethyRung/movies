@@ -44,16 +44,16 @@ useHead({
         </div>
         <div>
           <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">Browse by Genre</h1>
-          <p class="text-sm text-white/60 mt-1">
-            {{ genres?.length || 0 }} genres available
-          </p>
+          <p class="text-sm text-white/60 mt-1">{{ genres?.length || 0 }} genres available</p>
         </div>
       </div>
     </div>
 
     <!-- Loading -->
     <div v-if="isLoading" class="px-4 sm:px-6 md:px-8 lg:px-12 py-8">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+      >
         <div
           v-for="i in 12"
           :key="i"
@@ -64,7 +64,9 @@ useHead({
 
     <!-- Genres Grid -->
     <div v-else class="px-4 sm:px-6 md:px-8 lg:px-12 pb-16">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+      >
         <NuxtLink
           v-for="genre in genres"
           :key="genre.id"

@@ -387,9 +387,7 @@ useHead(() => ({
           >
             Go Back
           </UButton>
-          <UButton size="lg" icon="i-lucide-home" to="/">
-            Back to Home
-          </UButton>
+          <UButton size="lg" icon="i-lucide-home" to="/"> Back to Home </UButton>
         </div>
       </div>
     </div>
@@ -556,7 +554,7 @@ useHead(() => ({
                         aria-label="Add this series to your watchlist"
                         @click="handleToggleWatchlist"
                       >
-                        {{ isInWatchlist ? 'In My List' : 'My List' }}
+                        {{ isInWatchlist ? "In My List" : "My List" }}
                       </UButton>
                     </UTooltip>
                   </div>

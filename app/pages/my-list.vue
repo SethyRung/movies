@@ -61,7 +61,9 @@ useHead({
 
     <!-- Loading State -->
     <div v-if="isLoading" class="px-4 sm:px-6 md:px-8 lg:px-12 py-8">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+      >
         <div
           v-for="i in 12"
           :key="i"
@@ -103,7 +105,9 @@ useHead({
             <span class="text-sm font-normal text-white/50">({{ myListMovies.length }})</span>
           </h2>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4"
+        >
           <NuxtLink
             v-for="movie in myListMovies"
             :key="movie.id"
@@ -120,7 +124,9 @@ useHead({
               loading="lazy"
               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+            />
             <div class="absolute bottom-0 left-0 right-0 p-3">
               <h3 class="text-white font-medium text-sm line-clamp-2">{{ movie.title }}</h3>
               <p v-if="movie.releaseYear" class="text-white/60 text-xs mt-1">
@@ -147,7 +153,9 @@ useHead({
             <span class="text-sm font-normal text-white/50">({{ myListSeries.length }})</span>
           </h2>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4"
+        >
           <NuxtLink
             v-for="series in myListSeries"
             :key="series.id"
@@ -164,7 +172,9 @@ useHead({
               loading="lazy"
               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+            />
             <div class="absolute bottom-0 left-0 right-0 p-3">
               <h3 class="text-white font-medium text-sm line-clamp-2">{{ series.title }}</h3>
               <p v-if="series.firstAiredYear" class="text-white/60 text-xs mt-1">

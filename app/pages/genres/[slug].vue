@@ -49,7 +49,7 @@ const filteredSeries = computed(() => {
 // SEO
 useHead({
   title: computed(() =>
-    currentGenre.value ? `${currentGenre.value.name} - Cine Max` : "Genre - Cine Max"
+    currentGenre.value ? `${currentGenre.value.name} - Cine Max` : "Genre - Cine Max",
   ),
 });
 </script>
@@ -83,9 +83,7 @@ useHead({
           <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
             {{ currentGenre?.name || "Loading..." }}
           </h1>
-          <p class="text-sm text-white/60 mt-1">
-            {{ totalResults }} titles
-          </p>
+          <p class="text-sm text-white/60 mt-1">{{ totalResults }} titles</p>
         </div>
       </div>
 
@@ -132,7 +130,9 @@ useHead({
 
     <!-- Loading -->
     <div v-if="isLoading" class="px-4 sm:px-6 md:px-8 lg:px-12 py-8">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+      >
         <div
           v-for="i in 12"
           :key="i"
@@ -149,7 +149,9 @@ useHead({
           <UIcon name="i-lucide-film" class="w-5 h-5 text-primary-400" />
           Movies ({{ filteredMovies.length }})
         </h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+        >
           <NuxtLink
             v-for="movie in filteredMovies"
             :key="movie.id"
@@ -168,7 +170,9 @@ useHead({
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 class="text-white font-medium text-sm line-clamp-2 group-hover:text-primary-400 transition-colors">
+            <h3
+              class="text-white font-medium text-sm line-clamp-2 group-hover:text-primary-400 transition-colors"
+            >
               {{ movie.title }}
             </h3>
             <p v-if="movie.releaseYear" class="text-white/50 text-xs mt-1">
@@ -184,7 +188,9 @@ useHead({
           <UIcon name="i-lucide-tv" class="w-5 h-5 text-secondary-400" />
           TV Series ({{ filteredSeries.length }})
         </h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+        >
           <NuxtLink
             v-for="s in filteredSeries"
             :key="s.id"
@@ -203,7 +209,9 @@ useHead({
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <h3 class="text-white font-medium text-sm line-clamp-2 group-hover:text-secondary-400 transition-colors">
+            <h3
+              class="text-white font-medium text-sm line-clamp-2 group-hover:text-secondary-400 transition-colors"
+            >
               {{ s.title }}
             </h3>
             <p v-if="s.firstAiredYear" class="text-white/50 text-xs mt-1">
@@ -214,15 +222,10 @@ useHead({
       </section>
 
       <!-- Empty state -->
-      <div
-        v-if="totalResults === 0"
-        class="flex flex-col items-center justify-center py-16"
-      >
+      <div v-if="totalResults === 0" class="flex flex-col items-center justify-center py-16">
         <UIcon name="i-lucide-film" class="w-16 h-16 text-neutral-600 mx-auto mb-4" />
         <h2 class="text-xl font-semibold text-white mb-2">No content found</h2>
-        <p class="text-white/60">
-          No {{ currentGenre?.name || "genre" }} content available yet
-        </p>
+        <p class="text-white/60">No {{ currentGenre?.name || "genre" }} content available yet</p>
       </div>
     </div>
   </div>

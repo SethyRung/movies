@@ -57,11 +57,7 @@ export function useContinueWatching() {
   };
 
   // Add or update movie progress
-  const updateMovieProgress = (
-    movie: Movie,
-    progress: number,
-    viewData?: MovieView,
-  ): void => {
+  const updateMovieProgress = (movie: Movie, progress: number, viewData?: MovieView): void => {
     const existingIndex = items.value.findIndex(
       (item) => item.mediaId === movie.id && item.mediaType === "movie",
     );
@@ -146,9 +142,7 @@ export function useContinueWatching() {
 
   // Get progress for specific media
   const getProgress = (mediaId: string, mediaType: "movie" | "series"): number => {
-    const item = items.value.find(
-      (i) => i.mediaId === mediaId && i.mediaType === mediaType,
-    );
+    const item = items.value.find((i) => i.mediaId === mediaId && i.mediaType === mediaType);
     return item?.progress || 0;
   };
 
