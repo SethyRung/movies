@@ -28,7 +28,10 @@ export default defineNuxtConfig({
     "@nuxthub/core",
   ],
   hub: {
-    db: "postgresql",
+    db: {
+      dialect: "postgresql",
+      driver: process.env.DATABASE_DRIVER as "postgres-js" | "neon-http",
+    },
     kv: true,
     blob: true,
   },
