@@ -64,9 +64,10 @@ const genreFilteredContent = computed(() => {
       />
     </div>
 
-    <div v-if="pending" class="py-8">
-      <div class="grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
-        <USkeleton v-for="i in 8" :key="i" class="aspect-2/3 rounded-lg" />
+    <div v-if="pending" class="space-y-4">
+      <USkeleton class="h-8 w-48" />
+      <div class="flex gap-4 overflow-x-auto no-scrollbar">
+        <USkeleton v-for="i in 6" :key="i" class="shrink-0 w-40 sm:w-48 aspect-2/3" />
       </div>
     </div>
 

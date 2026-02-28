@@ -98,17 +98,20 @@ const genres = computed(() => data.value?.genres ?? []);
       </section>
 
       <UContainer class="py-8 space-y-10">
-        <section>
-          <USkeleton class="h-8 w-48 mb-4" />
-          <div class="grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
-            <USkeleton v-for="i in 8" :key="i" class="aspect-2/3 rounded-lg" />
+        <section class="space-y-4">
+          <USkeleton class="h-8 w-48" />
+          <div class="flex gap-4 overflow-x-auto no-scrollbar">
+            <USkeleton v-for="i in 6" :key="i" class="shrink-0 w-40 sm:w-48 aspect-2/3" />
           </div>
         </section>
 
-        <section>
-          <USkeleton class="h-8 w-48 mb-4" />
+        <section class="space-y-4">
+          <USkeleton class="h-8 w-48" />
           <div class="flex gap-3">
             <USkeleton v-for="i in 10" :key="i" class="h-10 w-24 rounded-full shrink-0" />
+          </div>
+          <div class="flex gap-4 overflow-x-auto no-scrollbar">
+            <USkeleton v-for="i in 6" :key="i" class="shrink-0 w-40 sm:w-48 aspect-2/3" />
           </div>
         </section>
       </UContainer>
