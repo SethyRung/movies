@@ -509,7 +509,15 @@ watch([currentTime, duration], ([time, dur]) => {
       :src="iframeSrc"
       class="w-full h-full"
       frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allow="
+        accelerometer;
+        autoplay;
+        clipboard-write;
+        encrypted-media;
+        gyroscope;
+        picture-in-picture;
+        web-share;
+      "
       allowfullscreen
     />
 
@@ -535,17 +543,18 @@ watch([currentTime, duration], ([time, dur]) => {
 
     <!-- Custom Controls (Native Video Only) -->
     <Transition name="fade">
-      <div
-        v-if="isNativeVideo && showControls"
-        class="absolute inset-0 z-20"
-      >
+      <div v-if="isNativeVideo && showControls" class="absolute inset-0 z-20">
         <!-- Top Gradient -->
-        <div class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/70 to-transparent" />
+        <div
+          class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/70 to-transparent"
+        />
 
         <!-- Bottom Controls -->
         <div class="absolute bottom-0 left-0 right-0">
           <!-- Bottom Gradient -->
-          <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div
+            class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+          />
 
           <div class="relative p-4">
             <!-- Progress Bar -->
@@ -558,7 +567,9 @@ watch([currentTime, duration], ([time, dur]) => {
               @mousemove="handleProgressDrag"
             >
               <!-- Progress Background -->
-              <div class="absolute inset-0 bg-white/30 rounded-full group-hover/progress:h-1.5 transition-all" />
+              <div
+                class="absolute inset-0 bg-white/30 rounded-full group-hover/progress:h-1.5 transition-all"
+              />
 
               <!-- Progress Fill -->
               <div
@@ -597,7 +608,13 @@ watch([currentTime, duration], ([time, dur]) => {
                     @click="toggleMute"
                   >
                     <UIcon
-                      :name="isMuted || volume === 0 ? 'i-lucide-volume-x' : volume < 0.5 ? 'i-lucide-volume-1' : 'i-lucide-volume-2'"
+                      :name="
+                        isMuted || volume === 0
+                          ? 'i-lucide-volume-x'
+                          : volume < 0.5
+                            ? 'i-lucide-volume-1'
+                            : 'i-lucide-volume-2'
+                      "
                       class="w-4 h-4 text-white"
                     />
                   </button>
@@ -643,7 +660,10 @@ watch([currentTime, duration], ([time, dur]) => {
                           'block w-full px-4 py-1 text-sm text-left hover:bg-white/10',
                           playbackRate === rate ? 'text-primary-400' : 'text-white',
                         ]"
-                        @click="setPlaybackRate(rate); showRateMenu = false"
+                        @click="
+                          setPlaybackRate(rate);
+                          showRateMenu = false;
+                        "
                       >
                         {{ rate }}x
                       </button>
@@ -692,10 +712,7 @@ watch([currentTime, duration], ([time, dur]) => {
     </Transition>
 
     <!-- Keyboard Shortcuts Hint (for iframe) -->
-    <div
-      v-if="isIframe"
-      class="absolute bottom-2 right-2 text-white/40 text-xs z-10"
-    >
+    <div v-if="isIframe" class="absolute bottom-2 right-2 text-white/40 text-xs z-10">
       Use player controls
     </div>
   </div>

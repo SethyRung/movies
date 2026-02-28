@@ -219,7 +219,9 @@ useHead(() => ({
             class="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-primary-400/50 rounded-full animate-[spin_1.5s_linear_reverse] motion-reduce:animate-none"
           />
         </div>
-        <p class="text-neutral-400 text-lg tracking-wide animate-pulse motion-reduce:animate-none">Loading movie details...</p>
+        <p class="text-neutral-400 text-lg tracking-wide animate-pulse motion-reduce:animate-none">
+          Loading movie details...
+        </p>
       </div>
     </div>
 
@@ -244,9 +246,7 @@ useHead(() => ({
           >
             Go Back
           </UButton>
-          <UButton size="lg" icon="i-lucide-home" to="/">
-            Back to Home
-          </UButton>
+          <UButton size="lg" icon="i-lucide-home" to="/"> Back to Home </UButton>
         </div>
       </div>
     </div>
@@ -412,7 +412,7 @@ useHead(() => ({
                         aria-label="Add this movie to your watchlist"
                         @click="handleToggleWatchlist"
                       >
-                        {{ isInWatchlist ? 'In My List' : 'My List' }}
+                        {{ isInWatchlist ? "In My List" : "My List" }}
                       </UButton>
                     </UTooltip>
                   </div>

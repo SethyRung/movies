@@ -4,14 +4,7 @@ import type { Movie, TVSeries } from "#shared/types";
 const route = useRoute();
 const router = useRouter();
 
-const {
-  query,
-  results,
-  isLoading,
-  error,
-  search,
-  clearSearch,
-} = useSearch();
+const { query, results, isLoading, error, search, clearSearch } = useSearch();
 
 // Get query from URL
 const searchQuery = computed({
@@ -65,22 +58,27 @@ onMounted(() => {
 });
 
 // Watch for URL changes
-watch(() => route.query.q, (newQuery) => {
-  if (newQuery && typeof newQuery === "string") {
-    search(newQuery);
-  }
-});
+watch(
+  () => route.query.q,
+  (newQuery) => {
+    if (newQuery && typeof newQuery === "string") {
+      search(newQuery);
+    }
+  },
+);
 
 // SEO
 useHead({
-  title: computed(() => query.value ? `Search: ${query.value} - Cine Max` : "Search - Cine Max"),
+  title: computed(() => (query.value ? `Search: ${query.value} - Cine Max` : "Search - Cine Max")),
 });
 </script>
 
 <template>
   <div class="min-h-screen bg-background">
     <!-- Search Header -->
-    <div class="sticky top-[var(--ui-header-height)] z-30 bg-background/95 backdrop-blur-sm border-b border-white/10">
+    <div
+      class="sticky top-[var(--ui-header-height)] z-30 bg-background/95 backdrop-blur-sm border-b border-white/10"
+    >
       <div class="px-4 sm:px-6 md:px-8 lg:px-12 py-4 pt-6">
         <div class="max-w-4xl mx-auto">
           <!-- Search Input -->
@@ -99,7 +97,12 @@ useHead({
             <button
               v-if="searchQuery"
               class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
-              @click="() => { searchQuery = ''; clearSearch(); }"
+              @click="
+                () => {
+                  searchQuery = '';
+                  clearSearch();
+                }
+              "
             >
               <UIcon name="i-lucide-x" class="w-5 h-5" />
             </button>
@@ -153,16 +156,16 @@ useHead({
       <div class="max-w-6xl mx-auto">
         <!-- Loading -->
         <div v-if="isLoading" class="flex items-center justify-center py-16">
-          <div class="w-10 h-10 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
+          <div
+            class="w-10 h-10 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"
+          />
         </div>
 
         <!-- Error -->
         <div v-else-if="error" class="text-center py-16">
           <UIcon name="i-lucide-alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-4" />
           <p class="text-white/70">{{ error }}</p>
-          <UButton color="primary" class="mt-4" @click="() => search(query)">
-            Try Again
-          </UButton>
+          <UButton color="primary" class="mt-4" @click="() => search(query)"> Try Again </UButton>
         </div>
 
         <!-- Empty - No Search Yet -->
@@ -191,7 +194,9 @@ useHead({
               <UIcon name="i-lucide-film" class="w-5 h-5 text-primary-400" />
               Movies ({{ filteredMovies.length }})
             </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <div
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+            >
               <NuxtLink
                 v-for="movie in filteredMovies"
                 :key="movie.id"
@@ -210,7 +215,9 @@ useHead({
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <h3 class="text-white font-medium text-sm line-clamp-2 group-hover:text-primary-400 transition-colors">
+                <h3
+                  class="text-white font-medium text-sm line-clamp-2 group-hover:text-primary-400 transition-colors"
+                >
                   {{ movie.title }}
                 </h3>
                 <p v-if="movie.releaseYear" class="text-white/50 text-xs mt-1">
@@ -226,7 +233,9 @@ useHead({
               <UIcon name="i-lucide-tv" class="w-5 h-5 text-secondary-400" />
               TV Series ({{ filteredSeries.length }})
             </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <div
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+            >
               <NuxtLink
                 v-for="series in filteredSeries"
                 :key="series.id"
@@ -245,7 +254,9 @@ useHead({
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <h3 class="text-white font-medium text-sm line-clamp-2 group-hover:text-secondary-400 transition-colors">
+                <h3
+                  class="text-white font-medium text-sm line-clamp-2 group-hover:text-secondary-400 transition-colors"
+                >
                   {{ series.title }}
                 </h3>
                 <p v-if="series.firstAiredYear" class="text-white/50 text-xs mt-1">

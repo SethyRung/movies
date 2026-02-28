@@ -201,9 +201,9 @@ A Netflix-inspired movie and TV series streaming website built with Nuxt 4, Vue 
 
 ### Pre-existing TypeScript Errors (Not Blocking)
 
-| File                | Issue                        | Priority |
-| ------------------- | ---------------------------- | -------- |
-| MediaPosterCard.vue | UButton color type           | Low      |
+| File                | Issue              | Priority |
+| ------------------- | ------------------ | -------- |
+| MediaPosterCard.vue | UButton color type | Low      |
 
 > **Note**: Several components (ContentRow.vue, HeroSection.vue, MediaCard.vue, MediaRail.vue, Top10Section.vue, etc.) have been removed as part of homepage cleanup.
 
