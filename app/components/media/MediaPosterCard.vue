@@ -83,7 +83,7 @@ onUnmounted(() => {
     @mouseenter="onEnter"
     @mouseleave="onLeave"
   >
-    <div ref="imageRef" class="size-full">
+    <div ref="imageRef" class="w-full aspect-2/3">
       <NuxtImg
         v-if="!imageError && content.poster"
         :src="content.poster"
