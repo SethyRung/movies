@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import bcrypt from "bcryptjs";
-import { ADMIN_CREDENTIALS, GENRES, MOVIES, SERIES } from "./data";
+import { ADMIN_CREDENTIALS, GENRES, MOVIES, SERIES } from "#server/data";
 
 export default defineTask({
   meta: {
