@@ -69,7 +69,14 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const accessToken = generateToken(user, config.jwt.access);
+    const accessToken = generateToken(
+      {
+        ...user,
+        createdAt: user.createdAt?.toISOString() ?? null,
+        updatedAt: user.updatedAt?.toISOString() ?? null,
+      },
+      config.jwt.access,
+    );
     const newRefreshToken = generateRefreshToken(user.id, config.jwt.refresh);
     const refreshTokenExpiry = calculateRefreshTokenExpiry(config.jwt.refresh.expiresIn);
 

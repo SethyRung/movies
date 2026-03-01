@@ -41,6 +41,9 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      // @ts-expect-error
+      tailwindcss(),
+    ],
   },
 });

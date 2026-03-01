@@ -5,7 +5,6 @@ import type { Response } from "#shared/types";
 
 const route = useRoute();
 const router = useRouter();
-const { isInList, toggleListItem } = useMyList();
 
 const movieId = computed(() => route.params.id as string);
 
@@ -77,16 +76,6 @@ const goBack = () => {
 const scrollToPlayer = () => {
   const player = document.getElementById("video-player");
   player?.scrollIntoView({ behavior: prefersReducedMotion.value ? "auto" : "smooth" });
-};
-
-const isInWatchlist = computed(() => {
-  if (!movie.value) return false;
-  return isInList(movie.value.id);
-});
-
-const handleToggleWatchlist = () => {
-  if (!movie.value) return;
-  toggleListItem(movie.value);
 };
 
 const initAnimations = () => {
@@ -350,7 +339,7 @@ useHead(() => ({
                       v-if="formattedRating"
                       size="lg"
                       variant="subtle"
-                      color="yellow"
+                      color="warning"
                       class="flex items-center gap-1"
                       :aria-label="`Rating: ${formattedRating} out of 10`"
                     >
@@ -400,22 +389,6 @@ useHead(() => ({
                     >
                       Watch Now
                     </UButton>
-
-                    <UTooltip
-                      :text="isInWatchlist ? 'Remove from My List' : 'Add to My List'"
-                      :content="{ side: 'top' }"
-                    >
-                      <UButton
-                        size="xl"
-                        :color="isInWatchlist ? 'primary' : 'neutral'"
-                        :variant="isInWatchlist ? 'soft' : 'outline'"
-                        :icon="isInWatchlist ? 'i-lucide-check' : 'i-lucide-plus'"
-                        aria-label="Add this movie to your watchlist"
-                        @click="handleToggleWatchlist"
-                      >
-                        {{ isInWatchlist ? "In My List" : "My List" }}
-                      </UButton>
-                    </UTooltip>
                   </div>
                 </div>
               </div>

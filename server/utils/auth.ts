@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt, { type SignOptions } from "jsonwebtoken";
 import type { User } from "#shared/types";
-import { JWTPayload, RefreshTokenPayload } from "#server/types";
+import type { JWTPayload, RefreshTokenPayload } from "#server/types";
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);

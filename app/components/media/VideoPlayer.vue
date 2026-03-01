@@ -289,7 +289,7 @@ const setPlaybackRate = (rate: number) => {
 const cyclePlaybackRate = () => {
   const currentIndex = playbackRates.indexOf(playbackRate.value);
   const nextIndex = (currentIndex + 1) % playbackRates.length;
-  setPlaybackRate(playbackRates[nextIndex]);
+  setPlaybackRate(playbackRates[nextIndex] ?? 1);
 };
 
 const toggleFullscreen = async () => {
