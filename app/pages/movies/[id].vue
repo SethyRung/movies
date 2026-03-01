@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { Response, Movie } from "#shared/types";
+import gsap from "gsap";
+
+import type { Response } from "#shared/types";
 
 const route = useRoute();
 const router = useRouter();
-const { $gsap: gsap } = useNuxtApp();
 const { isInList, toggleListItem } = useMyList();
 
 const movieId = computed(() => route.params.id as string);
