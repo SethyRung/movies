@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { Response, TVSeries, Season, Episode } from "#shared/types";
+import gsap from "gsap";
+
+import type { Response } from "#shared/types";
 
 const route = useRoute();
 const router = useRouter();
-const { $gsap: gsap } = useNuxtApp();
 const { isInList, toggleListItem } = useMyList();
 
 const seriesId = computed(() => route.params.id as string);
