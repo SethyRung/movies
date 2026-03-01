@@ -2,10 +2,10 @@
 import gsap from "gsap";
 
 import type { Response } from "#shared/types";
+import { ResponseCode } from "#shared/types";
 
 const route = useRoute();
 const router = useRouter();
-const { isInList, toggleListItem } = useMyList();
 
 const seriesId = computed(() => route.params.id as string);
 
@@ -81,7 +81,7 @@ const {
   () => {
     if (!selectedSeason.value)
       return Promise.resolve({
-        status: { code: "SUCCESS" as const, message: "", requestId: "", requestTime: 0 },
+        status: { code: ResponseCode.Success, message: "", requestId: "", requestTime: 0 },
         data: [],
       });
     return $fetch<Response<Episode[]>>(`/api/seasons/${selectedSeason.value.id}/episodes`);
@@ -104,7 +104,7 @@ const selectSeason = async (season: Season) => {
   await fetchEpisodes();
 
   if (episodes.value.length > 0) {
-    selectEpisode(episodes.value[0]);
+    selectEpisode(episodes.value[0]!);
   }
 };
 
@@ -170,16 +170,6 @@ const scrollToPlayer = () => {
       block: "center",
     });
   }
-};
-
-const isInWatchlist = computed(() => {
-  if (!series.value) return false;
-  return isInList(series.value.id);
-});
-
-const handleToggleWatchlist = () => {
-  if (!series.value) return;
-  toggleListItem(series.value);
 };
 
 const formatDuration = (seconds: number) => {
@@ -297,7 +287,7 @@ onMounted(() => {
     () => !isLoading.value && !isLoadingSeasons.value && seasons.value.length > 0,
     (isReady) => {
       if (isReady && !selectedSeason.value) {
-        selectedSeason.value = seasons.value[0];
+        selectedSeason.value = seasons.value[0] ?? null;
       }
     },
     { immediate: true },
@@ -307,7 +297,7 @@ onMounted(() => {
     () => !isLoadingEpisodes.value && episodes.value.length > 0,
     (isReady) => {
       if (isReady && !selectedEpisode.value) {
-        selectedEpisode.value = episodes.value[0];
+        selectedEpisode.value = episodes.value[0] ?? null;
       }
     },
     { immediate: true },
@@ -491,7 +481,7 @@ useHead(() => ({
                       v-if="formattedRating"
                       size="lg"
                       variant="subtle"
-                      color="yellow"
+                      color="warning"
                       class="flex items-center gap-1"
                     >
                       <template #leading>
@@ -514,7 +504,7 @@ useHead(() => ({
                     <UBadge
                       :label="seriesStatus"
                       size="lg"
-                      :color="series.status === 'ongoing' ? 'green' : 'blue'"
+                      :color="series.status === 'ongoing' ? 'success' : 'info'"
                       variant="subtle"
                     />
 
@@ -542,22 +532,6 @@ useHead(() => ({
                     >
                       Watch Now
                     </UButton>
-
-                    <UTooltip
-                      :text="isInWatchlist ? 'Remove from My List' : 'Add to My List'"
-                      :content="{ side: 'top' }"
-                    >
-                      <UButton
-                        size="xl"
-                        :color="isInWatchlist ? 'primary' : 'neutral'"
-                        :variant="isInWatchlist ? 'soft' : 'outline'"
-                        :icon="isInWatchlist ? 'i-lucide-check' : 'i-lucide-plus'"
-                        aria-label="Add this series to your watchlist"
-                        @click="handleToggleWatchlist"
-                      >
-                        {{ isInWatchlist ? "In My List" : "My List" }}
-                      </UButton>
-                    </UTooltip>
                   </div>
                 </div>
               </div>

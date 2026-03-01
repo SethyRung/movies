@@ -7,7 +7,7 @@ import {
   generateRefreshToken,
   calculateRefreshTokenExpiry,
 } from "#server/utils/auth";
-import { LoginRequest } from "#server/types";
+import type { LoginRequest } from "#server/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -50,7 +50,14 @@ export default defineEventHandler(async (event) => {
     }
 
     const config = useRuntimeConfig();
-    const accessToken = generateToken(user, config.jwt.access);
+    const accessToken = generateToken(
+      {
+        ...user,
+        createdAt: user.createdAt?.toISOString() ?? null,
+        updatedAt: user.updatedAt?.toISOString() ?? null,
+      },
+      config.jwt.access,
+    );
     const refreshToken = generateRefreshToken(user.id, config.jwt.refresh);
     const refreshTokenExpiry = calculateRefreshTokenExpiry(config.jwt.refresh.expiresIn);
 
