@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  compatibilityDate: "2024-11-27",
+  compatibilityDate: "2026-01-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
@@ -28,7 +28,10 @@ export default defineNuxtConfig({
     "@nuxthub/core",
   ],
   hub: {
-    db: "postgresql",
+    db: {
+      dialect: "postgresql",
+      driver: process.env.DATABASE_DRIVER as "postgres-js" | "neon-http",
+    },
     kv: true,
     blob: true,
   },
@@ -38,6 +41,9 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      // @ts-expect-error
+      tailwindcss(),
+    ],
   },
 });

@@ -1,4 +1,4 @@
-import { Response } from "#shared/types";
+import type { Response } from "#shared/types";
 
 export function createResponse<T>(
   status: { code: ResponseCode; message?: string },

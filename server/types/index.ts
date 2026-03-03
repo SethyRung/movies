@@ -1,6 +1,7 @@
 export interface PublicRoute {
   path: string;
   methods: string[];
+  caseInsensitive?: boolean;
 }
 
 export interface LoginRequest {
