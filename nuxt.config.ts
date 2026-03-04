@@ -32,8 +32,6 @@ export default defineNuxtConfig({
       dialect: "postgresql",
       driver: process.env.DATABASE_DRIVER as "postgres-js" | "neon-http",
     },
-    kv: true,
-    blob: true,
   },
   nitro: {
     experimental: {
