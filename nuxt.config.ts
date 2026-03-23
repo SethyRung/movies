@@ -33,6 +33,9 @@ export default defineNuxtConfig({
       driver: process.env.DATABASE_DRIVER as "postgres-js" | "neon-http",
     },
   },
+  colorMode: {
+    preference: "dark",
+  },
   nitro: {
     experimental: {
       tasks: true,
