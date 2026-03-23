@@ -27,13 +27,22 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxthub/core",
   ],
+  icon: {
+    customCollections: [
+      {
+        prefix: "cinemax",
+        dir: "./app/assets/icons/cinemax",
+      },
+    ],
+  },
   hub: {
     db: {
       dialect: "postgresql",
       driver: process.env.DATABASE_DRIVER as "postgres-js" | "neon-http",
     },
-    kv: true,
-    blob: true,
+  },
+  colorMode: {
+    preference: "dark",
   },
   nitro: {
     experimental: {
@@ -41,9 +50,16 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [
-      // @ts-expect-error
-      tailwindcss(),
-    ],
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: [
+        "gsap",
+        "gsap/ScrollSmoother",
+        "gsap/ScrollTrigger",
+        "gsap/SplitText",
+        "gsap/ScrollToPlugin",
+        "tailwind-variants",
+      ],
+    },
   },
 });

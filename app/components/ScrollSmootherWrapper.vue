@@ -8,7 +8,6 @@ onMounted(() => {
     wrapper: "#smooth-wrapper",
     content: "#smooth-content",
     smooth: 1.25,
-    normalizeScroll: true,
   });
 });
 

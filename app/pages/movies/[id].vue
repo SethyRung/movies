@@ -122,9 +122,9 @@ useSeoMeta({
           <div
             class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#080808_70%)]"
           />
-          <div
-            class="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg_viewBox=&quot;0_0_256_256&quot;_xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cfilter_id=&quot;noise&quot;%3E%3CfeTurbulence_type=&quot;fractalNoise&quot;_baseFrequency=&quot;0.9&quot;_numOctaves=&quot;4&quot;_stitchTiles=&quot;stitch&quot;/%3E%3C/filter%3E%3Crect_width=&quot;100%25&quot;_height=&quot;100%25&quot;_filter=&quot;url(%23noise)&quot;/%3E%3C/svg%3E')]"
-          />
+          <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none">
+            <UIcon name="i-cinemax-noise" class="w-full h-full text-white" />
+          </div>
         </div>
 
         <div
@@ -138,23 +138,11 @@ useSeoMeta({
           />
         </div>
 
-        <div
-          class="absolute top-0 left-0 w-32 h-32 pointer-events-none opacity-20"
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 128 128" class="w-full h-full text-primary-500">
-            <path d="M0 0 L128 0 L128 8 L8 8 L8 128 L0 128 Z" fill="currentColor" />
-            <path d="M16 16 L48 16 L48 20 L20 20 L20 48 L16 48 Z" fill="currentColor" />
-          </svg>
+        <div class="absolute top-0 left-0 pointer-events-none opacity-20" aria-hidden="true">
+          <UIcon name="i-cinemax-corner-left" :size="128" class="text-primary-500" />
         </div>
-        <div
-          class="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-20 rotate-90"
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 128 128" class="w-full h-full text-primary-500">
-            <path d="M0 0 L128 0 L128 8 L8 8 L8 128 L0 128 Z" fill="currentColor" />
-            <path d="M16 16 L48 16 L48 20 L20 20 L20 48 L16 48 Z" fill="currentColor" />
-          </svg>
+        <div class="absolute top-0 right-0 pointer-events-none opacity-20" aria-hidden="true">
+          <UIcon name="i-cinemax-corner-right" :size="128" class="text-primary-500" />
         </div>
 
         <UContainer>
