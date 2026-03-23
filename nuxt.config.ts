@@ -27,6 +27,14 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxthub/core",
   ],
+  icon: {
+    customCollections: [
+      {
+        prefix: "cinemax",
+        dir: "./app/assets/icons/cinemax",
+      },
+    ],
+  },
   hub: {
     db: {
       dialect: "postgresql",

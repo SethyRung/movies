@@ -138,23 +138,11 @@ useSeoMeta({
           />
         </div>
 
-        <div
-          class="absolute top-0 left-0 w-32 h-32 pointer-events-none opacity-20"
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 128 128" class="w-full h-full text-primary-500">
-            <path d="M0 0 L128 0 L128 8 L8 8 L8 128 L0 128 Z" fill="currentColor" />
-            <path d="M16 16 L48 16 L48 20 L20 20 L20 48 L16 48 Z" fill="currentColor" />
-          </svg>
+        <div class="absolute top-0 left-0 pointer-events-none opacity-20" aria-hidden="true">
+          <UIcon name="i-cinemax-corner-left" :size="128" class="text-primary-500" />
         </div>
-        <div
-          class="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-20 rotate-90"
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 128 128" class="w-full h-full text-primary-500">
-            <path d="M0 0 L128 0 L128 8 L8 8 L8 128 L0 128 Z" fill="currentColor" />
-            <path d="M16 16 L48 16 L48 20 L20 20 L20 48 L16 48 Z" fill="currentColor" />
-          </svg>
+        <div class="absolute top-0 right-0 pointer-events-none opacity-20" aria-hidden="true">
+          <UIcon name="i-cinemax-corner-right" :size="128" class="text-primary-500" />
         </div>
 
         <UContainer>
