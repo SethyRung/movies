@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="relative">
+  <div class="relative font-sans">
     <AppHeader />
 
     <ScrollSmootherWrapper>
