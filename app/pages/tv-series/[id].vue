@@ -269,8 +269,9 @@ useSeoMeta({
           <div
             class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#080808_70%)]"
           />
-          <div
-            class="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg_viewBox=&quot;0_0_256_256&quot;_xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cfilter_id=&quot;noise&quot;%3E%3CfeTurbulence_type=&quot;fractalNoise&quot;_baseFrequency=&quot;0.9&quot;_numOctaves=&quot;4&quot;_stitchTiles=&quot;stitch&quot;/%3E%3C/filter%3E%3Crect_width=&quot;100%25&quot;_height=&quot;100%25&quot;_filter=&quot;url(%23noise)&quot;/%3E%3C/svg%3E')]"
+          <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none">
+            <UIcon name="i-cinemax-noise" class="w-full h-full text-white" />
+          </div>
           />
         </div>
 
