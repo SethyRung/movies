@@ -50,9 +50,16 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [
-      // @ts-expect-error
-      tailwindcss(),
-    ],
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: [
+        "gsap",
+        "gsap/ScrollSmoother",
+        "gsap/ScrollTrigger",
+        "gsap/SplitText",
+        "gsap/ScrollToPlugin",
+        "tailwind-variants",
+      ],
+    },
   },
 });
