@@ -158,11 +158,19 @@ function runAnimations() {
 
   tl.from(".animate-poster", { scale: 1.1, opacity: 0, duration: 1.2, ease: "power3.out" }, 0.5);
   tl.from(".animate-title", { y: 60, opacity: 0, duration: 1, ease: "power3.out" }, 0.7);
-  tl.from(".animate-meta", { y: 30, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out" }, 0.9);
+  tl.from(
+    ".animate-meta",
+    { y: 30, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out" },
+    0.9,
+  );
   tl.from(".animate-description", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, 1.1);
   tl.from(".animate-actions", { scale: 0.9, opacity: 0, duration: 0.6, ease: "back.out(2)" }, 1.3);
   tl.from(".animate-seasons", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 1.4);
-  tl.from(".animate-card", { y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }, 1.5);
+  tl.from(
+    ".animate-card",
+    { y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" },
+    1.5,
+  );
 }
 
 onMounted(() => {
@@ -212,7 +220,9 @@ useSeoMeta({
     <div v-else-if="error" class="min-h-screen flex items-center justify-center px-4">
       <div class="text-center max-w-md">
         <div class="mb-6 inline-flex">
-          <div class="w-24 h-24 border border-red-500/30 rotate-45 flex items-center justify-center">
+          <div
+            class="w-24 h-24 border border-red-500/30 rotate-45 flex items-center justify-center"
+          >
             <UIcon name="i-lucide-alert-circle" class="w-10 h-10 text-red-400 -rotate-45" />
           </div>
         </div>
@@ -225,7 +235,10 @@ useSeoMeta({
             class="group flex items-center gap-2 px-6 py-3 border border-stone-700 hover:border-primary-500/50 text-stone-300 hover:text-primary-500 transition-colors"
             @click="goBack"
           >
-            <UIcon name="i-lucide-arrow-left" class="group-hover:-translate-x-0.5 transition-transform" />
+            <UIcon
+              name="i-lucide-arrow-left"
+              class="group-hover:-translate-x-0.5 transition-transform"
+            />
             Go Back
           </button>
           <NuxtLink
@@ -250,8 +263,12 @@ useSeoMeta({
             class="animate-poster absolute inset-0 bg-cover bg-center scale-105"
             :style="{ backgroundImage: `url('${backdropUrl}')` }"
           />
-          <div class="absolute inset-0 bg-linear-to-t from-[#080808] via-[#080808]/90 to-[#080808]/70" />
-          <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#080808_70%)]" />
+          <div
+            class="absolute inset-0 bg-linear-to-t from-[#080808] via-[#080808]/90 to-[#080808]/70"
+          />
+          <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#080808_70%)]"
+          />
           <div
             class="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg_viewBox=&quot;0_0_256_256&quot;_xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cfilter_id=&quot;noise&quot;%3E%3CfeTurbulence_type=&quot;fractalNoise&quot;_baseFrequency=&quot;0.9&quot;_numOctaves=&quot;4&quot;_stitchTiles=&quot;stitch&quot;/%3E%3C/filter%3E%3Crect_width=&quot;100%25&quot;_height=&quot;100%25&quot;_filter=&quot;url(%23noise)&quot;/%3E%3C/svg%3E')]"
           />
@@ -268,17 +285,11 @@ useSeoMeta({
           />
         </div>
 
-        <div class="absolute top-0 left-0 w-32 h-32 pointer-events-none opacity-20" aria-hidden="true">
-          <svg viewBox="0 0 128 128" class="w-full h-full text-primary-500">
-            <path d="M0 0 L128 0 L128 8 L8 8 L8 128 L0 128 Z" fill="currentColor" />
-            <path d="M16 16 L48 16 L48 20 L20 20 L20 48 L16 48 Z" fill="currentColor" />
-          </svg>
+        <div class="absolute top-0 left-0 pointer-events-none opacity-20" aria-hidden="true">
+          <UIcon name="i-cinemax-corner-left" :size="128" class="text-primary-500" />
         </div>
-        <div class="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-20 rotate-90" aria-hidden="true">
-          <svg viewBox="0 0 128 128" class="w-full h-full text-primary-500">
-            <path d="M0 0 L128 0 L128 8 L8 8 L8 128 L0 128 Z" fill="currentColor" />
-            <path d="M16 16 L48 16 L48 20 L20 20 L20 48 L16 48 Z" fill="currentColor" />
-          </svg>
+        <div class="absolute top-0 right-0 pointer-events-none opacity-20" aria-hidden="true">
+          <UIcon name="i-cinemax-corner-right" :size="128" class="text-primary-500" />
         </div>
 
         <UContainer>
@@ -289,8 +300,13 @@ useSeoMeta({
                 @click="goBack"
               >
                 <div class="p-1.5 relative flex items-center justify-center">
-                  <div class="absolute inset-0 border border-stone-700 group-hover:border-primary-500/50 rotate-45 transition-colors" />
-                  <UIcon name="i-lucide-arrow-left" class="group-hover:-translate-x-0.5 transition-transform" />
+                  <div
+                    class="absolute inset-0 border border-stone-700 group-hover:border-primary-500/50 rotate-45 transition-colors"
+                  />
+                  <UIcon
+                    name="i-lucide-arrow-left"
+                    class="group-hover:-translate-x-0.5 transition-transform"
+                  />
                 </div>
                 <span class="tracking-[0.2em] text-xs uppercase">Return to Lobby</span>
               </button>
@@ -303,12 +319,16 @@ useSeoMeta({
 
                   <div class="flex-1 pb-4">
                     <div v-if="yearRange" class="animate-meta mb-4">
-                      <span class="inline-block px-4 py-1.5 border border-primary-500/30 text-primary-500/80 tracking-[0.3em] text-xs uppercase">
+                      <span
+                        class="inline-block px-4 py-1.5 border border-primary-500/30 text-primary-500/80 tracking-[0.3em] text-xs uppercase"
+                      >
                         {{ yearRange }}
                       </span>
                     </div>
 
-                    <h1 class="animate-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-primary-50 leading-[1.1] tracking-tight mb-6">
+                    <h1
+                      class="animate-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-primary-50 leading-[1.1] tracking-tight mb-6"
+                    >
                       {{ series.title }}
                     </h1>
 
@@ -318,11 +338,16 @@ useSeoMeta({
                       <span v-if="seriesStatus" class="text-stone-400">{{ seriesStatus }}</span>
                       <template v-if="series.status === 'ongoing'">
                         <span class="text-stone-600">◈</span>
-                        <span class="text-emerald-500/80 tracking-wider text-xs uppercase">Now Airing</span>
+                        <span class="text-emerald-500/80 tracking-wider text-xs uppercase"
+                          >Now Airing</span
+                        >
                       </template>
                     </div>
 
-                    <p v-if="series.description" class="animate-description text-lg text-stone-400 leading-relaxed max-w-2xl mb-10">
+                    <p
+                      v-if="series.description"
+                      class="animate-description text-lg text-stone-400 leading-relaxed max-w-2xl mb-10"
+                    >
                       {{ series.description }}
                     </p>
 
@@ -340,8 +365,12 @@ useSeoMeta({
       </div>
 
       <section v-if="seasons.length > 0" class="relative py-12 px-6 md:px-12 lg:px-20">
-        <div class="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary-500/20 to-transparent" />
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 border border-primary-500/30" />
+        <div
+          class="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary-500/20 to-transparent"
+        />
+        <div
+          class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 border border-primary-500/30"
+        />
 
         <div class="max-w-7xl mx-auto">
           <div class="animate-seasons">
@@ -358,7 +387,9 @@ useSeoMeta({
             </div>
 
             <div class="relative">
-              <div class="absolute -inset-1 bg-linear-to-r from-primary-500/5 via-primary-500/2 to-primary-500/5 pointer-events-none" />
+              <div
+                class="absolute -inset-1 bg-linear-to-r from-primary-500/5 via-primary-500/2 to-primary-500/5 pointer-events-none"
+              />
               <div class="relative border border-stone-800/50 p-4">
                 <UTabs
                   v-model="selectedSeasonId"
@@ -379,7 +410,9 @@ useSeoMeta({
             <div class="lg:col-span-2 space-y-6">
               <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-primary-500/60 tracking-[0.3em] text-xs uppercase mb-2">Season {{ selectedSeason.seasonNumber }}</p>
+                  <p class="text-primary-500/60 tracking-[0.3em] text-xs uppercase mb-2">
+                    Season {{ selectedSeason.seasonNumber }}
+                  </p>
                   <h2 class="text-2xl font-medium text-primary-50">Episodes</h2>
                 </div>
                 <span v-if="selectedSeason.episodeCount" class="text-stone-500 text-sm">
@@ -389,8 +422,13 @@ useSeoMeta({
 
               <Loading v-if="isLoadingEpisodes" />
 
-              <div v-else-if="episodes.length === 0" class="text-center py-16 border border-stone-800/50">
-                <div class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4">
+              <div
+                v-else-if="episodes.length === 0"
+                class="text-center py-16 border border-stone-800/50"
+              >
+                <div
+                  class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
+                >
                   <UIcon name="i-lucide-video-off" class="w-6 h-6 text-stone-600 -rotate-45" />
                 </div>
                 <p class="text-stone-500">No episodes available</p>
@@ -408,8 +446,12 @@ useSeoMeta({
                   ]"
                   @click="selectEpisode(episode)"
                 >
-                  <div class="flex-shrink-0 w-12 h-12 border border-stone-800 flex items-center justify-center">
-                    <span class="text-primary-50 font-bold text-lg">{{ episode.episodeNumber }}</span>
+                  <div
+                    class="flex-shrink-0 w-12 h-12 border border-stone-800 flex items-center justify-center"
+                  >
+                    <span class="text-primary-50 font-bold text-lg">{{
+                      episode.episodeNumber
+                    }}</span>
                   </div>
 
                   <div class="flex-1 text-left min-w-0">
@@ -455,7 +497,9 @@ useSeoMeta({
               >
                 <div class="p-4 border-b border-stone-800/50 flex items-center justify-between">
                   <div>
-                    <p class="text-primary-500/60 tracking-[0.2em] text-xs uppercase mb-1">Now Playing</p>
+                    <p class="text-primary-500/60 tracking-[0.2em] text-xs uppercase mb-1">
+                      Now Playing
+                    </p>
                     <h3 v-if="selectedEpisode" class="text-lg font-medium text-primary-50">
                       Episode {{ selectedEpisode.episodeNumber }}
                     </h3>
@@ -465,7 +509,8 @@ useSeoMeta({
 
                 <div v-if="selectedEpisode" class="p-4">
                   <p class="text-stone-400 text-sm mb-4">
-                    Season {{ selectedSeason.seasonNumber }}, Episode {{ selectedEpisode.episodeNumber }}
+                    Season {{ selectedSeason.seasonNumber }}, Episode
+                    {{ selectedEpisode.episodeNumber }}
                   </p>
 
                   <div class="relative w-full aspect-video bg-[#050505] overflow-hidden">
@@ -477,8 +522,13 @@ useSeoMeta({
                     />
                     <div v-else class="w-full h-full flex items-center justify-center">
                       <div class="text-center">
-                        <div class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4">
-                          <UIcon name="i-lucide-video-off" class="w-6 h-6 text-stone-600 -rotate-45" />
+                        <div
+                          class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
+                        >
+                          <UIcon
+                            name="i-lucide-video-off"
+                            class="w-6 h-6 text-stone-600 -rotate-45"
+                          />
                         </div>
                         <p class="text-stone-500">Video unavailable</p>
                       </div>
@@ -487,7 +537,9 @@ useSeoMeta({
                 </div>
 
                 <div v-else class="p-8 text-center">
-                  <div class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4">
+                  <div
+                    class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
+                  >
                     <UIcon name="i-lucide-tv-2" class="w-6 h-6 text-stone-600 -rotate-45" />
                   </div>
                   <p class="text-stone-500">Select an episode</p>
@@ -525,22 +577,34 @@ useSeoMeta({
       </section>
 
       <section class="relative py-12 px-6 md:px-12 lg:px-20">
-        <div class="absolute top-0 left-20 right-20 h-px bg-linear-to-r from-transparent via-stone-800 to-transparent" />
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4">
+        <div
+          class="absolute top-0 left-20 right-20 h-px bg-linear-to-r from-transparent via-stone-800 to-transparent"
+        />
+        <div
+          class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4"
+        >
           <div class="w-12 h-px bg-stone-800" />
           <div class="w-2 h-2 rotate-45 border border-stone-700" />
           <div class="w-12 h-px bg-stone-800" />
         </div>
 
         <div class="max-w-7xl mx-auto">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-stone-600">
+          <div
+            class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-stone-600"
+          >
             <div class="flex items-center gap-2">
               <UIcon name="i-lucide-hash" class="w-3 h-3" />
               <span class="text-xs tracking-wider">Series ID: {{ series.id }}</span>
             </div>
             <p v-if="series.createdAt" class="text-xs tracking-wider">
               Added to Collection •
-              {{ new Date(series.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) }}
+              {{
+                new Date(series.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}
             </p>
           </div>
         </div>
