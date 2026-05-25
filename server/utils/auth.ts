@@ -1,7 +1,11 @@
 import bcrypt from "bcryptjs";
 import jwt, { type SignOptions } from "jsonwebtoken";
-import type { User } from "#shared/types";
-import type { JWTPayload, RefreshTokenPayload } from "#server/types";
+import type { AccessTokenPayload, User } from "#shared/types";
+
+interface RefreshTokenPayload {
+  userId: string;
+  type: "refresh";
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -18,7 +22,7 @@ export function generateToken(
     expiresIn: string;
   },
 ): string {
-  const payload: JWTPayload = {
+  const payload: AccessTokenPayload = {
     userId: user.id,
     email: user.email,
     name: user.name,
@@ -34,9 +38,9 @@ export function verifyToken(
   option: {
     secret: string;
   },
-): JWTPayload | null {
+): AccessTokenPayload | null {
   try {
-    return jwt.verify(token, option.secret) as JWTPayload;
+    return jwt.verify(token, option.secret) as AccessTokenPayload;
   } catch {
     return null;
   }

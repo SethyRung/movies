@@ -40,17 +40,37 @@ export enum ResponseCode {
   InternalError = "INTERNAL_ERROR",
 }
 
-export interface Response<T> {
-  status: {
-    code: ResponseCode;
-    message: string;
-    requestId: string;
-    requestTime: number;
-  };
+export interface ResponseStatus {
+  code: ResponseCode;
+  message: string;
+  requestId: string;
+  requestTime: number;
+}
+
+export type ResponseSuccess<T> = {
+  status: ResponseStatus & { code: ResponseCode.Success };
   data: T;
-  meta?: {
-    total: number;
-    limit: number;
-    offset: number;
-  };
+  meta?: { total: number; limit: number; offset: number };
+};
+
+export type ResponseError = {
+  status: ResponseStatus & { code: Exclude<ResponseCode, ResponseCode.Success> };
+  data: null;
+};
+
+export type Response<T> = ResponseSuccess<T> | ResponseError;
+
+export function isSuccessResponse<T>(res: Response<T>): res is ResponseSuccess<T> {
+  return res.status.code === ResponseCode.Success;
+}
+
+export enum CookieName {
+  AccessToken = "access_token",
+  RefreshToken = "refresh_token",
+}
+
+export interface AccessTokenPayload {
+  userId: string;
+  email: string;
+  name: string;
 }

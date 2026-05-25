@@ -7,11 +7,10 @@ import {
   generateRefreshToken,
   calculateRefreshTokenExpiry,
 } from "#server/utils/auth";
-import type { LoginRequest } from "#server/types";
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody<LoginRequest>(event);
+    const body = await readBody<{ email: string; password: string }>(event);
 
     if (!body.email || !body.password) {
       return createResponse(

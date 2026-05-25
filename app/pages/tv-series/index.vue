@@ -54,7 +54,10 @@ const { data, pending } = await useLazyAsyncData<Response<TVSeries[]>>(
 );
 
 const series = computed(() => data.value?.data ?? []);
-const total = computed(() => data.value?.meta?.total ?? 0);
+const total = computed(() => {
+  if (data.value && isSuccessResponse(data.value)) return data.value.meta?.total ?? 0;
+  return 0;
+});
 const totalPages = computed(() => Math.ceil(total.value / limit));
 const currentPage = computed(() => Math.floor(offset.value / limit) + 1);
 

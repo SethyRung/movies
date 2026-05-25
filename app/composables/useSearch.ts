@@ -67,8 +67,14 @@ export function useSearch() {
 
       const [moviesResponse, seriesResponse] = await Promise.all([moviesPromise, seriesPromise]);
 
-      const movies = moviesResponse.status.code === "SUCCESS" ? moviesResponse.data : [];
-      const series = seriesResponse.status.code === "SUCCESS" ? seriesResponse.data : [];
+      const movies =
+        moviesResponse.status.code === "SUCCESS" && moviesResponse.data != null
+          ? moviesResponse.data
+          : [];
+      const series =
+        seriesResponse.status.code === "SUCCESS" && seriesResponse.data != null
+          ? seriesResponse.data
+          : [];
 
       // Apply type filter if specified
       const filteredMovies = filters.type === "series" ? [] : movies;
