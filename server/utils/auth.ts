@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 interface Payload {
   userId: string;
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 const PUBLIC_ROUTES: { pattern: RegExp; methods: string[] }[] = [
