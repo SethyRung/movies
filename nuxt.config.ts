@@ -55,10 +55,11 @@ export default defineNuxtConfig({
       include: [
         "gsap",
         "gsap/ScrollSmoother",
+        "gsap/ScrollToPlugin",
         "gsap/ScrollTrigger",
         "gsap/SplitText",
-        "gsap/ScrollToPlugin",
         "tailwind-variants",
+        "zod",
       ],
     },
   },

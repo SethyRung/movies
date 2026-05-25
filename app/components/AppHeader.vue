@@ -2,6 +2,7 @@
 import gsap from "gsap";
 
 const route = useRoute();
+const user = useUser();
 
 const navItems = [
   { label: "Home", to: "/" },
@@ -10,6 +11,16 @@ const navItems = [
 ];
 
 const { y: scrollY } = useWindowScroll();
+
+async function logout() {
+  const res = await useApi("/api/auth/logout", { method: "POST" });
+  if (isSuccessResponse(res)) {
+    user.value = null;
+    await navigateTo("/");
+  }
+}
+
+const userMenuItems = [[{ label: "Logout", icon: "i-lucide-log-out", onSelect: logout }]];
 
 function animateMobileMenu(value: boolean) {
   if (value) {
@@ -82,6 +93,12 @@ onBeforeUnmount(() => {
 
     <template #right>
       <UButton icon="i-lucide:search" color="neutral" variant="ghost" />
+
+      <UDropdownMenu v-if="user" :items="userMenuItems">
+        <UAvatar :alt="user.name" size="sm" />
+      </UDropdownMenu>
+
+      <UButton v-else label="Sign in" to="/auth" size="sm" />
     </template>
 
     <template #body>
@@ -94,6 +111,19 @@ onBeforeUnmount(() => {
       >
         {{ item.label }}
       </NuxtLink>
+
+      <div class="menu-item border-t border-neutral-800 mt-2 pt-2">
+        <UButton
+          v-if="user"
+          label="Sign out"
+          color="neutral"
+          variant="ghost"
+          icon="i-lucide-log-out"
+          block
+          @click="logout"
+        />
+        <UButton v-else label="Sign in" to="/auth" block />
+      </div>
     </template>
   </UHeader>
 </template>
