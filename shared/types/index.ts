@@ -29,7 +29,7 @@ export type RefreshToken = DateFields<
   "createdAt" | "expiresAt" | "revokedAt"
 >;
 
-export enum ResponseCode {
+export enum ApiResponseCode {
   Success = "SUCCESS",
   Error = "ERROR",
   NotFound = "NOT_FOUND",
@@ -40,28 +40,28 @@ export enum ResponseCode {
   InternalError = "INTERNAL_ERROR",
 }
 
-export interface ResponseStatus {
-  code: ResponseCode;
+export interface ApiResponseStatus {
+  code: ApiResponseCode;
   message: string;
   requestId: string;
   requestTime: number;
 }
 
-export type ResponseSuccess<T> = {
-  status: ResponseStatus & { code: ResponseCode.Success };
+export type ApiResponseSuccess<T> = {
+  status: ApiResponseStatus & { code: ApiResponseCode.Success };
   data: T;
   meta?: { total: number; limit: number; offset: number };
 };
 
-export type ResponseError = {
-  status: ResponseStatus & { code: Exclude<ResponseCode, ResponseCode.Success> };
+export type ApiResponseError = {
+  status: ApiResponseStatus & { code: Exclude<ApiResponseCode, ApiResponseCode.Success> };
   data: null;
 };
 
-export type Response<T> = ResponseSuccess<T> | ResponseError;
+export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
 
-export function isSuccessResponse<T>(res: Response<T>): res is ResponseSuccess<T> {
-  return res.status.code === ResponseCode.Success;
+export function isSuccessResponse<T>(res: ApiResponse<T>): res is ApiResponseSuccess<T> {
+  return res.status.code === ApiResponseCode.Success;
 }
 
 export enum CookieName {

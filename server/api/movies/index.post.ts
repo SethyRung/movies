@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { CreateMovieBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!body.title || !body.embedUrl || !body.embedType) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "title, embedUrl, and embedType are required",
         },
         null,
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     if (!validEmbedTypes.includes(body.embedType)) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: `embedType must be one of: ${validEmbedTypes.join(", ")}`,
         },
         null,
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (body.status && !["active", "draft", "archived"].includes(body.status)) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "status must be one of: active, draft, archived",
         },
         null,
@@ -55,10 +55,10 @@ export default defineEventHandler(async (event) => {
       })
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, newMovie[0]);
+    return createResponse({ code: ApiResponseCode.Success }, newMovie[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to create movie" },
+      { code: ApiResponseCode.InternalError, message: "Failed to create movie" },
       null,
     );
   }

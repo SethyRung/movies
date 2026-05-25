@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq, sql } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       return createResponse(
         {
-          code: ResponseCode.InvalidRequest,
+          code: ApiResponseCode.InvalidRequest,
           message: "Episode ID is required",
         },
         null,
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Episode not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Episode not found" }, null);
     }
 
     const seasonId = existing[0]!.seasonId;
@@ -43,10 +43,10 @@ export default defineEventHandler(async (event) => {
       .set({ episodeCount: newCount, updatedAt: new Date() })
       .where(eq(schema.seasons.id, seasonId));
 
-    return createResponse({ code: ResponseCode.Success }, { id });
+    return createResponse({ code: ApiResponseCode.Success }, { id });
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to delete episode" },
+      { code: ApiResponseCode.InternalError, message: "Failed to delete episode" },
       null,
     );
   }

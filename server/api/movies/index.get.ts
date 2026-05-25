@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq, and, desc, sql, inArray } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
         .offset(offset);
 
       return createResponse(
-        { code: ResponseCode.Success },
+        { code: ApiResponseCode.Success },
         movies.map((m) => m.movies),
         {
           total,
@@ -88,14 +88,14 @@ export default defineEventHandler(async (event) => {
       .limit(limit)
       .offset(offset);
 
-    return createResponse({ code: ResponseCode.Success }, movies, {
+    return createResponse({ code: ApiResponseCode.Success }, movies, {
       total,
       limit,
       offset,
     });
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to fetch movies" },
+      { code: ApiResponseCode.InternalError, message: "Failed to fetch movies" },
       null,
     );
   }

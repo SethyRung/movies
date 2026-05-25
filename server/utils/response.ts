@@ -1,19 +1,19 @@
-import type { Response } from "#shared/types";
+import type { ApiResponse } from "#shared/types";
 
 export function createResponse<T>(
-  status: { code: ResponseCode.Success; message?: string },
+  status: { code: ApiResponseCode.Success; message?: string },
   data: T,
   meta?: { total: number; limit: number; offset: number },
-): Response<T>;
+): ApiResponse<T>;
 export function createResponse(
-  status: { code: Exclude<ResponseCode, ResponseCode.Success>; message?: string },
+  status: { code: Exclude<ApiResponseCode, ApiResponseCode.Success>; message?: string },
   data?: null,
-): Response<never>;
+): ApiResponse<never>;
 export function createResponse<T>(
-  status: { code: ResponseCode; message?: string },
+  status: { code: ApiResponseCode; message?: string },
   data?: T | null,
   meta?: { total: number; limit: number; offset: number },
-): Response<T> {
+): ApiResponse<T> {
   return {
     status: {
       code: status.code,
@@ -23,5 +23,5 @@ export function createResponse<T>(
     },
     data: data ?? null,
     meta,
-  } as Response<T>;
+  } as ApiResponse<T>;
 }

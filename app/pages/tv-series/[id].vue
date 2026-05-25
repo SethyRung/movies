@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
-import type { Response } from "#shared/types";
-import { ResponseCode } from "#shared/types";
+import type { ApiResponse } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 const route = useRoute();
 const router = useRouter();
@@ -18,9 +18,9 @@ const playerRef = ref<HTMLElement>();
 const leftCurtainEl = computed(() => leftCurtain.value?.root);
 const rightCurtainEl = computed(() => rightCurtain.value?.root);
 
-const { data: seriesResponse, pending: isLoading } = await useAsyncData<Response<TVSeries>>(
+const { data: seriesResponse, pending: isLoading } = await useAsyncData<ApiResponse<TVSeries>>(
   `series-${seriesId.value}`,
-  () => $fetch<Response<TVSeries>>(`/api/series/${seriesId.value}`),
+  () => $fetch<ApiResponse<TVSeries>>(`/api/series/${seriesId.value}`),
   { watch: [seriesId] },
 );
 
@@ -33,9 +33,11 @@ const error = computed(() => {
   return null;
 });
 
-const { data: seasonsResponse, pending: isLoadingSeasons } = await useAsyncData<Response<Season[]>>(
+const { data: seasonsResponse, pending: isLoadingSeasons } = await useAsyncData<
+  ApiResponse<Season[]>
+>(
   `series-${seriesId.value}-seasons`,
-  () => $fetch<Response<Season[]>>(`/api/series/${seriesId.value}/seasons`),
+  () => $fetch<ApiResponse<Season[]>>(`/api/series/${seriesId.value}/seasons`),
   { watch: [seriesId] },
 );
 
@@ -63,15 +65,15 @@ const {
   data: episodesResponse,
   pending: isLoadingEpisodes,
   execute: fetchEpisodes,
-} = useLazyAsyncData<Response<Episode[]>>(
+} = useLazyAsyncData<ApiResponse<Episode[]>>(
   `season-episodes`,
   () => {
     if (!selectedSeason.value)
       return Promise.resolve({
-        status: { code: ResponseCode.Success, message: "", requestId: "", requestTime: 0 },
+        status: { code: ApiResponseCode.Success, message: "", requestId: "", requestTime: 0 },
         data: [],
       });
-    return $fetch<Response<Episode[]>>(`/api/seasons/${selectedSeason.value.id}/episodes`);
+    return $fetch<ApiResponse<Episode[]>>(`/api/seasons/${selectedSeason.value.id}/episodes`);
   },
   { immediate: false, watch: [selectedSeason] },
 );

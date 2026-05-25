@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       return createResponse(
         {
-          code: ResponseCode.InvalidRequest,
+          code: ApiResponseCode.InvalidRequest,
           message: "Movie view ID is required",
         },
         null,
@@ -23,16 +23,19 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Movie view not found" }, null);
+      return createResponse(
+        { code: ApiResponseCode.NotFound, message: "Movie view not found" },
+        null,
+      );
     }
 
     await db.delete(schema.movieViews).where(eq(schema.movieViews.id, id));
 
-    return createResponse({ code: ResponseCode.Success }, { id });
+    return createResponse({ code: ApiResponseCode.Success }, { id });
   } catch {
     return createResponse(
       {
-        code: ResponseCode.InternalError,
+        code: ApiResponseCode.InternalError,
         message: "Failed to delete movie view",
       },
       null,

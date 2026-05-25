@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
     if (!userId) {
       return createResponse(
-        { code: ResponseCode.Unauthorized, message: "User not found in context" },
+        { code: ApiResponseCode.Unauthorized, message: "User not found in context" },
         null,
       );
     }
@@ -18,11 +18,11 @@ export default defineEventHandler(async (event) => {
     });
 
     if (!user) {
-      return createResponse({ code: ResponseCode.NotFound, message: "User not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "User not found" }, null);
     }
 
     return createResponse(
-      { code: ResponseCode.Success },
+      { code: ApiResponseCode.Success },
       {
         id: user.id,
         name: user.name,
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     );
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to fetch user" },
+      { code: ApiResponseCode.InternalError, message: "Failed to fetch user" },
       null,
     );
   }

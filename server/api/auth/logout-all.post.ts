@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq, and, isNull } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
     if (!userId) {
       return createResponse(
-        { code: ResponseCode.Unauthorized, message: "User not found in context" },
+        { code: ApiResponseCode.Unauthorized, message: "User not found in context" },
         null,
       );
     }
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
     return createResponse(
       {
-        code: ResponseCode.Success,
+        code: ApiResponseCode.Success,
         message: "Logged out from all devices successfully",
       },
       null,
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   } catch {
     return createResponse(
       {
-        code: ResponseCode.InternalError,
+        code: ApiResponseCode.InternalError,
         message: "Failed to logout from all devices",
       },
       null,

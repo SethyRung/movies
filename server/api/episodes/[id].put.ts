@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { UpdateEpisodeBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       return createResponse(
         {
-          code: ResponseCode.InvalidRequest,
+          code: ApiResponseCode.InvalidRequest,
           message: "Episode ID is required",
         },
         null,
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Episode not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Episode not found" }, null);
     }
 
     if (body.embedType) {
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
       if (!validEmbedTypes.includes(body.embedType)) {
         return createResponse(
           {
-            code: ResponseCode.ValidationError,
+            code: ApiResponseCode.ValidationError,
             message: `embedType must be one of: ${validEmbedTypes.join(", ")}`,
           },
           null,
@@ -57,10 +57,10 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.episodes.id, id))
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, updated[0]);
+    return createResponse({ code: ApiResponseCode.Success }, updated[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to update episode" },
+      { code: ApiResponseCode.InternalError, message: "Failed to update episode" },
       null,
     );
   }

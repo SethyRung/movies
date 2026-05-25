@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { UpdateEpisodeViewBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       return createResponse(
         {
-          code: ResponseCode.InvalidRequest,
+          code: ApiResponseCode.InvalidRequest,
           message: "Episode view ID is required",
         },
         null,
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
     if (!existing || existing.length === 0) {
       return createResponse(
-        { code: ResponseCode.NotFound, message: "Episode view not found" },
+        { code: ApiResponseCode.NotFound, message: "Episode view not found" },
         null,
       );
     }
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     if (Object.keys(updateData).length === 0) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "No fields to update",
         },
         null,
@@ -54,11 +54,11 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.episodeViews.id, id))
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, updated[0]);
+    return createResponse({ code: ApiResponseCode.Success }, updated[0]);
   } catch {
     return createResponse(
       {
-        code: ResponseCode.InternalError,
+        code: ApiResponseCode.InternalError,
         message: "Failed to update episode view",
       },
       null,

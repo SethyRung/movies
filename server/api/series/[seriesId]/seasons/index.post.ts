@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { CreateSeasonBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
     if (!seriesId) {
       return createResponse(
-        { code: ResponseCode.InvalidRequest, message: "Series ID is required" },
+        { code: ApiResponseCode.InvalidRequest, message: "Series ID is required" },
         null,
       );
     }
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     if (!body.seasonNumber) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "seasonNumber is required",
         },
         null,
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!series || series.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Series not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Series not found" }, null);
     }
 
     // Check if season with same number already exists
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
     if (seasonExists) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: `Season ${body.seasonNumber} already exists for this series`,
         },
         null,
@@ -69,10 +69,10 @@ export default defineEventHandler(async (event) => {
       })
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, newSeason[0]);
+    return createResponse({ code: ApiResponseCode.Success }, newSeason[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to create season" },
+      { code: ApiResponseCode.InternalError, message: "Failed to create season" },
       null,
     );
   }

@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { desc, sql } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -42,14 +42,14 @@ export default defineEventHandler(async (event) => {
       .limit(limit)
       .offset(offset);
 
-    return createResponse({ code: ResponseCode.Success }, genres, {
+    return createResponse({ code: ApiResponseCode.Success }, genres, {
       total,
       limit,
       offset,
     });
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to fetch genres" },
+      { code: ApiResponseCode.InternalError, message: "Failed to fetch genres" },
       null,
     );
   }

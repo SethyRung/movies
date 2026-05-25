@@ -1,5 +1,5 @@
 import type { Movie, TVSeries } from "#shared/types";
-import type { Response } from "#shared/types";
+import type { ApiResponse } from "#shared/types";
 
 interface SearchFilters {
   genre?: string;
@@ -62,8 +62,10 @@ export function useSearch() {
       seriesParams.set("limit", "50");
 
       // Fetch movies and series in parallel
-      const moviesPromise = $fetch<Response<Movie[]>>(`/api/movies?${moviesParams.toString()}`);
-      const seriesPromise = $fetch<Response<TVSeries[]>>(`/api/series?${seriesParams.toString()}`);
+      const moviesPromise = $fetch<ApiResponse<Movie[]>>(`/api/movies?${moviesParams.toString()}`);
+      const seriesPromise = $fetch<ApiResponse<TVSeries[]>>(
+        `/api/series?${seriesParams.toString()}`,
+      );
 
       const [moviesResponse, seriesResponse] = await Promise.all([moviesPromise, seriesPromise]);
 

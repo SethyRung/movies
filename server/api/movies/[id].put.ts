@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { UpdateMovieBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
     if (!id) {
       return createResponse(
-        { code: ResponseCode.InvalidRequest, message: "Movie ID is required" },
+        { code: ApiResponseCode.InvalidRequest, message: "Movie ID is required" },
         null,
       );
     }
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     const existing = await db.select().from(schema.movies).where(eq(schema.movies.id, id)).limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Movie not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Movie not found" }, null);
     }
 
     if (body.embedType) {
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
       if (!validEmbedTypes.includes(body.embedType)) {
         return createResponse(
           {
-            code: ResponseCode.ValidationError,
+            code: ApiResponseCode.ValidationError,
             message: `embedType must be one of: ${validEmbedTypes.join(", ")}`,
           },
           null,
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
     if (body.status && !["active", "draft", "archived"].includes(body.status)) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "status must be one of: active, draft, archived",
         },
         null,
@@ -67,10 +67,10 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.movies.id, id))
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, updated[0]);
+    return createResponse({ code: ApiResponseCode.Success }, updated[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to update movie" },
+      { code: ApiResponseCode.InternalError, message: "Failed to update movie" },
       null,
     );
   }

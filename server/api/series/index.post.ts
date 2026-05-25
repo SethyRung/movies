@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { CreateSeriesBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!body.title) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "title is required",
         },
         null,
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     if (body.status && !["ongoing", "completed", "draft", "archived"].includes(body.status)) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "status must be one of: ongoing, completed, draft, archived",
         },
         null,
@@ -42,10 +42,10 @@ export default defineEventHandler(async (event) => {
       })
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, newSeries[0]);
+    return createResponse({ code: ApiResponseCode.Success }, newSeries[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to create series" },
+      { code: ApiResponseCode.InternalError, message: "Failed to create series" },
       null,
     );
   }

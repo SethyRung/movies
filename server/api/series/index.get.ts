@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq, and, desc, sql, inArray } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
         .offset(offset);
 
       return createResponse(
-        { code: ResponseCode.Success },
+        { code: ApiResponseCode.Success },
         series.map((s) => s.series),
         {
           total,
@@ -88,14 +88,14 @@ export default defineEventHandler(async (event) => {
       .limit(limit)
       .offset(offset);
 
-    return createResponse({ code: ResponseCode.Success }, series, {
+    return createResponse({ code: ApiResponseCode.Success }, series, {
       total,
       limit,
       offset,
     });
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to fetch series" },
+      { code: ApiResponseCode.InternalError, message: "Failed to fetch series" },
       null,
     );
   }

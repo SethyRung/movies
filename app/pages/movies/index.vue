@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { watchDebounced } from "@vueuse/core";
 import { useRouteQuery } from "@vueuse/router";
 
-import type { Response } from "#shared/types";
+import type { ApiResponse } from "#shared/types";
 
 const limit = 20;
 
@@ -42,10 +42,10 @@ const sortOrder = useRouteQuery<string>("sortOrder", "desc", {
   },
 });
 
-const { data, pending } = await useLazyAsyncData<Response<Movie[]>>(
+const { data, pending } = await useLazyAsyncData<ApiResponse<Movie[]>>(
   "movies-list",
   () =>
-    $fetch<Response<Movie[]>>("/api/movies", {
+    $fetch<ApiResponse<Movie[]>>("/api/movies", {
       query: {
         limit,
         offset: offset.value,

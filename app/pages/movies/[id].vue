@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
-import type { Response } from "#shared/types";
+import type { ApiResponse } from "#shared/types";
 
 const route = useRoute();
 const router = useRouter();
@@ -16,8 +16,8 @@ const spotlightRef = ref<HTMLElement>();
 const leftCurtainEl = computed(() => leftCurtain.value?.root);
 const rightCurtainEl = computed(() => rightCurtain.value?.root);
 
-const { data, pending } = await useLazyAsyncData<Response<Movie>>(`movie-${movieId.value}`, () =>
-  $fetch<Response<Movie>>(`/api/movies/${movieId.value}`),
+const { data, pending } = await useLazyAsyncData<ApiResponse<Movie>>(`movie-${movieId.value}`, () =>
+  $fetch<ApiResponse<Movie>>(`/api/movies/${movieId.value}`),
 );
 
 const movie = computed(() => data.value?.data ?? null);

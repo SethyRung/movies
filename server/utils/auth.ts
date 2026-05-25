@@ -1,10 +1,33 @@
 import bcrypt from "bcryptjs";
-import jwt, { type SignOptions } from "jsonwebtoken";
-import type { AccessTokenPayload, User } from "#shared/types";
+import jwt from "jsonwebtoken";
 
-interface RefreshTokenPayload {
+interface Payload {
   userId: string;
-  type: "refresh";
+  [key: string]: unknown;
+}
+
+const PUBLIC_ROUTES: { pattern: RegExp; methods: string[] }[] = [
+  { pattern: /^\/api\/auth\/login$/, methods: ["POST"] },
+  { pattern: /^\/api\/auth\/register$/, methods: ["POST"] },
+  { pattern: /^\/api\/auth\/refresh$/, methods: ["POST"] },
+  { pattern: /^\/api\/movies$/, methods: ["GET"] },
+  { pattern: /^\/api\/movies\/[a-f0-9-]+$/, methods: ["GET"] },
+  { pattern: /^\/api\/series$/, methods: ["GET"] },
+  { pattern: /^\/api\/series\/[a-f0-9-]+$/, methods: ["GET"] },
+  { pattern: /^\/api\/series\/[a-f0-9-]+\/seasons$/, methods: ["GET"] },
+  { pattern: /^\/api\/seasons\/[a-f0-9-]+$/, methods: ["GET"] },
+  { pattern: /^\/api\/seasons\/[a-f0-9-]+\/episodes$/, methods: ["GET"] },
+  { pattern: /^\/api\/episodes\/[a-f0-9-]+$/, methods: ["GET"] },
+  { pattern: /^\/api\/genres$/, methods: ["GET"] },
+  { pattern: /^\/api\/genres\/[a-f0-9-]+$/, methods: ["GET"] },
+  { pattern: /^\/api\/_nuxt_icon\/.*$/, methods: ["GET"] },
+];
+
+export function isPublicRoute(path: string, method: string | undefined): boolean {
+  return PUBLIC_ROUTES.some(
+    (route) =>
+      route.pattern.test(path) && (!method || route.methods.includes(method.toUpperCase())),
+  );
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -15,98 +38,74 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash);
 }
 
-export function generateToken(
-  user: Omit<User, "passwordHash">,
-  option: {
-    secret: string;
-    expiresIn: string;
-  },
-): string {
-  const payload: AccessTokenPayload = {
-    userId: user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return jwt.sign(payload, option.secret, {
-    expiresIn: option.expiresIn as SignOptions["expiresIn"],
+export function generateTokens<T extends Payload>(
+  payload: T,
+  config: { secret: string; expiresIn: string },
+) {
+  return jwt.sign(payload, config.secret, {
+    expiresIn: config.expiresIn as Parameters<typeof jwt.sign>[2]["expiresIn"],
   });
 }
 
-export function verifyToken(
+export function verifyToken<T extends Payload>(
   token: string,
-  option: {
-    secret: string;
-  },
-): AccessTokenPayload | null {
+  config: { secret: string },
+): T | null {
   try {
-    return jwt.verify(token, option.secret) as AccessTokenPayload;
+    return jwt.verify(token, config.secret) as T;
   } catch {
     return null;
   }
 }
 
-export function generateRefreshToken(
-  userId: string,
-  option: {
-    secret: string;
-    expiresIn: string;
-  },
-): string {
-  const payload: RefreshTokenPayload = {
-    userId,
-    type: "refresh",
-  };
-
-  return jwt.sign(payload, option.secret, {
-    expiresIn: option.expiresIn as SignOptions["expiresIn"],
-  });
-}
-
-export function verifyRefreshToken(
-  token: string,
-  option: {
-    secret: string;
-  },
-): RefreshTokenPayload | null {
-  try {
-    const payload = jwt.verify(token, option.secret) as RefreshTokenPayload;
-    if (payload.type !== "refresh") {
-      return null;
-    }
-    return payload;
-  } catch {
-    return null;
-  }
-}
-
-const DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS = 7;
-const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
-
-export function calculateRefreshTokenExpiry(expiresIn: string): Date {
+export function expiresInToDate(expiresIn: string): Date {
   const now = new Date();
   const match = expiresIn.match(/^(\d+)([dhms])$/);
   if (!match) {
-    return new Date(now.getTime() + DEFAULT_REFRESH_TOKEN_EXPIRY_DAYS * MILLISECONDS_PER_DAY);
+    throw new Error(`Invalid expiresIn format: ${expiresIn}`);
   }
 
-  const value = parseInt(match[1] ?? "", 10);
+  const value = Number.parseInt(match[1]!, 10);
   const unit = match[2];
 
   switch (unit) {
     case "d":
-      now.setDate(now.getDate() + value);
-      break;
+      return new Date(now.getTime() + value * 24 * 60 * 60 * 1000);
     case "h":
-      now.setHours(now.getHours() + value);
-      break;
+      return new Date(now.getTime() + value * 60 * 60 * 1000);
     case "m":
-      now.setMinutes(now.getMinutes() + value);
-      break;
+      return new Date(now.getTime() + value * 60 * 1000);
     case "s":
-      now.setSeconds(now.getSeconds() + value);
-      break;
+      return new Date(now.getTime() + value * 1000);
+    default:
+      throw new Error(`Invalid expiresIn unit: ${unit}`);
+  }
+}
+
+export function expiresInToSeconds(expiresIn: string): number {
+  const match = expiresIn.match(/^(\d+)([dhms])$/);
+  if (!match) {
+    throw new Error(`Invalid expiresIn format: ${expiresIn}`);
   }
 
-  return now;
+  const [, valueStr, unit] = match;
+  if (!valueStr || !unit) {
+    throw new Error(`Invalid expiresIn format: ${expiresIn}`);
+  }
+
+  const value = Number.parseInt(valueStr, 10);
+
+  const unitMultipliers: Record<string, number> = {
+    d: 86400,
+    h: 3600,
+    m: 60,
+    s: 1,
+  };
+
+  const multiplier = unitMultipliers[unit];
+  if (!multiplier) {
+    throw new Error(`Invalid expiresIn unit: ${unit}`);
+  }
+
+  return value * multiplier;
 }

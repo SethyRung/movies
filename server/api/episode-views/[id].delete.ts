@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       return createResponse(
         {
-          code: ResponseCode.InvalidRequest,
+          code: ApiResponseCode.InvalidRequest,
           message: "Episode view ID is required",
         },
         null,
@@ -24,18 +24,18 @@ export default defineEventHandler(async (event) => {
 
     if (!existing || existing.length === 0) {
       return createResponse(
-        { code: ResponseCode.NotFound, message: "Episode view not found" },
+        { code: ApiResponseCode.NotFound, message: "Episode view not found" },
         null,
       );
     }
 
     await db.delete(schema.episodeViews).where(eq(schema.episodeViews.id, id));
 
-    return createResponse({ code: ResponseCode.Success }, { id });
+    return createResponse({ code: ApiResponseCode.Success }, { id });
   } catch {
     return createResponse(
       {
-        code: ResponseCode.InternalError,
+        code: ApiResponseCode.InternalError,
         message: "Failed to delete episode view",
       },
       null,

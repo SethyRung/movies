@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { UpdateGenreBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
     if (!id) {
       return createResponse(
-        { code: ResponseCode.InvalidRequest, message: "Genre ID is required" },
+        { code: ApiResponseCode.InvalidRequest, message: "Genre ID is required" },
         null,
       );
     }
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     const existing = await db.select().from(schema.genres).where(eq(schema.genres.id, id)).limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Genre not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Genre not found" }, null);
     }
 
     const updateData: any = {};
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
       if (!slugRegex.test(body.slug)) {
         return createResponse(
           {
-            code: ResponseCode.ValidationError,
+            code: ApiResponseCode.ValidationError,
             message: "slug must contain only lowercase letters, numbers, and hyphens",
           },
           null,
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
       if (slugExists && slugExists.length > 0 && slugExists[0]?.id !== id) {
         return createResponse(
           {
-            code: ResponseCode.ValidationError,
+            code: ApiResponseCode.ValidationError,
             message: "Genre with this slug already exists",
           },
           null,
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     if (Object.keys(updateData).length === 0) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "No fields to update",
         },
         null,
@@ -72,10 +72,10 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.genres.id, id))
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, updated[0]);
+    return createResponse({ code: ApiResponseCode.Success }, updated[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to update genre" },
+      { code: ApiResponseCode.InternalError, message: "Failed to update genre" },
       null,
     );
   }

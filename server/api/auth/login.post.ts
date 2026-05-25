@@ -1,12 +1,5 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
-import {
-  verifyPassword,
-  generateToken,
-  generateRefreshToken,
-  calculateRefreshTokenExpiry,
-} from "#server/utils/auth";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -15,7 +8,7 @@ export default defineEventHandler(async (event) => {
     if (!body.email || !body.password) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "Email and password are required",
         },
         null,
@@ -29,7 +22,7 @@ export default defineEventHandler(async (event) => {
     if (!user) {
       return createResponse(
         {
-          code: ResponseCode.Unauthorized,
+          code: ApiResponseCode.Unauthorized,
           message: "Invalid email or password",
         },
         null,
@@ -41,7 +34,7 @@ export default defineEventHandler(async (event) => {
     if (!isValidPassword) {
       return createResponse(
         {
-          code: ResponseCode.Unauthorized,
+          code: ApiResponseCode.Unauthorized,
           message: "Invalid email or password",
         },
         null,
@@ -49,37 +42,53 @@ export default defineEventHandler(async (event) => {
     }
 
     const config = useRuntimeConfig();
-    const accessToken = generateToken(
-      {
-        ...user,
-        createdAt: user.createdAt?.toISOString() ?? null,
-        updatedAt: user.updatedAt?.toISOString() ?? null,
-      },
+
+    const accessToken = generateTokens(
+      { userId: user.id, email: user.email, name: user.name },
       config.jwt.access,
     );
-    const refreshToken = generateRefreshToken(user.id, config.jwt.refresh);
-    const refreshTokenExpiry = calculateRefreshTokenExpiry(config.jwt.refresh.expiresIn);
+
+    const refreshToken = generateTokens({ userId: user.id, type: "refresh" }, config.jwt.refresh);
 
     await db.insert(schema.refreshTokens).values({
       token: refreshToken,
       userId: user.id,
-      expiresAt: refreshTokenExpiry,
+      expiresAt: expiresInToDate(config.jwt.refresh.expiresIn),
+    });
+
+    const isProduction = process.env.NODE_ENV === "production";
+
+    setCookie(event, CookieName.AccessToken, accessToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: expiresInToSeconds(config.jwt.access.expiresIn),
+    });
+
+    setCookie(event, CookieName.RefreshToken, refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: expiresInToSeconds(config.jwt.refresh.expiresIn),
     });
 
     return createResponse(
       {
-        code: ResponseCode.Success,
+        code: ApiResponseCode.Success,
         message: "Login successful",
       },
       {
-        accessToken,
-        refreshToken,
+        id: user.id,
+        email: user.email,
+        name: user.name,
       },
     );
   } catch {
     return createResponse(
       {
-        code: ResponseCode.InternalError,
+        code: ApiResponseCode.InternalError,
         message: "Failed to login",
       },
       null,

@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { CreateEpisodeBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
     if (!seasonId) {
       return createResponse(
-        { code: ResponseCode.InvalidRequest, message: "Season ID is required" },
+        { code: ApiResponseCode.InvalidRequest, message: "Season ID is required" },
         null,
       );
     }
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     if (!body.episodeNumber || !body.embedUrl || !body.embedType) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "episodeNumber, embedUrl, and embedType are required",
         },
         null,
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (!validEmbedTypes.includes(body.embedType)) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: `embedType must be one of: ${validEmbedTypes.join(", ")}`,
         },
         null,
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!season || season.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     // Check if episode with same number already exists in this season
@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
     if (episodeExists) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: `Episode ${body.episodeNumber} already exists in this season`,
         },
         null,
@@ -85,10 +85,10 @@ export default defineEventHandler(async (event) => {
       .set({ episodeCount: existingEpisodes.length + 1, updatedAt: new Date() })
       .where(eq(schema.seasons.id, seasonId));
 
-    return createResponse({ code: ResponseCode.Success }, newEpisode[0]);
+    return createResponse({ code: ApiResponseCode.Success }, newEpisode[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to create episode" },
+      { code: ApiResponseCode.InternalError, message: "Failed to create episode" },
       null,
     );
   }

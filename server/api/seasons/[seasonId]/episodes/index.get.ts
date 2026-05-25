@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
     if (!seasonId) {
       return createResponse(
-        { code: ResponseCode.InvalidRequest, message: "Season ID is required" },
+        { code: ApiResponseCode.InvalidRequest, message: "Season ID is required" },
         null,
       );
     }
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!season || season.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     const episodes = await db
@@ -30,10 +30,10 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.episodes.seasonId, seasonId))
       .orderBy(schema.episodes.episodeNumber);
 
-    return createResponse({ code: ResponseCode.Success }, episodes);
+    return createResponse({ code: ApiResponseCode.Success }, episodes);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to fetch episodes" },
+      { code: ApiResponseCode.InternalError, message: "Failed to fetch episodes" },
       null,
     );
   }

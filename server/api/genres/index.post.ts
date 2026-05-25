@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { CreateGenreBody } from "#server/types";
 import { eq } from "drizzle-orm";
 
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     if (!body.name || !body.slug) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "name and slug are required",
         },
         null,
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     if (!slugRegex.test(body.slug)) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "slug must contain only lowercase letters, numbers, and hyphens",
         },
         null,
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     if (existingGenre && existingGenre.length > 0) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "Genre with this slug already exists",
         },
         null,
@@ -52,10 +52,10 @@ export default defineEventHandler(async (event) => {
       })
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, newGenre[0]);
+    return createResponse({ code: ApiResponseCode.Success }, newGenre[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to create genre" },
+      { code: ApiResponseCode.InternalError, message: "Failed to create genre" },
       null,
     );
   }

@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { UpdateSeasonBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
     if (!id) {
       return createResponse(
-        { code: ResponseCode.InvalidRequest, message: "Season ID is required" },
+        { code: ApiResponseCode.InvalidRequest, message: "Season ID is required" },
         null,
       );
     }
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       .limit(1);
 
     if (!existing || existing.length === 0) {
-      return createResponse({ code: ResponseCode.NotFound, message: "Season not found" }, null);
+      return createResponse({ code: ApiResponseCode.NotFound, message: "Season not found" }, null);
     }
 
     const updateData: any = {
@@ -42,10 +42,10 @@ export default defineEventHandler(async (event) => {
       .where(eq(schema.seasons.id, id))
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, updated[0]);
+    return createResponse({ code: ApiResponseCode.Success }, updated[0]);
   } catch {
     return createResponse(
-      { code: ResponseCode.InternalError, message: "Failed to update season" },
+      { code: ApiResponseCode.InternalError, message: "Failed to update season" },
       null,
     );
   }

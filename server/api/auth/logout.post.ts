@@ -1,51 +1,34 @@
 import { db, schema } from "@nuxthub/db";
-import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { eq, and, isNull } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody<{ refreshToken: string }>(event);
+    const config = useRuntimeConfig();
+    const cookieRefresh = getCookie(event, CookieName.RefreshToken);
 
-    if (!body.refreshToken) {
+    const payload = verifyToken(cookieRefresh ?? "", config.jwt.refresh);
+
+    if (!payload) {
       return createResponse(
-        {
-          code: ResponseCode.ValidationError,
-          message: "Refresh token is required",
-        },
+        { code: ApiResponseCode.Unauthorized, message: "User not authenticated" },
         null,
       );
     }
 
-    // Revoke the refresh token
-    const result = await db
+    const { userId } = payload;
+
+    await db
       .update(schema.refreshTokens)
       .set({ revokedAt: new Date() })
-      .where(eq(schema.refreshTokens.token, body.refreshToken))
-      .returning();
+      .where(and(eq(schema.refreshTokens.userId, userId), isNull(schema.refreshTokens.revokedAt)));
 
-    if (result.length === 0) {
-      return createResponse(
-        {
-          code: ResponseCode.NotFound,
-          message: "Refresh token not found",
-        },
-        null,
-      );
-    }
+    deleteCookie(event, CookieName.AccessToken);
+    deleteCookie(event, CookieName.RefreshToken);
 
-    return createResponse(
-      {
-        code: ResponseCode.Success,
-        message: "Logged out successfully",
-      },
-      null,
-    );
+    return createResponse({ code: ApiResponseCode.Success, message: "Logout successful" }, null);
   } catch {
     return createResponse(
-      {
-        code: ResponseCode.InternalError,
-        message: "Failed to logout",
-      },
+      { code: ApiResponseCode.InternalError, message: "An error occurred during logout" },
       null,
     );
   }

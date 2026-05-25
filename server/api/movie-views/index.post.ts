@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ResponseCode } from "#shared/types";
+import { ApiResponseCode } from "#shared/types";
 import type { CreateMovieViewBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     if (!body.movieId) {
       return createResponse(
         {
-          code: ResponseCode.ValidationError,
+          code: ApiResponseCode.ValidationError,
           message: "movieId is required",
         },
         null,
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     if (!movieExists || movieExists.length === 0) {
       return createResponse(
         {
-          code: ResponseCode.NotFound,
+          code: ApiResponseCode.NotFound,
           message: "Movie not found",
         },
         null,
@@ -42,11 +42,11 @@ export default defineEventHandler(async (event) => {
       })
       .returning();
 
-    return createResponse({ code: ResponseCode.Success }, newMovieView[0]);
+    return createResponse({ code: ApiResponseCode.Success }, newMovieView[0]);
   } catch {
     return createResponse(
       {
-        code: ResponseCode.InternalError,
+        code: ApiResponseCode.InternalError,
         message: "Failed to create movie view",
       },
       null,
