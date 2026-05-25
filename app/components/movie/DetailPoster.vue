@@ -15,7 +15,9 @@ defineProps<{
         <div class="absolute -bottom-1 -right-1 w-4 h-4 border-b border-r border-primary-500/40" />
       </div>
 
-      <div class="aspect-2/3 overflow-hidden bg-linear-to-br from-stone-900 to-stone-950 shadow-2xl shadow-black/50">
+      <div
+        class="aspect-2/3 overflow-hidden bg-linear-to-br from-stone-900 to-stone-950 shadow-2xl shadow-black/50"
+      >
         <NuxtImg
           v-if="src"
           :src="src"
