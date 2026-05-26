@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-screen min-h-screen overflow-x-hidden overflow-y-auto relative font-sans flex justify-center sm:items-center"
+    class="max-w-screen min-h-screen overflow-x-hidden overflow-y-auto relative font-sans flex justify-center sm:items-center"
   >
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div

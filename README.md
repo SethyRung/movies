@@ -221,13 +221,16 @@ interface Response<T> {
 
 ### Authentication
 
-| Method | Endpoint               | Description                                            | Auth Required |
-| ------ | ---------------------- | ------------------------------------------------------ | ------------- |
-| POST   | `/api/auth/login`      | Admin login (returns `accessToken` and `refreshToken`) | No            |
-| POST   | `/api/auth/refresh`    | Refresh access token using `refreshToken`              | No            |
-| POST   | `/api/auth/logout`     | Logout (revoke specific refresh token)                 | No            |
-| POST   | `/api/auth/logout-all` | Logout from all devices                                | Yes           |
-| GET    | `/api/auth/me`         | Get current authenticated user                         | Yes           |
+Cookie-based JWT auth (access + refresh tokens set as `httpOnly` cookies).
+
+| Method | Endpoint             | Description                                         | Auth Required |
+| ------ | -------------------- | --------------------------------------------------- | ------------- |
+| POST   | `/api/auth/register` | Register a new account                              | No            |
+| POST   | `/api/auth/login`    | Login (sets access + refresh token cookies)         | No            |
+| POST   | `/api/auth/refresh`  | Refresh access token (reads refresh token cookie)   | No            |
+| POST   | `/api/auth/logout`   | Logout (revokes all refresh tokens, clears cookies) | Yes           |
+| GET    | `/api/auth/me`       | Get current authenticated user                      | Yes           |
+| GET    | `/api/auth/check`    | Check auth state (lightweight, no user data)        | No            |
 
 **Login Request Body:**
 
@@ -235,28 +238,10 @@ interface Response<T> {
 { "email": "admin@example.com", "password": "your-password" }
 ```
 
-**Login/Refresh Response:**
+**Register Request Body:**
 
 ```json
-{ "accessToken": "jwt-access-token", "refreshToken": "jwt-refresh-token" }
-```
-
-**Refresh Request Body:**
-
-```json
-{ "refreshToken": "your-refresh-token" }
-```
-
-**Logout Request Body:**
-
-```json
-{ "refreshToken": "your-refresh-token" }
-```
-
-**Authorization Header (for protected routes):**
-
-```
-Authorization: Bearer <accessToken>
+{ "name": "John Doe", "email": "john@example.com", "password": "your-password" }
 ```
 
 ### Movies

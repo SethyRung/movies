@@ -94,8 +94,10 @@ onBeforeUnmount(() => {
     <template #right>
       <UButton icon="i-lucide:search" color="neutral" variant="ghost" />
 
-      <UDropdownMenu v-if="user" :items="userMenuItems">
-        <UAvatar :alt="user.name" size="sm" />
+      <UDropdownMenu v-if="user" :items="userMenuItems" :content="{ align: 'end', sideOffset: 8 }">
+        <UButton variant="ghost" color="neutral" class="p-0">
+          <UAvatar :alt="user.name" size="sm" />
+        </UButton>
       </UDropdownMenu>
 
       <UButton v-else label="Sign in" to="/auth" size="sm" />
