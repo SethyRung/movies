@@ -1,9 +1,15 @@
 import { db, schema } from "@nuxthub/db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
+    const userId = event.context.user?.userId;
+
+    if (!userId) {
+      return createResponse({ code: ApiResponseCode.Unauthorized, message: "Unauthorized" }, null);
+    }
+
     const id = getRouterParam(event, "id");
 
     if (!id) {
@@ -19,7 +25,7 @@ export default defineEventHandler(async (event) => {
     const movieView = await db
       .select()
       .from(schema.movieViews)
-      .where(eq(schema.movieViews.id, id))
+      .where(and(eq(schema.movieViews.id, id), eq(schema.movieViews.userId, userId)))
       .limit(1);
 
     if (!movieView || movieView.length === 0) {

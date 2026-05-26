@@ -1,9 +1,15 @@
 import { db, schema } from "@nuxthub/db";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 import { ApiResponseCode } from "#shared/types";
 
 export default defineEventHandler(async (event) => {
   try {
+    const userId = event.context.user?.userId;
+
+    if (!userId) {
+      return createResponse({ code: ApiResponseCode.Unauthorized, message: "Unauthorized" }, null);
+    }
+
     const query = getQuery(event);
 
     const limit = Math.min(Number(query.limit) || 20, 100);
@@ -15,7 +21,7 @@ export default defineEventHandler(async (event) => {
     const sortBy = (query.sortBy as string) || "viewedAt";
     const sortOrder = (query.sortOrder as string) || "desc";
 
-    const conditions: any[] = [];
+    const conditions = [eq(schema.movieViews.userId, userId)];
 
     if (movieId) {
       conditions.push(eq(schema.movieViews.movieId, movieId));
@@ -25,12 +31,7 @@ export default defineEventHandler(async (event) => {
       conditions.push(eq(schema.movieViews.completed, completed));
     }
 
-    const whereClause =
-      conditions.length > 0
-        ? conditions.length === 1
-          ? conditions[0]
-          : sql`${conditions.join(" AND ")}`
-        : undefined;
+    const whereClause = and(...conditions);
 
     const orderByColumn =
       sortBy === "viewedAt"

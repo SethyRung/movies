@@ -20,7 +20,13 @@ async function logout() {
   }
 }
 
-const userMenuItems = [[{ label: "Logout", icon: "i-lucide-log-out", onSelect: logout }]];
+const userMenuItems = [
+  [
+    { label: "My List", icon: "i-lucide-bookmark", to: "/my-list" },
+    { label: "History", icon: "i-lucide-clock", to: "/history" },
+  ],
+  [{ label: "Logout", icon: "i-lucide-log-out", onSelect: logout }],
+];
 
 function animateMobileMenu(value: boolean) {
   if (value) {
@@ -115,15 +121,32 @@ onBeforeUnmount(() => {
       </NuxtLink>
 
       <div class="menu-item border-t border-neutral-800 mt-2 pt-2">
-        <UButton
-          v-if="user"
-          label="Sign out"
-          color="neutral"
-          variant="ghost"
-          icon="i-lucide-log-out"
-          block
-          @click="logout"
-        />
+        <template v-if="user">
+          <UButton
+            label="My List"
+            to="/my-list"
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-bookmark"
+            block
+          />
+          <UButton
+            label="History"
+            to="/history"
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-clock"
+            block
+          />
+          <UButton
+            label="Sign out"
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-log-out"
+            block
+            @click="logout"
+          />
+        </template>
         <UButton v-else label="Sign in" to="/auth" block />
       </div>
     </template>

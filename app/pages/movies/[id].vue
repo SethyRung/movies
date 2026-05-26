@@ -95,6 +95,60 @@ onMounted(() => {
 
 onUnmounted(() => tl.kill());
 
+const user = useUser();
+const inWatchlist = ref(false);
+const watchlistId = ref<string | null>(null);
+
+const checkWatchlist = async () => {
+  if (!user.value || !movie.value) return;
+  try {
+    const res = await useApi<ApiResponse<{ inWatchlist: boolean; watchlistId: string | null }>>(
+      "/api/watchlist/check",
+      {
+        query: { contentType: "movie", contentId: movie.value.id },
+      },
+    );
+    if (isSuccessResponse(res)) {
+      inWatchlist.value = res.data.inWatchlist;
+      watchlistId.value = res.data.watchlistId;
+    }
+  } catch {}
+};
+
+const toggleWatchlist = async () => {
+  if (!user.value) return navigateTo("/auth");
+  const toast = useToast();
+
+  try {
+    if (inWatchlist.value && watchlistId.value) {
+      await useApi(`/api/watchlist/${watchlistId.value}`, { method: "DELETE" });
+      inWatchlist.value = false;
+      watchlistId.value = null;
+      toast.add({ title: "Removed from your list", color: "success" });
+    } else {
+      const res = await useApi<ApiResponse<{ id: string }>>("/api/watchlist", {
+        method: "POST",
+        body: { contentType: "movie", contentId: movie.value!.id },
+      });
+      if (isSuccessResponse(res)) {
+        inWatchlist.value = true;
+        watchlistId.value = res.data.id;
+        toast.add({ title: "Added to your list", color: "success" });
+      }
+    }
+  } catch {}
+};
+
+watch(movieId, () => {
+  inWatchlist.value = false;
+  watchlistId.value = null;
+  checkWatchlist();
+});
+
+onMounted(() => {
+  checkWatchlist();
+});
+
 useSeoMeta({
   title: movie.value ? `${movie.value.title} - Cine Max` : "Movie - Cine Max",
   description: movie.value?.description || "Watch this movie on Cine Max",
@@ -207,8 +261,19 @@ useSeoMeta({
                       {{ movie.description }}
                     </p>
 
-                    <div class="animate-actions">
+                    <div class="animate-actions flex items-center gap-4">
                       <MovieDetailButton @click="scrollToPlayer" />
+                      <button
+                        v-if="user"
+                        class="flex items-center gap-2 px-4 py-2.5 border border-stone-700 hover:border-primary-500/50 text-stone-400 hover:text-primary-400 transition-colors tracking-[0.1em] text-xs uppercase"
+                        @click="toggleWatchlist"
+                      >
+                        <UIcon
+                          :name="inWatchlist ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'"
+                          class="w-4 h-4"
+                        />
+                        {{ inWatchlist ? "In My List" : "Add to List" }}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -263,6 +328,8 @@ useSeoMeta({
                 :embed-type="videoConfig.embedType"
                 :video-id="videoConfig.videoId"
                 :poster="videoConfig.poster"
+                content-type="movie"
+                :content-id="movie.id"
               />
 
               <div v-else class="w-full h-full flex items-center justify-center">

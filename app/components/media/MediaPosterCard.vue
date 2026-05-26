@@ -3,6 +3,7 @@ import gsap from "gsap";
 
 const props = defineProps<{
   content: Movie | TVSeries;
+  progressPercent?: number;
 }>();
 
 const year = computed(() =>
@@ -130,6 +131,13 @@ onUnmounted(() => {
         }"
         :to="getMediaDetailLink(props.content)"
       />
+    </div>
+
+    <div
+      v-if="progressPercent && progressPercent > 0"
+      class="absolute bottom-0 left-0 right-0 h-1 bg-black/40"
+    >
+      <div class="h-full bg-primary-500" :style="{ width: `${progressPercent}%` }" />
     </div>
   </div>
 </template>

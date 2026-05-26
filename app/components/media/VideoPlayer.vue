@@ -7,6 +7,8 @@ interface Props {
   videoId: string;
   poster?: string;
   autoplay?: boolean;
+  contentType?: "movie" | "episode";
+  contentId?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -168,6 +170,84 @@ const loadProgress = (): number => {
   return 0;
 };
 
+// Server-side progress tracking (when authenticated)
+const user = useUser();
+const serverViewId = ref<string | null>(null);
+const progressInterval = ref<ReturnType<typeof setInterval> | null>(null);
+
+const canTrackServer = computed(() => !!user.value && !!props.contentType && !!props.contentId);
+
+const fetchExistingView = async () => {
+  if (!canTrackServer.value) return;
+
+  try {
+    const endpoint = props.contentType === "movie" ? "/api/movie-views" : "/api/episode-views";
+    const paramName = props.contentType === "movie" ? "movieId" : "episodeId";
+    const res = await useApi<ApiResponse<(MovieView | EpisodeView)[]>>(endpoint, {
+      query: { [paramName]: props.contentId, limit: 1 },
+    });
+
+    if (isSuccessResponse(res) && res.data.length > 0) {
+      const view = res.data[0]!;
+      serverViewId.value = view.id;
+      if (view.progressSeconds && view.progressSeconds > 0 && videoRef.value) {
+        videoRef.value.currentTime = view.progressSeconds;
+      }
+    }
+  } catch {}
+};
+
+const syncProgressToServer = async () => {
+  if (!canTrackServer.value || !currentTime.value) return;
+
+  try {
+    const seconds = Math.floor(currentTime.value);
+
+    if (serverViewId.value) {
+      await useApi(`/api/${props.contentType}-views/${serverViewId.value}`, {
+        method: "PUT",
+        body: { progressSeconds: seconds },
+      });
+    } else {
+      const endpoint = props.contentType === "movie" ? "/api/movie-views" : "/api/episode-views";
+      const paramName = props.contentType === "movie" ? "movieId" : "episodeId";
+      const res = await useApi<ApiResponse<MovieView | EpisodeView>>(endpoint, {
+        method: "POST",
+        body: { [paramName]: props.contentId, progressSeconds: seconds },
+      });
+
+      if (isSuccessResponse(res)) {
+        serverViewId.value = res.data.id;
+      }
+    }
+  } catch {}
+};
+
+const markCompleted = async () => {
+  if (!canTrackServer.value || !serverViewId.value) return;
+
+  try {
+    await useApi(`/api/${props.contentType}-views/${serverViewId.value}`, {
+      method: "PUT",
+      body: { completed: true, progressSeconds: Math.floor(currentTime.value) },
+    });
+  } catch {}
+};
+
+const startProgressSync = () => {
+  if (!canTrackServer.value) return;
+
+  stopProgressSync();
+  progressInterval.value = setInterval(syncProgressToServer, 15000);
+};
+
+const stopProgressSync = () => {
+  if (progressInterval.value) {
+    clearInterval(progressInterval.value);
+    progressInterval.value = null;
+  }
+};
+
 // Video event handlers
 const onTimeUpdate = () => {
   if (videoRef.value) {
@@ -179,33 +259,40 @@ const onLoadedMetadata = () => {
   if (videoRef.value) {
     duration.value = videoRef.value.duration;
 
-    // Restore saved progress
     const savedTime = loadProgress();
     if (savedTime > 0 && savedTime < duration.value) {
       videoRef.value.currentTime = savedTime;
     }
 
-    // Apply saved volume and playback rate
     videoRef.value.volume = volume.value;
     videoRef.value.playbackRate = playbackRate.value;
+
+    if (canTrackServer.value) {
+      fetchExistingView();
+    }
   }
 };
 
 const onVideoPlay = () => {
   isPlaying.value = true;
   error.value = null;
+  startProgressSync();
   emit("play");
 };
 
 const onVideoPause = () => {
   isPlaying.value = false;
   saveProgress();
+  stopProgressSync();
+  syncProgressToServer();
   emit("pause");
 };
 
 const onVideoEnded = () => {
   isPlaying.value = false;
   saveProgress();
+  stopProgressSync();
+  markCompleted();
   emit("ended");
 };
 
@@ -461,6 +548,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   saveProgress();
+  stopProgressSync();
+  syncProgressToServer();
   document.removeEventListener("keydown", handleKeydown);
 
   if (controlsTimeout.value) {

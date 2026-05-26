@@ -64,15 +64,20 @@ export const movieGenres = pgTable(
   (table) => [index("movie_genres_pk").on(table.movieId, table.genreId)],
 );
 
-export const movieViews = pgTable("movie_views", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  movieId: uuid("movie_id")
-    .notNull()
-    .references(() => movies.id, { onDelete: "cascade" }),
-  viewedAt: timestamp("viewed_at").defaultNow(),
-  progressSeconds: integer("progress_seconds"),
-  completed: boolean("completed").default(false),
-});
+export const movieViews = pgTable(
+  "movie_views",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    movieId: uuid("movie_id")
+      .notNull()
+      .references(() => movies.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+    viewedAt: timestamp("viewed_at").defaultNow(),
+    progressSeconds: integer("progress_seconds"),
+    completed: boolean("completed").default(false),
+  },
+  (table) => [index("idx_movie_views_user").on(table.userId)],
+);
 
 export const tvSeries = pgTable(
   "tv_series",
@@ -139,16 +144,37 @@ export const episodes = pgTable("episodes", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const episodeViews = pgTable("episode_views", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  episodeId: uuid("episode_id")
-    .notNull()
-    .references(() => episodes.id, { onDelete: "cascade" }),
-  viewedAt: timestamp("viewed_at").defaultNow(),
-  sessionId: varchar("session_id", { length: 255 }),
-  progressSeconds: integer("progress_seconds"),
-  completed: boolean("completed").default(false),
-});
+export const episodeViews = pgTable(
+  "episode_views",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    episodeId: uuid("episode_id")
+      .notNull()
+      .references(() => episodes.id, { onDelete: "cascade" }),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+    viewedAt: timestamp("viewed_at").defaultNow(),
+    sessionId: varchar("session_id", { length: 255 }),
+    progressSeconds: integer("progress_seconds"),
+    completed: boolean("completed").default(false),
+  },
+  (table) => [index("idx_episode_views_user").on(table.userId)],
+);
+
+export const watchlist = pgTable(
+  "watchlist",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    contentType: varchar("content_type", { length: 10 }).notNull(),
+    contentId: uuid("content_id").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    index("idx_watchlist_user_content").on(table.userId, table.contentType, table.contentId),
+  ],
+);
 
 export const refreshTokens = pgTable(
   "refresh_tokens",

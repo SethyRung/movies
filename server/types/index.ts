@@ -122,3 +122,8 @@ export interface UpdateEpisodeViewBody {
   progressSeconds?: number;
   completed?: boolean;
 }
+
+export interface CreateWatchlistBody {
+  contentType: "movie" | "series";
+  contentId: string;
+}
