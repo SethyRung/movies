@@ -68,6 +68,7 @@ const tabs = [
         },
         input: {
           size: 'xl',
+          variant: 'soft',
           ui: {
             root: 'w-full',
             base: 'py-3 rounded-xs',
