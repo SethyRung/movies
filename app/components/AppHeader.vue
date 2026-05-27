@@ -1,16 +1,49 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
-const route = useRoute();
+import { isSuccessResponse } from "#shared/types";
+
+const NuxtLink = resolveComponent("NuxtLink");
+
 const user = useUser();
 
-const navItems = [
-  { label: "Home", to: "/" },
-  { label: "Movies", to: "/movies" },
-  { label: "TV Series", to: "/tv-series" },
-];
+const menuOpen = ref(false);
 
-const { y: scrollY } = useWindowScroll();
+const menuRef = useTemplateRef("menuRef");
+
+const route = useRoute();
+
+const navItems = computed(() => [
+  { icon: "i-lucide-home", label: "Home", to: "/" },
+  { icon: "i-lucide-film", label: "Movies", to: "/movies" },
+  { icon: "i-lucide-tv", label: "TV Series", to: "/tv-series" },
+]);
+
+const userItems = computed(() => [
+  { label: "My List", icon: "i-lucide:bookmark", to: "/my-list" },
+  { label: "Watch History", icon: "i-lucide:history", to: "/history" },
+  { label: "Sign Out", icon: "i-lucide:log-out", onSelect: logout },
+]);
+
+const { y } = useWindowScroll();
+const locked = useScrollLock(window);
+
+const scrolled = computed(() => y.value >= 56);
+
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
+  item: {
+    icon: string;
+    label: string;
+    to?: string;
+    onSelect?: () => void;
+  };
+}>();
+
+function checkActiveLink(to: string | undefined) {
+  if (!to) return false;
+
+  return route.path === to || (to !== "/" && route.path.startsWith(to));
+}
 
 async function logout() {
   const res = await useApi("/api/auth/logout", { method: "POST" });
@@ -18,137 +51,187 @@ async function logout() {
     user.value = null;
     await navigateTo("/");
   }
+  menuOpen.value = false;
 }
 
-const userMenuItems = [
-  [
-    { label: "My List", icon: "i-lucide-bookmark", to: "/my-list" },
-    { label: "History", icon: "i-lucide-clock", to: "/history" },
-  ],
-  [{ label: "Logout", icon: "i-lucide-log-out", onSelect: logout }],
-];
+let tl: gsap.core.Timeline | null = null;
 
-function animateMobileMenu(value: boolean) {
-  if (value) {
-    nextTick(() => {
-      gsap.fromTo(
-        ".menu-item",
-        { opacity: 0, x: -20 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.4,
-          stagger: 0.08,
-          delay: 0.1,
-          ease: "power2.out",
-        },
-      );
-    });
+function animateMobileMenu(open: boolean) {
+  locked.value = open;
+  menuOpen.value = open;
+
+  if (open) {
+    tl?.play();
+  } else {
+    tl?.reverse();
   }
 }
 
-onBeforeUnmount(() => {
-  gsap.killTweensOf(".menu-item");
+onMounted(() => {
+  if (menuRef.value) {
+    tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+    tl.to(".menu-overlay", {
+      display: "block",
+      opacity: 1,
+      duration: 0.1,
+    });
+
+    tl.to(menuRef.value, { display: "block", height: "auto", opacity: 1, duration: 0.4 });
+
+    tl.from(".menu-item", { x: -30, opacity: 0, duration: 0.4, stagger: 0.06 }, 0.1);
+
+    tl.fromTo(".menu-divider", { scaleX: 0 }, { scaleX: 1, duration: 0.3 }, 0.2);
+
+    tl.pause();
+  }
+});
+
+onUnmounted(() => {
+  tl?.reverse();
 });
 </script>
 
 <template>
-  <UHeader
-    mode="slideover"
-    :ui="{
-      root: [
-        'w-full fixed border-b-0',
-        scrollY > 50
-          ? 'bg-neutral-950 shadow-lg'
-          : 'bg-gradient-to-b from-neutral-950/80 via-neutral-950/40 to-transparent backdrop-blur-none',
-      ],
-      container: 'gap-6 md:gap-8',
-      left: 'lg:flex-none',
-      content: 'bg-neutral-950',
-    }"
-    @update:open="animateMobileMenu"
-  >
-    <template #left>
-      <NuxtLink to="/" class="flex items-center gap-2 group" aria-label="Cine Max Home">
-        <div
-          class="w-8 h-8 md:w-10 md:h-10 rounded bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center transition-transform group-hover:scale-110"
-        >
-          <span class="text-white font-bold text-lg md:text-xl">C</span>
+  <DefineTemplate v-slot="{ item }">
+    <component
+      :is="item.to ? NuxtLink : 'button'"
+      :to="item.to ?? ''"
+      class="menu-item w-full px-4 py-3 flex items-center gap-3 text-sm tracking-widest uppercase transition-colors cursor-pointer"
+      :class="[
+        checkActiveLink(item.to)
+          ? 'text-primary-500 bg-primary-500/5'
+          : 'text-stone-400 hover:text-primary-400',
+      ]"
+      @click="
+        () => {
+          if (item.onSelect) {
+            item.onSelect();
+          }
+          animateMobileMenu(false);
+        }
+      "
+    >
+      <UIcon :name="item.icon" />
+      {{ item.label }}
+    </component>
+  </DefineTemplate>
+
+  <header class="w-full fixed top-0 left-0 z-100 transition-all">
+    <div
+      class="w-full absolute top-0 left-0 z-100"
+      :class="
+        scrolled || menuOpen
+          ? 'bg-background/85 backdrop-blur-md shadow-lg shadow-black/30'
+          : 'bg-transparent'
+      "
+    >
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-14">
+          <NuxtLink to="/" class="group flex items-center gap-3">
+            <div class="relative">
+              <div
+                class="w-8 h-8 border border-primary-500/40 group-hover:border-primary-500 rotate-45 flex items-center justify-center transition-colors duration-300"
+              >
+                <UIcon name="i-lucide-clapperboard" class="w-4 h-4 text-primary-500 -rotate-45" />
+              </div>
+            </div>
+            <p
+              class="text-xl font-bold tracking-[0.15em] group-hover:text-primary-400 transition-colors"
+            >
+              <span class="text-primary-50"> CINE </span>
+              <span class="text-primary-500"> MAX </span>
+            </p>
+          </NuxtLink>
+
+          <nav class="hidden md:flex items-center gap-1">
+            <NuxtLink
+              v-for="item in navItems"
+              :key="item.to"
+              :to="item.to"
+              class="relative px-4 py-2 text-sm tracking-widest uppercase transition-colors duration-300"
+              :class="[
+                checkActiveLink(item.to)
+                  ? 'text-primary-500'
+                  : 'text-stone-400 hover:text-primary-400',
+              ]"
+            >
+              <span class="flex items-center gap-2">
+                <UIcon :name="item.icon" class="w-4 h-4" />
+                {{ item.label }}
+              </span>
+              <div
+                v-if="checkActiveLink(item.to)"
+                class="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary-500"
+              />
+            </NuxtLink>
+          </nav>
+
+          <div class="flex items-center gap-2">
+            <UButton
+              icon="i-lucide-search"
+              to="/search"
+              variant="ghost"
+              class="text-stone-400 hover:text-primary-400"
+            />
+
+            <UDropdownMenu v-if="user" :items="userItems">
+              <UButton
+                icon="i-lucide-user"
+                variant="ghost"
+                class="text-stone-400 hover:text-primary-400 hidden md:inline-flex"
+              />
+            </UDropdownMenu>
+
+            <UButton
+              v-else
+              to="/auth"
+              variant="ghost"
+              class="text-stone-400 hover:text-primary-400 tracking-widest text-xs uppercase"
+            >
+              <UIcon name="i-lucide-log-in" class="w-4 h-4" />
+              <span class="hidden sm:inline">Sign In</span>
+            </UButton>
+
+            <UButton
+              variant="ghost"
+              class="text-stone-400 hover:text-primary-400 md:hidden"
+              @click="animateMobileMenu(!menuOpen)"
+            >
+              <UIcon :name="menuOpen ? 'i-lucide-x' : 'i-lucide-menu'" class="w-5 h-5" />
+            </UButton>
+          </div>
         </div>
-        <span class="hidden sm:block text-xl md:text-2xl font-bold text-white">
-          CINE<span class="text-primary-500">MAX</span>
-        </span>
-      </NuxtLink>
-    </template>
-
-    <nav class="hidden lg:flex items-center gap-6">
-      <NuxtLink
-        v-for="item in navItems"
-        :key="item.to"
-        :to="item.to"
-        class="relative text-sm text-white/80 hover:text-white transition-colors group"
-        active-class="text-white font-semibold"
-      >
-        {{ item.label }}
-        <span
-          class="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
-          :class="{ 'scale-x-100': route.path === item.to }"
-        />
-      </NuxtLink>
-    </nav>
-
-    <template #right>
-      <UButton icon="i-lucide:search" color="neutral" variant="ghost" />
-
-      <UDropdownMenu v-if="user" :items="userMenuItems" :content="{ align: 'end', sideOffset: 8 }">
-        <UButton variant="ghost" color="neutral" class="p-0">
-          <UAvatar :alt="user.name" size="sm" />
-        </UButton>
-      </UDropdownMenu>
-
-      <UButton v-else label="Sign in" to="/auth" size="sm" />
-    </template>
-
-    <template #body>
-      <NuxtLink
-        v-for="item in navItems"
-        :key="item.to"
-        :to="item.to"
-        class="menu-item flex items-center px-3.5 py-2.5 rounded-lg text-white hover:bg-neutral-800"
-        active-class="bg-neutral-800"
-      >
-        {{ item.label }}
-      </NuxtLink>
-
-      <div class="menu-item border-t border-neutral-800 mt-2 pt-2">
-        <template v-if="user">
-          <UButton
-            label="My List"
-            to="/my-list"
-            color="neutral"
-            variant="ghost"
-            icon="i-lucide-bookmark"
-            block
-          />
-          <UButton
-            label="History"
-            to="/history"
-            color="neutral"
-            variant="ghost"
-            icon="i-lucide-clock"
-            block
-          />
-          <UButton
-            label="Sign out"
-            color="neutral"
-            variant="ghost"
-            icon="i-lucide-log-out"
-            block
-            @click="logout"
-          />
-        </template>
-        <UButton v-else label="Sign in" to="/auth" block />
       </div>
-    </template>
-  </UHeader>
+
+      <div
+        ref="menuRef"
+        class="hidden h-0 opacity-0 md:hidden bg-background/85 backdrop-blur-md shadow-lg shadow-black/30"
+      >
+        <nav class="px-4 py-4 space-y-2">
+          <ReuseTemplate v-for="item in navItems" :key="item.to" :item="item" />
+
+          <div class="menu-divider h-px bg-stone-800/50 my-2 origin-left" />
+
+          <template v-if="user">
+            <ReuseTemplate v-for="item in userItems" :key="item.to" :item="item" />
+          </template>
+
+          <ReuseTemplate
+            v-else
+            :item="{
+              icon: 'i-lucide:log-in',
+              label: 'Sign In',
+              to: '/auth',
+            }"
+          />
+        </nav>
+      </div>
+    </div>
+
+    <div
+      class="menu-overlay hidden w-screen h-screen bg-background/50 backdrop-blur opacity-0 absolute top-0 left-0 z-99"
+      @click="animateMobileMenu(false)"
+    ></div>
+  </header>
 </template>

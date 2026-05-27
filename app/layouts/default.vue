@@ -5,7 +5,7 @@
     <AppHeader />
 
     <ScrollSmootherWrapper>
-      <div class="bg-neutral-950">
+      <div class="bg-background">
         <UMain>
           <slot />
         </UMain>

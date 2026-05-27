@@ -18,21 +18,21 @@ const { data, pending } = await useLazyAsyncData("homepage", async () => {
     newSeriesRes,
     genresRes,
   ] = await Promise.all([
-    $fetch("/api/movies", { query: { featured: true, limit: 5 } }),
-    $fetch("/api/series", { query: { featured: true, limit: 5 } }),
-    $fetch("/api/movies", {
+    useApi("/api/movies", { query: { featured: true, limit: 5 } }),
+    useApi("/api/series", { query: { featured: true, limit: 5 } }),
+    useApi("/api/movies", {
       query: { limit: 4, sortBy: "rating", sortOrder: "desc" },
     }),
-    $fetch("/api/series", {
+    useApi("/api/series", {
       query: { limit: 4, sortBy: "rating", sortOrder: "desc" },
     }),
-    $fetch("/api/movies", {
+    useApi("/api/movies", {
       query: { limit: 10, sortBy: "createdAt", sortOrder: "desc" },
     }),
-    $fetch("/api/series", {
+    useApi("/api/series", {
       query: { limit: 10, sortBy: "createdAt", sortOrder: "desc" },
     }),
-    $fetch("/api/genres", { query: { limit: 20 } }),
+    useApi("/api/genres", { query: { limit: 20 } }),
   ]);
 
   return {
@@ -46,11 +46,11 @@ const { data, pending } = await useLazyAsyncData("homepage", async () => {
   };
 });
 
-const { data: continueWatchingData } = await useLazyAsyncData<
-  ApiResponse<ContinueWatchingItem[]> | null
->("continue-watching", () => {
+const { data: continueWatchingData } = await useLazyAsyncData<ApiResponse<
+  ContinueWatchingItem[]
+> | null>("continue-watching", () => {
   if (!user.value) return Promise.resolve(null);
-  return $fetch<ApiResponse<ContinueWatchingItem[]>>("/api/continue-watching", {
+  return useApi<ApiResponse<ContinueWatchingItem[]>>("/api/continue-watching", {
     query: { limit: 10 },
   });
 });
@@ -171,7 +171,9 @@ const genres = computed(() => data.value?.genres ?? []);
                 <div v-else class="w-full h-full bg-neutral-800 flex items-center justify-center">
                   <UIcon name="i-lucide-play" class="w-8 h-8 text-neutral-600" />
                 </div>
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                <div
+                  class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"
+                />
                 <div
                   class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 >
