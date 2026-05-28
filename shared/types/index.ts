@@ -75,8 +75,8 @@ export type ApiResponseError = {
 
 export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
 
-export function isSuccessResponse<T>(res: ApiResponse<T>): res is ApiResponseSuccess<T> {
-  return res.status.code === ApiResponseCode.Success;
+export function isSuccessResponse<T>(res?: ApiResponse<T>): res is ApiResponseSuccess<T> {
+  return !!res && res.status.code === ApiResponseCode.Success;
 }
 
 export enum CookieName {

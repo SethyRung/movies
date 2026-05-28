@@ -86,7 +86,13 @@ const formattedRating = computed(() => {
             {{ content.description }}
           </p>
 
-            <UButton icon="i-lucide:play" label="Watch Now" size="xl" class="px-6 md:px-10 py-3 rounded-xs text-sm uppercase font-medium" :to="`/movies/${content.id}`"/>
+          <UButton
+            icon="i-lucide:play"
+            label="Watch Now"
+            size="xl"
+            class="px-6 md:px-10 py-3 rounded-xs text-sm uppercase font-medium"
+            :to="`/movies/${content.id}`"
+          />
         </div>
       </div>
     </div>

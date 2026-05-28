@@ -44,24 +44,35 @@ const genreFilteredContent = computed(() => {
 
 <template>
   <div class="space-y-8">
-    <div class="flex items-baseline gap-3 mb-4">
-      <h2 class="text-xl font-bold text-white">Browse by Genre</h2>
-      <span class="text-sm text-neutral-400">Explore content by category</span>
+    <div>
+      <div class="flex items-center gap-3 mb-1">
+        <div class="w-8 h-px bg-primary-500/30" />
+        <p class="text-primary-500/60 tracking-[0.3em] text-xs uppercase">Explore content</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <h2 class="text-2xl md:text-3xl font-medium text-primary-50">Browse by Genre</h2>
+        <div class="hidden md:flex items-center gap-2 text-stone-600">
+          <div class="w-8 h-px bg-stone-800" />
+          <div class="w-1 h-1 rotate-45 border border-stone-700" />
+        </div>
+      </div>
     </div>
 
     <div class="flex gap-2 flex-wrap">
-      <UButton
+      <button
         v-for="genre in genres"
         :key="genre.id"
-        :label="genre.name"
-        :variant="selectedGenre?.id === genre.id ? 'solid' : 'outline'"
-        class="rounded-full"
-        @click="
-          () => {
-            selectedGenre = genre;
-          }
+        :data-active="selectedGenre?.id === genre.id || undefined"
+        class="px-4 py-2 text-xs tracking-[0.15em] uppercase border transition-all duration-300"
+        :class="
+          selectedGenre?.id === genre.id
+            ? 'border-primary-500/50 bg-primary-500/10 text-primary-400'
+            : 'border-stone-800 text-stone-500 hover:border-stone-600 hover:text-stone-300'
         "
-      />
+        @click="selectedGenre = genre"
+      >
+        {{ genre.name }}
+      </button>
     </div>
 
     <div v-if="pending" class="space-y-4">

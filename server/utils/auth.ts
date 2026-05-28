@@ -10,6 +10,7 @@ const PUBLIC_ROUTES: { pattern: RegExp; methods: string[] }[] = [
   { pattern: /^\/api\/auth\/login$/, methods: ["POST"] },
   { pattern: /^\/api\/auth\/register$/, methods: ["POST"] },
   { pattern: /^\/api\/auth\/refresh$/, methods: ["POST"] },
+  { pattern: /^\/api\/stats$/, methods: ["GET"] },
   { pattern: /^\/api\/movies$/, methods: ["GET"] },
   { pattern: /^\/api\/movies\/[a-f0-9-]+$/, methods: ["GET"] },
   { pattern: /^\/api\/series$/, methods: ["GET"] },
