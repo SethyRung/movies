@@ -6,40 +6,52 @@ const props = defineProps<{
   progressPercent?: number;
 }>();
 
+const imgSrc = computed(() => props.content.poster);
+
 const year = computed(() =>
   isMovie(props.content) ? props.content.releaseYear : props.content.firstAiredYear,
 );
 
+const formattedRating = computed(() => {
+  if (!props.content.rating) return null;
+  return Number(props.content.rating).toFixed(1);
+});
+
 const imageRef = useTemplateRef("imageRef");
 const overlayRef = useTemplateRef("overlayRef");
-const playButtonRef = useTemplateRef("playButtonRef");
-const yearRef = useTemplateRef("yearRef");
-const ratingRef = useTemplateRef("ratingRef");
+const borderRef = useTemplateRef("borderRef");
+const ratingBadgeRef = useTemplateRef("ratingBadgeRef");
 
 const imageError = ref(false);
 
 function onEnter() {
   gsap.to(imageRef.value, {
-    scale: 1.1,
-    duration: 0.5,
+    scale: 1.05,
+    duration: 0.7,
     ease: "power2.out",
   });
 
   gsap.to(overlayRef.value, {
     opacity: 1,
+    duration: 0.4,
     ease: "power2.out",
   });
 
-  gsap.to(playButtonRef.value, {
-    scale: 1,
-    ease: "power2.out",
-  });
+  if (ratingBadgeRef.value) {
+    gsap.to(ratingBadgeRef.value, {
+      scale: 1,
+      duration: 0.3,
+      ease: "back.out(2)",
+    });
+  }
 
-  gsap.to([yearRef.value, ratingRef.value], {
-    opacity: 1,
-    y: 0,
-    ease: "power2.out",
-  });
+  if (borderRef.value) {
+    gsap.to(borderRef.value, {
+      opacity: 1,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }
 }
 
 function onLeave() {
@@ -51,93 +63,95 @@ function onLeave() {
 
   gsap.to(overlayRef.value, {
     opacity: 0,
+    duration: 0.3,
     ease: "power2.out",
   });
 
-  gsap.to(playButtonRef.value, {
-    scale: 0,
-    ease: "power2.out",
-  });
+  if (ratingBadgeRef.value) {
+    gsap.to(ratingBadgeRef.value, {
+      scale: 0.9,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }
 
-  gsap.to([yearRef.value, ratingRef.value], {
-    opacity: 0,
-    y: -10,
-    ease: "power2.out",
-  });
+  if (borderRef.value) {
+    gsap.to(borderRef.value, {
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }
 }
 
 onUnmounted(() => {
-  gsap.killTweensOf([
-    imageRef.value,
-    overlayRef.value,
-    playButtonRef.value,
-    yearRef.value,
-    ratingRef.value,
-  ]);
+  gsap.killTweensOf([imageRef.value, overlayRef.value, ratingBadgeRef.value, borderRef.value]);
 });
 </script>
 
 <template>
-  <div
+  <NuxtLink
     ref="cardRef"
-    class="relative cursor-pointer rounded-lg overflow-hidden"
+    class="w-40 sm:w-48 group cursor-pointer shrink-0 relative grid grid-rows-[1fr_20%] gap-2"
+    :to="getMediaDetailLink(content)"
     @mouseenter="onEnter"
     @mouseleave="onLeave"
   >
-    <div ref="imageRef" class="w-full aspect-2/3">
-      <NuxtImg
-        v-if="!imageError && content.poster"
-        :src="content.poster"
-        :alt="content.title"
-        class="size-full object-cover"
-        loading="lazy"
-        @error="() => (imageError = true)"
+    <div
+      ref="borderRef"
+      class="absolute -inset-1 border-2 border-primary-500/15 pointer-events-none opacity-0"
+    >
+      <div class="absolute -top-1 -left-1 w-5 h-5 border-t-2 border-l-2 border-primary-500/40" />
+      <div class="absolute -top-1 -right-1 w-5 h-5 border-t-2 border-r-2 border-primary-500/40" />
+      <div class="absolute -bottom-1 -left-1 w-5 h-5 border-b-2 border-l-2 border-primary-500/40" />
+      <div
+        class="absolute -bottom-1 -right-1 w-5 h-5 border-b-2 border-r-2 border-primary-500/40"
+      />
+    </div>
+
+    <div class="size-full relative overflow-hidden">
+      <div
+        ref="imageRef"
+        class="w-full aspect-2/3 overflow-hidden bg-linear-to-br from-neutral-900 to-neutral-950"
+      >
+        <NuxtImg
+          v-if="!imageError && imgSrc"
+          :src="imgSrc"
+          :alt="content.title"
+          class="size-full object-cover"
+          loading="lazy"
+          @error="() => (imageError = true)"
+        />
+
+        <div
+          v-else
+          class="size-full flex flex-col items-center justify-center bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(212,175,55,0.03)_10px,rgba(212,175,55,0.03)_20px)]"
+        >
+          <UIcon name="i-lucide-film" class="size-10 text-stone-700" />
+        </div>
+      </div>
+
+      <div
+        ref="overlayRef"
+        class="size-full absolute top-0 left-0 bg-linear-to-t from-black/80 via-black/30 to-transparent opacity-0"
       />
 
-      <div v-else class="size-full p-4 bg-muted flex flex-col items-center justify-center gap-2">
-        <UIcon name="i-mdi:movie-open" class="size-16 text-toned" />
-        <span class="font-semibold text-center">{{ content.title }}</span>
+      <div
+        v-if="formattedRating"
+        ref="ratingBadgeRef"
+        class="absolute top-2 right-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-sm border border-primary-500/20 scale-90"
+      >
+        <UIcon name="i-lucide-star" class="w-3 h-3 text-primary-500 fill-primary-500" />
+        <span class="text-xs text-primary-200 font-medium">{{ formattedRating }}</span>
       </div>
     </div>
 
-    <div ref="overlayRef" class="size-full absolute top-0 left-0 bg-accented/50 opacity-0"></div>
+    <div class="text-sm font-mono">
+      <p class="text-primary/70 group-hover:text-primary-300 transition-colors duration-300">
+        {{ content.title }}
+      </p>
 
-    <div
-      ref="yearRef"
-      class="absolute top-2 left-2 px-2 py-1 bg-black/70 rounded text-white text-sm font-medium opacity-0 -translate-y-2"
-    >
-      {{ year }}
+      <p class="text-dimmed">{{ year }}</p>
     </div>
-
-    <div
-      ref="ratingRef"
-      class="absolute top-2 right-2 px-2 py-1 bg-black/70 rounded text-white text-sm font-medium opacity-0 -translate-y-2 flex items-center gap-1"
-    >
-      <UIcon name="i-mdi:star" class="size-4 text-yellow-400" />
-      {{ content.rating }}
-    </div>
-
-    <div
-      ref="playButtonRef"
-      class="size-full absolute top-0 left-0 flex items-center justify-center scale-0"
-    >
-      <UButton
-        icon="i-mdi:play"
-        size="xl"
-        color="neutral"
-        :ui="{
-          base: 'rounded-full p-3',
-          leadingIcon: 'size-8',
-        }"
-        :to="getMediaDetailLink(props.content)"
-      />
-    </div>
-
-    <div
-      v-if="progressPercent && progressPercent > 0"
-      class="absolute bottom-0 left-0 right-0 h-1 bg-black/40"
-    >
-      <div class="h-full bg-primary-500" :style="{ width: `${progressPercent}%` }" />
-    </div>
-  </div>
+  </NuxtLink>
 </template>
