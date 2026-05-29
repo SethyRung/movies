@@ -1,43 +1,37 @@
 <script setup lang="ts">
 import gsap from "gsap";
 
-import type { ApiResponse } from "#shared/types";
-import { ApiResponseCode } from "#shared/types";
-
 const route = useRoute();
 const router = useRouter();
 
 const seriesId = computed(() => route.params.id as string);
 
-const contentRef = ref<HTMLElement>();
+const contentRef = useTemplateRef("contentRef");
 const leftCurtain = useTemplateRef("leftCurtain");
 const rightCurtain = useTemplateRef("rightCurtain");
-const spotlightRef = ref<HTMLElement>();
-const playerRef = ref<HTMLElement>();
+const spotlightRef = useTemplateRef("spotlightRef");
+const playerRef = useTemplateRef("playerRef");
 
 const leftCurtainEl = computed(() => leftCurtain.value?.root);
 const rightCurtainEl = computed(() => rightCurtain.value?.root);
 
-const { data: seriesResponse, pending: isLoading } = await useAsyncData<ApiResponse<TVSeries>>(
-  `series-${seriesId.value}`,
-  () => $fetch<ApiResponse<TVSeries>>(`/api/series/${seriesId.value}`),
+const { data: seriesResponse, pending: isLoading } = await useFetch(
+  `/api/series/${seriesId.value}`,
   { watch: [seriesId] },
 );
 
 const series = computed(() => seriesResponse.value?.data ?? null);
 const statusCode = computed(() => seriesResponse.value?.status.code ?? null);
 const error = computed(() => {
-  if (seriesResponse.value?.status.code !== "SUCCESS" && seriesResponse.value?.status.code) {
-    return seriesResponse.value.status.message || "Failed to load series details";
+  const code = seriesResponse.value?.status.code;
+  if (code && code !== ApiResponseCode.Success) {
+    return seriesResponse.value?.status.message || "Failed to load series details";
   }
   return null;
 });
 
-const { data: seasonsResponse, pending: isLoadingSeasons } = await useAsyncData<
-  ApiResponse<Season[]>
->(
-  `series-${seriesId.value}-seasons`,
-  () => $fetch<ApiResponse<Season[]>>(`/api/series/${seriesId.value}/seasons`),
+const { data: seasonsResponse, pending: isLoadingSeasons } = await useFetch<ApiResponse<Season[]>>(
+  `/api/series/${seriesId.value}/seasons`,
   { watch: [seriesId] },
 );
 
@@ -97,7 +91,6 @@ const selectEpisode = (episode: Episode) => {
   selectedEpisode.value = episode;
   nextTick(() => {
     playerRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-    playerRef.value?.focus({ preventScroll: true });
   });
 };
 
@@ -167,6 +160,7 @@ function runAnimations() {
   );
   tl.from(".animate-description", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, 1.1);
   tl.from(".animate-actions", { scale: 0.9, opacity: 0, duration: 0.6, ease: "back.out(2)" }, 1.3);
+  tl.from(".animate-theater", { y: 80, opacity: 0, duration: 1, ease: "power3.out" }, 1.2);
   tl.from(".animate-seasons", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 1.4);
   tl.from(
     ".animate-card",
@@ -199,9 +193,7 @@ onMounted(() => {
   watch(
     () => !isLoading.value && series.value,
     (isLoaded) => {
-      if (isLoaded) {
-        nextTick(() => runAnimations());
-      }
+      if (isLoaded) nextTick(() => runAnimations());
     },
     { immediate: true },
   );
@@ -259,9 +251,13 @@ watch(seriesId, () => {
   checkWatchlist();
 });
 
-onMounted(() => {
-  checkWatchlist();
-});
+watch(
+  () => user.value && series.value,
+  (active) => {
+    if (active) checkWatchlist();
+  },
+  { immediate: true },
+);
 
 useSeoMeta({
   title: series.value ? `${series.value.title} - Cine Max` : "TV Series - Cine Max",
@@ -328,7 +324,6 @@ useSeoMeta({
           <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none">
             <UIcon name="i-cinemax-noise" class="w-full h-full text-white" />
           </div>
-          />
         </div>
 
         <div
@@ -372,7 +367,10 @@ useSeoMeta({
             <div class="pb-16 pt-20">
               <div class="w-full max-w-7xl mx-auto">
                 <div class="flex flex-col lg:flex-row gap-10 lg:gap-16">
-                  <MovieDetailPoster :src="series.poster" :alt="`Poster for ${series.title}`" />
+                  <MovieDetailPoster
+                    :src="series.poster || series.thumbnail"
+                    :alt="`Poster for ${series.title}`"
+                  />
 
                   <div class="flex-1 pb-4">
                     <div v-if="yearRange" class="animate-meta mb-4">
@@ -393,6 +391,16 @@ useSeoMeta({
                       <span class="text-stone-400">TV Series</span>
                       <span class="text-stone-600">◈</span>
                       <span v-if="seriesStatus" class="text-stone-400">{{ seriesStatus }}</span>
+                      <template v-if="formattedRating">
+                        <span class="text-stone-600">◈</span>
+                        <span class="flex items-center gap-2 text-stone-400">
+                          <UIcon
+                            name="i-lucide-star"
+                            class="w-4 h-4 text-primary-500 fill-primary-500"
+                          />
+                          {{ formattedRating }}
+                        </span>
+                      </template>
                       <template v-if="series.status === 'ongoing'">
                         <span class="text-stone-600">◈</span>
                         <span class="text-emerald-500/80 tracking-wider text-xs uppercase"
@@ -432,7 +440,7 @@ useSeoMeta({
         </UContainer>
       </div>
 
-      <section v-if="seasons.length > 0" class="relative py-12 px-6 md:px-12 lg:px-20">
+      <section v-if="seasons.length > 0" class="relative py-20 px-6 md:px-12 lg:px-20">
         <div
           class="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary-500/20 to-transparent"
         />
@@ -440,6 +448,80 @@ useSeoMeta({
           class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 border border-primary-500/30"
         />
 
+        <div class="max-w-7xl mx-auto">
+          <div class="animate-theater mb-10 flex items-center justify-between">
+            <div>
+              <p class="text-primary-500/60 tracking-[0.3em] text-xs uppercase mb-2">
+                Screening Room
+              </p>
+              <h2 class="text-2xl md:text-3xl font-medium text-primary-50">
+                Watch {{ series.title }}
+              </h2>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-stone-600">
+              <div class="w-8 h-px bg-stone-700" />
+              <UIcon name="i-lucide-tv" class="w-5 h-5" />
+              <div class="w-8 h-px bg-stone-700" />
+            </div>
+          </div>
+
+          <div ref="playerRef" class="animate-theater relative">
+            <div
+              class="absolute -inset-1 bg-linear-to-r from-primary-500/10 via-primary-500/5 to-primary-500/10 pointer-events-none"
+            />
+            <div class="absolute -inset-2 border border-primary-500/10 pointer-events-none" />
+
+            <div
+              class="relative w-full aspect-video bg-[#050505] overflow-hidden shadow-2xl shadow-black/50"
+            >
+              <div class="absolute inset-0 pointer-events-none z-10">
+                <div class="absolute inset-0 bg-linear-to-b from-white/2 to-transparent" />
+              </div>
+
+              <MediaVideoPlayer
+                v-if="videoConfig"
+                :src="videoConfig.src"
+                :embed-type="videoConfig.embedType"
+                :video-id="videoConfig.videoId"
+                content-type="episode"
+                :content-id="selectedEpisode!.id"
+              />
+
+              <div v-else class="w-full h-full flex items-center justify-center">
+                <div class="text-center">
+                  <div class="relative inline-block mb-6">
+                    <div
+                      class="w-24 h-24 border border-stone-800 rotate-45 flex items-center justify-center"
+                    >
+                      <UIcon name="i-lucide-video-off" class="w-8 h-8 text-stone-600 -rotate-45" />
+                    </div>
+                  </div>
+                  <p class="text-stone-500 tracking-wide">
+                    This screening is currently unavailable
+                  </p>
+                  <p class="text-stone-600 text-sm mt-2">Please check back later</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="selectedEpisode"
+              class="mt-4 flex items-center justify-between text-sm text-stone-500"
+            >
+              <span>
+                Season {{ selectedSeason?.seasonNumber }}, Episode
+                {{ selectedEpisode.episodeNumber }}
+              </span>
+              <span v-if="selectedEpisode.duration" class="flex items-center gap-1">
+                <UIcon name="i-lucide-clock" class="w-3 h-3" />
+                {{ formatDuration(selectedEpisode.duration) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section v-if="seasons.length > 0" class="relative py-12 px-6 md:px-12 lg:px-20">
         <div class="max-w-7xl mx-auto">
           <div class="animate-seasons">
             <div class="flex items-center justify-between mb-6">
@@ -474,151 +556,66 @@ useSeoMeta({
 
       <section v-if="selectedSeason" class="relative py-12 px-6 md:px-12 lg:px-20">
         <div class="max-w-7xl mx-auto">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-6">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-primary-500/60 tracking-[0.3em] text-xs uppercase mb-2">
-                    Season {{ selectedSeason.seasonNumber }}
-                  </p>
-                  <h2 class="text-2xl font-medium text-primary-50">Episodes</h2>
-                </div>
-                <span v-if="selectedSeason.episodeCount" class="text-stone-500 text-sm">
-                  {{ selectedSeason.episodeCount }} episodes
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <p class="text-primary-500/60 tracking-[0.3em] text-xs uppercase mb-2">
+                Season {{ selectedSeason.seasonNumber }}
+              </p>
+              <h2 class="text-2xl font-medium text-primary-50">Episodes</h2>
+            </div>
+            <span v-if="selectedSeason.episodeCount" class="text-stone-500 text-sm">
+              {{ selectedSeason.episodeCount }} episodes
+            </span>
+          </div>
+
+          <Loading v-if="isLoadingEpisodes" />
+
+          <div
+            v-else-if="episodes.length === 0"
+            class="text-center py-16 border border-stone-800/50"
+          >
+            <div
+              class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
+            >
+              <UIcon name="i-lucide-video-off" class="w-6 h-6 text-stone-600 -rotate-45" />
+            </div>
+            <p class="text-stone-500">No episodes available</p>
+          </div>
+
+          <div v-else class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-3">
+            <button
+              v-for="episode in episodes"
+              :key="episode.id"
+              class="group text-left border transition-all duration-300"
+              :class="
+                selectedEpisode?.id === episode.id
+                  ? 'border-primary-500/30 bg-primary-500/5'
+                  : 'border-stone-800/50 hover:border-stone-700'
+              "
+              @click="selectEpisode(episode)"
+            >
+              <div class="flex items-center justify-between p-3">
+                <span
+                  class="text-sm font-bold font-mono"
+                  :class="
+                    selectedEpisode?.id === episode.id
+                      ? 'text-primary-400'
+                      : 'text-stone-500 group-hover:text-stone-300'
+                  "
+                >
+                  EP {{ String(episode.episodeNumber).padStart(2, "0") }}
+                </span>
+
+                <span v-if="episode.duration" class="text-xs text-stone-600">
+                  {{ formatDuration(episode.duration) }}
                 </span>
               </div>
-
-              <Loading v-if="isLoadingEpisodes" />
-
-              <div
-                v-else-if="episodes.length === 0"
-                class="text-center py-16 border border-stone-800/50"
-              >
-                <div
-                  class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
-                >
-                  <UIcon name="i-lucide-video-off" class="w-6 h-6 text-stone-600 -rotate-45" />
-                </div>
-                <p class="text-stone-500">No episodes available</p>
-              </div>
-
-              <div v-else class="space-y-3">
-                <button
-                  v-for="episode in episodes"
-                  :key="episode.id"
-                  :class="[
-                    'w-full flex items-center gap-4 p-4 border transition-all',
-                    selectedEpisode?.id === episode.id
-                      ? 'border-primary-500/30 bg-primary-500/5'
-                      : 'border-stone-800/50 hover:border-stone-700',
-                  ]"
-                  @click="selectEpisode(episode)"
-                >
-                  <div
-                    class="flex-shrink-0 w-12 h-12 border border-stone-800 flex items-center justify-center"
-                  >
-                    <span class="text-primary-50 font-bold text-lg">{{
-                      episode.episodeNumber
-                    }}</span>
-                  </div>
-
-                  <div class="flex-1 text-left min-w-0">
-                    <p class="text-primary-50 font-medium">Episode {{ episode.episodeNumber }}</p>
-                    <div class="flex items-center gap-3 text-sm text-stone-500">
-                      <span v-if="episode.duration" class="flex items-center gap-1">
-                        <UIcon name="i-lucide-clock" class="w-3 h-3" />
-                        {{ formatDuration(episode.duration) }}
-                      </span>
-                      <span
-                        v-if="episode.status"
-                        :class="[
-                          'px-2 py-0.5 text-xs',
-                          episode.status === 'active' ? 'text-emerald-500/80' : 'text-stone-500',
-                        ]"
-                      >
-                        {{ episode.status }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="flex-shrink-0">
-                    <div
-                      :class="[
-                        'w-10 h-10 border flex items-center justify-center transition-all',
-                        selectedEpisode?.id === episode.id
-                          ? 'border-primary-500 bg-primary-500 text-primary-950'
-                          : 'border-stone-800 text-stone-500 hover:border-primary-500/50 hover:text-primary-500',
-                      ]"
-                    >
-                      <UIcon name="i-lucide-play" class="w-4 h-4" />
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            <div class="lg:col-span-1">
-              <div
-                ref="playerRef"
-                tabindex="-1"
-                class="sticky top-20 border border-stone-800/50 overflow-hidden"
-              >
-                <div class="p-4 border-b border-stone-800/50 flex items-center justify-between">
-                  <div>
-                    <p class="text-primary-500/60 tracking-[0.2em] text-xs uppercase mb-1">
-                      Now Playing
-                    </p>
-                    <h3 v-if="selectedEpisode" class="text-lg font-medium text-primary-50">
-                      Episode {{ selectedEpisode.episodeNumber }}
-                    </h3>
-                  </div>
-                  <UIcon name="i-lucide-tv" class="w-5 h-5 text-stone-600" />
-                </div>
-
-                <div v-if="selectedEpisode" class="p-4">
-                  <p class="text-stone-400 text-sm mb-4">
-                    Season {{ selectedSeason.seasonNumber }}, Episode
-                    {{ selectedEpisode.episodeNumber }}
-                  </p>
-
-                  <div class="relative w-full aspect-video bg-[#050505] overflow-hidden">
-                    <MediaVideoPlayer
-                      v-if="videoConfig"
-                      :src="videoConfig.src"
-                      :embed-type="videoConfig.embedType"
-                      :video-id="videoConfig.videoId"
-                      content-type="episode"
-                      :content-id="selectedEpisode!.id"
-                    />
-                    <div v-else class="w-full h-full flex items-center justify-center">
-                      <div class="text-center">
-                        <div
-                          class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
-                        >
-                          <UIcon
-                            name="i-lucide-video-off"
-                            class="w-6 h-6 text-stone-600 -rotate-45"
-                          />
-                        </div>
-                        <p class="text-stone-500">Video unavailable</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-else class="p-8 text-center">
-                  <div
-                    class="w-16 h-16 border border-stone-800 rotate-45 flex items-center justify-center mx-auto mb-4"
-                  >
-                    <UIcon name="i-lucide-tv-2" class="w-6 h-6 text-stone-600 -rotate-45" />
-                  </div>
-                  <p class="text-stone-500">Select an episode</p>
-                </div>
-              </div>
-            </div>
+            </button>
           </div>
         </div>
       </section>
+
+      <DecorativeDivider class="mt-8" />
 
       <section class="relative py-16 px-6 md:px-12 lg:px-20">
         <div class="max-w-7xl mx-auto">
@@ -667,7 +664,7 @@ useSeoMeta({
               <span class="text-xs tracking-wider">Series ID: {{ series.id }}</span>
             </div>
             <p v-if="series.createdAt" class="text-xs tracking-wider">
-              Added to Collection •
+              Added to Collection &bull;
               {{
                 new Date(series.createdAt).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -679,18 +676,6 @@ useSeoMeta({
           </div>
         </div>
       </section>
-
-      <div class="relative h-8 overflow-hidden" aria-hidden="true">
-        <div class="absolute inset-0 flex justify-center items-center gap-2">
-          <div class="w-20 h-px bg-linear-to-r from-transparent to-primary-500/20" />
-          <div class="w-1 h-1 rotate-45 bg-primary-500/20" />
-          <div class="w-16 h-px bg-primary-500/20" />
-          <div class="w-2 h-2 border border-primary-500/20 rotate-45" />
-          <div class="w-16 h-px bg-primary-500/20" />
-          <div class="w-1 h-1 rotate-45 bg-primary-500/20" />
-          <div class="w-20 h-px bg-linear-to-l from-transparent to-primary-500/20" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
