@@ -28,6 +28,18 @@ export type MovieView = DateFields<typeof movieViews.$inferSelect, "viewedAt">;
 export type WatchlistItem = DateFields<typeof watchlist.$inferSelect, "createdAt">;
 export type ContentType = "movie" | "series";
 
+export const VALID_EMBED_TYPES = [
+  "youtube",
+  "vimeo",
+  "dailymotion",
+  "okru",
+  "facebook",
+  "gdrive",
+  "custom",
+  "mp4",
+  "direct",
+] as const;
+
 export interface ContinueWatchingItem {
   contentType: ContentType;
   contentId: string;

@@ -6,7 +6,7 @@ const props = defineProps<{
   progressPercent?: number;
 }>();
 
-const imgSrc = computed(() => props.content.poster);
+const imgSrc = computed(() => props.content.poster || props.content.thumbnail);
 
 const year = computed(() =>
   isMovie(props.content) ? props.content.releaseYear : props.content.firstAiredYear,

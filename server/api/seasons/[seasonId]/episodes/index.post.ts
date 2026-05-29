@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { ApiResponseCode } from "#shared/types";
+import { ApiResponseCode, VALID_EMBED_TYPES } from "#shared/types";
 import type { CreateEpisodeBody } from "#server/types";
 
 export default defineEventHandler(async (event) => {
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const validEmbedTypes = ["youtube", "vimeo", "dailymotion", "custom"];
+    const validEmbedTypes = VALID_EMBED_TYPES as readonly string[];
     if (!validEmbedTypes.includes(body.embedType)) {
       return createResponse(
         {
