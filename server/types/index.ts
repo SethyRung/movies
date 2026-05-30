@@ -11,6 +11,7 @@ export interface CreateMovieBody {
   duration?: number;
   embedUrl: string;
   embedType: string;
+  origin?: string;
   releaseYear?: number;
   rating?: string;
   featured?: boolean;
@@ -26,6 +27,7 @@ export interface UpdateMovieBody {
   duration?: number;
   embedUrl?: string;
   embedType?: string;
+  origin?: string;
   releaseYear?: number;
   rating?: string;
   featured?: boolean;
@@ -42,6 +44,7 @@ export interface CreateSeriesBody {
   rating?: string;
   featured?: boolean;
   status?: string;
+  origin?: string;
   createdBy?: string;
 }
 
@@ -55,6 +58,7 @@ export interface UpdateSeriesBody {
   rating?: string;
   featured?: boolean;
   status?: string;
+  origin?: string;
 }
 
 export interface CreateSeasonBody {

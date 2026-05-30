@@ -47,6 +47,7 @@ export default defineEventHandler(async (event) => {
         duration: body.duration,
         embedUrl: body.embedUrl,
         embedType: body.embedType,
+        origin: body.origin,
         releaseYear: body.releaseYear,
         rating: body.rating ? String(body.rating) : null,
         featured: body.featured || false,

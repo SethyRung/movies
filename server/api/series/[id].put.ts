@@ -49,6 +49,7 @@ export default defineEventHandler(async (event) => {
     if (body.rating !== undefined) updateData.rating = String(body.rating);
     if (body.featured !== undefined) updateData.featured = body.featured;
     if (body.status !== undefined) updateData.status = body.status;
+    if (body.origin !== undefined) updateData.origin = body.origin;
 
     const updated = await db
       .update(schema.tvSeries)

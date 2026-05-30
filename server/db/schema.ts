@@ -37,6 +37,7 @@ export const movies = pgTable(
     duration: integer("duration"),
     embedUrl: varchar("embed_url", { length: 1000 }).notNull(),
     embedType: varchar("embed_type", { length: 50 }).notNull(),
+    origin: varchar("origin", { length: 50 }),
     releaseYear: integer("release_year"),
     rating: decimal("rating", { precision: 3, scale: 1 }),
     featured: boolean("featured").default(false),
@@ -48,6 +49,7 @@ export const movies = pgTable(
   (table) => [
     index("idx_movies_status").on(table.status),
     index("idx_movies_featured").on(table.featured),
+    index("idx_movies_origin").on(table.origin),
   ],
 );
 
@@ -92,6 +94,7 @@ export const tvSeries = pgTable(
     rating: decimal("rating", { precision: 3, scale: 1 }),
     featured: boolean("featured").default(false),
     status: varchar("status", { length: 50 }).default("ongoing"),
+    origin: varchar("origin", { length: 50 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
     createdBy: uuid("created_by").references(() => users.id),
@@ -99,6 +102,7 @@ export const tvSeries = pgTable(
   (table) => [
     index("idx_tv_series_status").on(table.status),
     index("idx_tv_series_featured").on(table.featured),
+    index("idx_tv_series_origin").on(table.origin),
   ],
 );
 

@@ -38,6 +38,7 @@ export default defineEventHandler(async (event) => {
         rating: body.rating ? String(body.rating) : null,
         featured: body.featured || false,
         status: (body.status as any) || "ongoing",
+        origin: body.origin,
         createdBy: body.createdBy,
       })
       .returning();

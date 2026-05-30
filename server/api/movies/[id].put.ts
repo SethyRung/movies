@@ -56,6 +56,7 @@ export default defineEventHandler(async (event) => {
     if (body.duration !== undefined) updateData.duration = body.duration;
     if (body.embedUrl !== undefined) updateData.embedUrl = body.embedUrl;
     if (body.embedType !== undefined) updateData.embedType = body.embedType;
+    if (body.origin !== undefined) updateData.origin = body.origin;
     if (body.releaseYear !== undefined) updateData.releaseYear = body.releaseYear;
     if (body.rating !== undefined) updateData.rating = String(body.rating);
     if (body.featured !== undefined) updateData.featured = body.featured;
