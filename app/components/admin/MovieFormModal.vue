@@ -7,6 +7,8 @@ const props = defineProps<{
   movie?: Movie;
 }>();
 
+const open = defineModel<boolean>("open", { default: undefined });
+
 const emits = defineEmits<{
   saved: [];
 }>();
@@ -46,6 +48,24 @@ const state = reactive<Partial<Schema>>({
   featured: props.movie?.featured ?? false,
   status: props.movie?.status ?? "active",
 });
+
+watch(
+  () => props.movie,
+  (movie) => {
+    state.title = movie?.title;
+    state.description = movie?.description || undefined;
+    state.thumbnail = movie?.thumbnail || undefined;
+    state.poster = movie?.poster || undefined;
+    state.embedUrl = movie?.embedUrl;
+    state.embedType = movie?.embedType;
+    state.origin = movie?.origin || undefined;
+    state.duration = movie?.duration || undefined;
+    state.releaseYear = movie?.releaseYear || undefined;
+    state.rating = movie?.rating || undefined;
+    state.featured = movie?.featured ?? false;
+    state.status = movie?.status ?? "active";
+  },
+);
 
 const formRef = useTemplateRef("formRef");
 
@@ -97,6 +117,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: "success",
       icon: "i-lucide-check-circle",
     });
+    open.value = false;
     emits("saved");
   } catch {
     toast.add({
@@ -111,7 +132,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UModal :title="isEdit ? 'Edit Movie' : 'Create Movie'" :ui="{ footer: 'justify-end' }">
+  <UModal
+    v-model:open="open"
+    :title="isEdit ? 'Edit Movie' : 'Create Movie'"
+    :ui="{ footer: 'justify-end' }"
+  >
     <slot></slot>
 
     <template #body>
