@@ -137,7 +137,12 @@ async function handleDelete(movie: any) {
         </template>
       </UDashboardNavbar>
 
-      <UDashboardToolbar>
+      <UDashboardToolbar
+        :ui="{
+          root: 'flex-wrap',
+          right: 'flex-wrap',
+        }"
+      >
         <template #left>
           <UInput
             v-model="search"

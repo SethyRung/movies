@@ -60,7 +60,12 @@ async function handleDelete(genre: any) {
         </template>
       </UDashboardNavbar>
 
-      <UDashboardToolbar>
+      <UDashboardToolbar
+        :ui="{
+          root: 'flex-wrap',
+          right: 'flex-wrap',
+        }"
+      >
         <template #right>
           <UButton
             label="Add Genre"

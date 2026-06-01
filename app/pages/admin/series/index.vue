@@ -20,7 +20,7 @@ const statusFilter = ref<(typeof statusItems)[number]["value"]>(statusItems[0]!.
 const status = computed(() => (statusFilter.value !== "all" ? statusFilter.value : undefined));
 
 const modelOpen = ref(false);
-const series = ref<any>();
+const series = ref<TVSeries>();
 
 const UBadge = resolveComponent("UBadge");
 
@@ -142,7 +142,12 @@ async function handleDelete(series: any) {
         </template>
       </UDashboardNavbar>
 
-      <UDashboardToolbar>
+      <UDashboardToolbar
+        :ui="{
+          root: 'flex-wrap',
+          right: 'flex-wrap',
+        }"
+      >
         <template #left>
           <UInput
             v-model="search"
@@ -182,9 +187,9 @@ async function handleDelete(series: any) {
             :items="[
               [
                 {
-                  label: 'View',
-                  icon: 'i-lucide-eye',
-                  onSelect: () => navigateTo(`/tv-series/${row.original.id}`),
+                  label: 'Manage',
+                  icon: 'i-lucide-settings',
+                  onSelect: () => navigateTo(`/admin/series/${row.original.id}`),
                 },
                 {
                   label: 'Edit',
