@@ -482,12 +482,10 @@ useSeoMeta({
               </div>
 
               <MediaVideoPlayer
-                v-if="videoConfig"
-                :src="videoConfig.src"
-                :embed-type="videoConfig.embedType"
-                :video-id="videoConfig.videoId"
-                content-type="episode"
-                :content-id="selectedEpisode!.id"
+                v-if="selectedEpisode"
+                :key="`${seriesId}-${selectedSeasonId}-${selectedEpisode.id}`"
+                :src="selectedEpisode.embedUrl"
+                :embed-type="selectedEpisode.embedType"
               />
 
               <div v-else class="w-full h-full flex items-center justify-center">
@@ -524,7 +522,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <section v-if="seasons.length > 0" class="relative py-12 px-6 md:px-12 lg:px-20">
+      <section v-if="seasons.length > 1" class="relative py-12 px-6 md:px-12 lg:px-20">
         <div class="max-w-7xl mx-auto">
           <div class="animate-seasons">
             <div class="flex items-center justify-between mb-6">

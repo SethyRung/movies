@@ -1,24 +1,10 @@
 <script setup lang="ts">
 type EmbedType = (typeof VALID_EMBED_TYPES)[number];
 
-const props = withDefaults(
-  defineProps<{
-    src: string;
-    embedType: EmbedType;
-    videoId?: string;
-    poster?: string;
-    contentType?: "movie" | "episode";
-    contentId?: string;
-  }>(),
-  {
-    videoId: undefined,
-    poster: undefined,
-    contentType: "movie",
-    contentId: undefined,
-  },
-);
-
-const isIframe = computed(() => props.embedType !== "mp4");
+const props = defineProps<{
+  src: string;
+  embedType: EmbedType | string;
+}>();
 
 const iframeAllow = computed(() => {
   switch (props.embedType) {
@@ -29,7 +15,7 @@ const iframeAllow = computed(() => {
     case "dailymotion":
       return "autoplay; fullscreen";
     case "okru":
-      return "autoplay; fullscreen";
+      return "autoplay; fullscreen; screen-wake-lock";
     case "facebook":
       return "autoplay; encrypted-media; picture-in-picture";
     case "gdrive":
@@ -40,11 +26,12 @@ const iframeAllow = computed(() => {
 });
 
 const iframeSandbox = computed(() => {
-  if (props.embedType === "custom" || props.embedType === "direct") {
-    return undefined;
+  switch (props.embedType) {
+    case "direct":
+      return undefined;
+    default:
+      return "allow-scripts allow-same-origin allow-popups allow-forms";
   }
-
-  return "allow-scripts allow-same-origin allow-popups allow-forms allow-presentation";
 });
 
 const computedSrc = computed(() => {
@@ -62,19 +49,17 @@ const computedSrc = computed(() => {
 <template>
   <div class="relative size-full bg-black overflow-hidden">
     <iframe
-      v-if="isIframe"
+      v-if="props.embedType !== 'mp4'"
       ref="iframeRef"
       :src="computedSrc"
       :allow="iframeAllow"
       :sandbox="iframeSandbox"
-      allowfullscreen
       class="absolute inset-0 size-full border-0"
     />
 
     <video
       v-else
       ref="videoRef"
-      :poster="poster"
       controls
       autoplay
       playsinline

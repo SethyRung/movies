@@ -326,13 +326,10 @@ useSeoMeta({
               </div>
 
               <MediaVideoPlayer
-                v-if="videoConfig"
-                :src="videoConfig.src"
-                :embed-type="videoConfig.embedType"
-                :video-id="videoConfig.videoId"
-                :poster="videoConfig.poster"
-                content-type="movie"
-                :content-id="movie.id"
+                v-if="movie"
+                :key="movie.id"
+                :src="movie.embedUrl"
+                :embed-type="movie.embedType"
               />
 
               <div v-else class="w-full h-full flex items-center justify-center">
