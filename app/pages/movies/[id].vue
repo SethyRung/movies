@@ -261,19 +261,22 @@ useSeoMeta({
                       {{ movie.description }}
                     </p>
 
-                    <div class="animate-actions flex items-center gap-4">
+                    <div class="animate-actions flex items-center gap-4 flex-wrap">
                       <MovieDetailButton @click="scrollToPlayer" />
-                      <button
+
+                      <UButton
                         v-if="user"
-                        class="flex items-center gap-2 px-4 py-2.5 border border-stone-700 hover:border-primary-500/50 text-stone-400 hover:text-primary-400 transition-colors tracking-[0.1em] text-xs uppercase"
-                        @click="toggleWatchlist"
-                      >
-                        <UIcon
-                          :name="inWatchlist ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'"
-                          class="w-4 h-4"
-                        />
-                        {{ inWatchlist ? "In My List" : "Add to List" }}
-                      </button>
+                        :icon="inWatchlist ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'"
+                        :label="inWatchlist ? 'In My List' : 'Add to List'"
+                        color="neutral"
+                        variant="soft"
+                        class="px-6 py-4 rounded-none"
+                        @click="
+                          () => {
+                            toggleWatchlist();
+                          }
+                        "
+                      />
                     </div>
                   </div>
                 </div>
