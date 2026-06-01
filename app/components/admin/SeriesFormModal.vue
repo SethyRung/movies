@@ -6,6 +6,8 @@ const props = defineProps<{
   series?: any;
 }>();
 
+const open = defineModel<boolean>("open", { default: undefined });
+
 const emits = defineEmits<{
   saved: [];
 }>();
@@ -41,6 +43,22 @@ const state = reactive<Partial<Schema>>({
   featured: props.series?.featured ?? false,
   status: props.series?.status ?? "ongoing",
 });
+
+watch(
+  () => props.series,
+  (series) => {
+    state.title = series?.title ?? undefined;
+    state.description = series?.description || undefined;
+    state.thumbnail = series?.thumbnail || undefined;
+    state.poster = series?.poster || undefined;
+    state.origin = series?.origin || undefined;
+    state.firstAiredYear = series?.firstAiredYear || undefined;
+    state.lastAiredYear = series?.lastAiredYear || undefined;
+    state.rating = series?.rating || undefined;
+    state.featured = series?.featured ?? false;
+    state.status = series?.status ?? "ongoing";
+  },
+);
 
 const formRef = useTemplateRef("formRef");
 
@@ -86,6 +104,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: "success",
       icon: "i-lucide-check-circle",
     });
+    open.value = false;
     emits("saved");
   } catch {
     toast.add({
@@ -100,7 +119,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UModal :title="isEdit ? 'Edit Series' : 'Create Series'" :ui="{ footer: 'justify-end' }">
+  <UModal
+    v-model:open="open"
+    :title="isEdit ? 'Edit Series' : 'Create Series'"
+    :ui="{ footer: 'justify-end' }"
+  >
     <template #body>
       <UForm ref="formRef" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormField name="title" label="Title" required>
