@@ -1,6 +1,8 @@
 import { db, schema } from "@nuxthub/db";
-import { and, eq, desc, sql } from "drizzle-orm";
+import { and, eq, desc, sql, notInArray } from "drizzle-orm";
 import { ApiResponseCode } from "#shared/types";
+
+const activeSeriesWhere = notInArray(schema.tvSeries.status, ["draft", "archived"]);
 
 export default defineEventHandler(async (event) => {
   try {
@@ -29,7 +31,7 @@ export default defineEventHandler(async (event) => {
       db
         .select()
         .from(schema.tvSeries)
-        .where(and(eq(schema.tvSeries.status, "ongoing"), eq(schema.tvSeries.featured, true)))
+        .where(and(activeSeriesWhere, eq(schema.tvSeries.featured, true)))
         .orderBy(desc(schema.tvSeries.createdAt))
         .limit(1),
 
@@ -43,7 +45,7 @@ export default defineEventHandler(async (event) => {
       db
         .select()
         .from(schema.tvSeries)
-        .where(eq(schema.tvSeries.status, "ongoing"))
+        .where(activeSeriesWhere)
         .orderBy(desc(schema.tvSeries.rating))
         .limit(4),
 
@@ -57,7 +59,7 @@ export default defineEventHandler(async (event) => {
       db
         .select()
         .from(schema.tvSeries)
-        .where(eq(schema.tvSeries.status, "ongoing"))
+        .where(activeSeriesWhere)
         .orderBy(desc(schema.tvSeries.createdAt))
         .limit(10),
 
@@ -71,7 +73,7 @@ export default defineEventHandler(async (event) => {
       db
         .select({ count: sql<number>`count(*)::int` })
         .from(schema.tvSeries)
-        .where(eq(schema.tvSeries.status, "ongoing")),
+        .where(activeSeriesWhere),
     ]);
 
     return createResponse(
