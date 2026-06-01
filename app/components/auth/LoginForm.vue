@@ -53,7 +53,12 @@ async function onSubmit() {
 <template>
   <UForm :schema="schema" :state="state" @submit="onSubmit">
     <UFormField name="email" label="Email" required>
-      <UInput v-model="state.email" type="email" placeholder="you@example.com" />
+      <UInput
+        v-model="state.email"
+        type="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+      />
     </UFormField>
 
     <UFormField name="password" label="Password" required>

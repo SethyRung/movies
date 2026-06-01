@@ -4,10 +4,14 @@
 
 - `pnpm dev` — start dev server (requires Docker PostgreSQL running)
 - `pnpm build` / `pnpm preview` — production build and preview
+- `pnpm typecheck` — run TypeScript type checking (`nuxt typecheck`)
 - `pnpm lint` / `pnpm lint:fix` — oxlint (not ESLint)
 - `pnpm fmt` / `pnpm fmt:check` — oxfmt (not Prettier)
 - `pnpm exec nuxt db generate` — generate Drizzle migrations from `server/db/schema.ts`
 - `pnpm exec nuxt db migrate` — apply migrations
+- `pnpm exec nuxt db drop <TABLE>` — drop a specific table
+- `pnpm exec nuxt db drop-all` — drop all tables (destructive)
+- `pnpm exec nuxt db sql "<QUERY>"` — execute raw SQL
 
 After changes, run: `pnpm fmt` → `pnpm lint`
 
@@ -24,24 +28,27 @@ After changes, run: `pnpm fmt` → `pnpm lint`
 - **Nuxt 4** with compatibility version 4 (`future.compatibilityVersion: 4`)
 - **Package manager**: pnpm (not npm/yarn)
 - **Database**: PostgreSQL via Drizzle ORM, managed through NuxtHub (`hub: db` dialect `postgresql`)
-- **Auth**: JWT access + refresh tokens. Server middleware (`server/middleware/auth.ts`) protects all `/api/*` routes; public routes are whitelisted inline in that file
-- **API response envelope**: all endpoints return `Response<T>` from `shared/types/index.ts` via `createResponse()` from `server/utils/response.ts`
+- **Auth**: Cookie-based JWT (access + refresh tokens as `httpOnly` cookies). Server middleware (`server/middleware/auth.ts`) protects all `/api/*` routes by default; public routes are whitelisted in the `PUBLIC_ROUTES` array in `server/utils/auth.ts` — add new public endpoints there
+- **API response envelope**: all endpoints return `ApiResponse<T>` from `shared/types/index.ts` via the overloaded `createResponse()` from `server/utils/response.ts` — success responses carry data, error responses set data to `null`
 - **DB schema**: single file `server/db/schema.ts` — all Drizzle table definitions live here
-- **Shared types**: `shared/types/index.ts` imports from `"hub:db:schema"` and re-exports app-level types
-- **Server type augmentation**: `server/types/h3.d.ts` adds `user` to `H3EventContext`
+- **Shared types**: `shared/types/index.ts` imports table types from `"hub:db:schema"` and re-exports app-level types. Import as `#shared/types` from both client and server code
+- **Request body types**: `server/types/index.ts` — defines `Create*Body` / `Update*Body` interfaces for all API endpoints
+- **Server type augmentation**: `server/types/h3.d.ts` adds `user?: AccessTokenPayload` to `H3EventContext`
+- **Client composables**: `app/composables/` — `useApi`, `useFetchApi`, `useUser`, `useSearch`
 - **Seed data**: `server/data.ts` + `server/tasks/db/seed.ts`
 
 ### Directory layout (non-obvious)
 
-- `app/` — Nuxt app dir (pages, components, composables, layouts, stores)
-- `server/api/` — REST endpoints grouped by resource (auth, movies, series, genres, etc.)
+- `app/` — Nuxt app dir (pages, components, composables, layouts, middleware, plugins, utils)
+- `server/api/` — REST endpoints grouped by resource (auth, movies, series, genres, seasons, episodes, movie-views, episode-views, watchlist, continue-watching, admin, stats)
 - `server/utils/` — shared server helpers (`auth.ts`, `response.ts`)
-- `shared/types/` — types used by both client and server (imported as `#shared/types`)
+- `server/types/` — request body interfaces and H3 type augmentation
+- `shared/types/` — types shared between client and server (imported as `#shared/types`)
 
 ## Style / Conventions
 
 - **Formatter**: oxfmt — 2-space indent, semicolons, double quotes, trailing commas, 100 char print width (see `oxfmt.config.ts`)
-- **Linter**: oxlint with vue + typescript plugins. `no-explicit-any` is off
+- **Linter**: oxlint with vue + typescript plugins. Disabled rules that affect code generation: `no-explicit-any`, `no-empty-object-type`, `ban-types` are all off
 - **Tailwind CSS v4** via `@tailwindcss/vite` plugin (not PostCSS)
 - **Nuxt UI v4** + Tailwind Variants for component styling
 - **GSAP** for animations (pre-configured in Vite optimizeDeps)
@@ -54,3 +61,5 @@ After changes, run: `pnpm fmt` → `pnpm lint`
 - `.env` is gitignored; `.env.example` is the template
 - UUIDs used for all primary keys
 - `DATABASE_DRIVER` env var controls whether `postgres-js` or `neon-http` driver is used
+- GET endpoints for movies, series, seasons, episodes, genres, and stats are public (no auth required); all write operations require auth
+- `ApiResponse` (not `Response`) is the canonical type name — `Response` is the browser built-in
