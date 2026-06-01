@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const limit = Math.min(Number(query.limit) || 20, 100);
     const offset = Math.max(Number(query.offset) || 0, 0);
 
-    const status = (query.status as string) || "active";
+    const status = query.status ? (query.status as string) : undefined;
     const featured =
       query.featured === "true" ? true : query.featured === "false" ? false : undefined;
     const search = (query.search as string) || "";
@@ -17,7 +17,11 @@ export default defineEventHandler(async (event) => {
     const sortOrder = (query.sortOrder as string) || "desc";
     const genreParam = query.genre as string | undefined;
 
-    const conditions: any[] = [eq(schema.movies.status, status)];
+    const conditions: any[] = [];
+
+    if (status) {
+      conditions.push(eq(schema.movies.status, status));
+    }
 
     if (featured !== undefined) {
       conditions.push(eq(schema.movies.featured, featured));
@@ -29,7 +33,12 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const whereClause = conditions.length > 1 ? and(...conditions) : conditions[0];
+    const whereClause =
+      conditions.length > 1
+        ? and(...conditions)
+        : conditions.length === 1
+          ? conditions[0]
+          : undefined;
 
     const orderByColumn =
       sortBy === "title"
@@ -49,7 +58,11 @@ export default defineEventHandler(async (event) => {
         .select({ count: sql<number>`count(distinct ${schema.movies.id})::int` })
         .from(schema.movies)
         .innerJoin(schema.movieGenres, eq(schema.movies.id, schema.movieGenres.movieId))
-        .where(and(whereClause, inArray(schema.movieGenres.genreId, genreIds)));
+        .where(
+          whereClause
+            ? and(whereClause, inArray(schema.movieGenres.genreId, genreIds))
+            : inArray(schema.movieGenres.genreId, genreIds),
+        );
 
       const total = countResult[0]?.count || 0;
 
@@ -57,7 +70,11 @@ export default defineEventHandler(async (event) => {
         .selectDistinctOn([schema.movies.id], { movies: schema.movies })
         .from(schema.movies)
         .innerJoin(schema.movieGenres, eq(schema.movies.id, schema.movieGenres.movieId))
-        .where(and(whereClause, inArray(schema.movieGenres.genreId, genreIds)))
+        .where(
+          whereClause
+            ? and(whereClause, inArray(schema.movieGenres.genreId, genreIds))
+            : inArray(schema.movieGenres.genreId, genreIds),
+        )
         .orderBy(schema.movies.id, orderByClause)
         .limit(limit)
         .offset(offset);
