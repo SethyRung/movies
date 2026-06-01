@@ -40,6 +40,10 @@ const iframeAllow = computed(() => {
 });
 
 const iframeSandbox = computed(() => {
+  if (props.embedType === "custom" || props.embedType === "direct") {
+    return undefined;
+  }
+
   return "allow-scripts allow-same-origin allow-popups allow-forms allow-presentation";
 });
 
