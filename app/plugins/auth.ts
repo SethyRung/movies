@@ -5,7 +5,6 @@ export default defineNuxtPlugin({
     const user = useUser();
 
     const res = await useApi<ApiResponse<AuthUser>>("/api/auth/me");
-    console.info("auth: ", res);
 
     if (res.status.code === ApiResponseCode.Success) {
       user.value = res.data;

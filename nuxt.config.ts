@@ -18,6 +18,11 @@ export default defineNuxtConfig({
         expiresIn: "",
       },
     },
+    admin: {
+      name: "",
+      email: "",
+      password: "",
+    },
   },
   modules: [
     "@nuxt/ui",
