@@ -1,0 +1,155 @@
+{
+  "title": "Import TV Series",
+  "description": "Schema for batch importing TV series with seasons and episodes via JSON",
+  "type": "object",
+  "required": ["series"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "series": {
+      "type": "array",
+      "description": "List of TV series to import",
+      "items": {
+        "type": "object",
+        "required": ["title", "seasons"],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Series title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Series description"
+          },
+          "thumbnail": {
+            "type": "string",
+            "description": "Thumbnail image URL"
+          },
+          "poster": {
+            "type": "string",
+            "description": "Poster image URL"
+          },
+          "firstAiredYear": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2100,
+            "description": "Year the series first aired"
+          },
+          "lastAiredYear": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2100,
+            "description": "Year the series last aired"
+          },
+          "rating": {
+            "type": "string",
+            "description": "Rating (e.g. '8.5')"
+          },
+          "origin": {
+            "type": "string",
+            "description": "Country of origin (overridden by import form selection)"
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this series is featured"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ongoing", "completed", "draft", "archived"],
+            "default": "ongoing",
+            "description": "Series status"
+          },
+          "seasons": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Seasons belonging to this series",
+            "items": {
+              "type": "object",
+              "required": ["seasonNumber", "episodes"],
+              "additionalProperties": false,
+              "properties": {
+                "seasonNumber": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Season number"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Season title (e.g. 'Season 1')"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Season description"
+                },
+                "thumbnail": {
+                  "type": "string",
+                  "description": "Season thumbnail image URL"
+                },
+                "releaseYear": {
+                  "type": "integer",
+                  "minimum": 1900,
+                  "maximum": 2100,
+                  "description": "Year this season aired"
+                },
+                "episodes": {
+                  "type": "array",
+                  "minItems": 1,
+                  "description": "Episodes in this season",
+                  "items": {
+                    "type": "object",
+                    "required": ["episodeNumber", "embedUrl", "embedType"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "episodeNumber": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Episode number"
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Duration in minutes"
+                      },
+                      "embedUrl": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Embed URL for this episode"
+                      },
+                      "embedType": {
+                        "type": "string",
+                        "enum": [
+                          "youtube",
+                          "vimeo",
+                          "dailymotion",
+                          "okru",
+                          "facebook",
+                          "gdrive",
+                          "custom",
+                          "mp4",
+                          "direct"
+                        ],
+                        "description": "Embed provider type"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": ["active", "draft"],
+                        "default": "active",
+                        "description": "Episode status"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

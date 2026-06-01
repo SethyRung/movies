@@ -1,0 +1,91 @@
+{
+  "title": "Import Movies",
+  "description": "Schema for batch importing movies via JSON",
+  "type": "object",
+  "required": ["movies"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "movies": {
+      "type": "array",
+      "description": "List of movies to import",
+      "items": {
+        "type": "object",
+        "required": ["title", "embedUrl", "embedType"],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Movie title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Movie description"
+          },
+          "thumbnail": {
+            "type": "string",
+            "description": "Thumbnail image URL"
+          },
+          "poster": {
+            "type": "string",
+            "description": "Poster image URL"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Duration in minutes"
+          },
+          "embedUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Embed URL for the movie player"
+          },
+          "embedType": {
+            "type": "string",
+            "enum": [
+              "youtube",
+              "vimeo",
+              "dailymotion",
+              "okru",
+              "facebook",
+              "gdrive",
+              "custom",
+              "mp4",
+              "direct"
+            ],
+            "description": "Embed provider type"
+          },
+          "origin": {
+            "type": "string",
+            "description": "Country of origin (overridden by import form selection)"
+          },
+          "releaseYear": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2100,
+            "description": "Release year"
+          },
+          "rating": {
+            "type": "string",
+            "description": "Rating (e.g. '8.5')"
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this movie is featured"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "draft", "archived"],
+            "default": "active",
+            "description": "Movie status"
+          }
+        }
+      }
+    }
+  }
+}
